@@ -2,6 +2,7 @@ package com.example.SamvaadProject.admissionpackage;
 
 import com.example.SamvaadProject.coursepackage.CourseMaster;
 import com.example.SamvaadProject.coursepackage.CourseRepository;
+import com.example.SamvaadProject.studentbatchpackage.StudentBatchMap;
 import com.example.SamvaadProject.studentbatchpackage.StudentBatchRepository;
 import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import com.example.SamvaadProject.usermasterpackage.UserRepository;
@@ -14,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdmissionController {
@@ -63,6 +65,7 @@ public class AdmissionController {
         dto.setDiscount(admission.getDiscount());
         dto.setCourseId(admission.getCourse().getCourseId());
         dto.setCourseName(admission.getCourse().getCourseName());
+        dto.setBalance(admission.getBalance());
 
         return dto;
     }
@@ -119,6 +122,30 @@ public class AdmissionController {
                     })
                     .toList();
         }
+//@GetMapping("/admissions/{userId}")
+//@ResponseBody
+//public List<AdmissionDTO> getAllAdmission(@PathVariable("userId") Long userId) {
+//    return admissionRepository.findByUserMaster_UserId(userId)
+//            .stream()
+//            .map(ad -> {
+//                // fetch all student-batch mappings for this admission
+//                List<StudentBatchMap> studentBatches = studentBatchRepository.findByAdmission_AdmissionId(ad.getAdmissionId());
+//
+//                String batchName = studentBatches.isEmpty()
+//                        ? "Not Assigned"
+//                        : studentBatches.stream()
+//                        .map(sb -> sb.getBatch().getName())
+//                        .collect(Collectors.joining(", ")); // join with commas
+//
+//                return new AdmissionDTO(
+//                        ad.getAdmissionId(),
+//                        ad.getCourse().getCourseName(),
+//                        batchName,
+//                        ad.getJoinDate().toString()
+//                );
+//            })
+//            .toList();
+//}
 
 
 

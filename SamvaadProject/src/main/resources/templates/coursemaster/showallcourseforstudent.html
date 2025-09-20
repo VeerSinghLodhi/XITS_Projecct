@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        .master-div {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+
+         .button1{
+            width:150px;
+            background-color: #ffc451;
+            justify-content: center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
+            SideBar
+        </div>
+        <div class="col-lg-7">
+            <h2>Available Courses</h2>
+            <div class="row two-div">
+                <div class="row master-div" th:each="course : ${coursedata}">
+                    <div class="col-lg-6 col-md-6 col mb-3 mini-master">
+                        <h3 th:text="${course.courseName}"></h3>
+                        <hr>
+                        <p><strong>Duration:</strong> <span th:text="${course.duration}"></span></p>
+                        <p><strong>Lumpsum:</strong> ₹<span th:text="${course.lumpSum}"></span></p>
+                        <p><strong>Installment:</strong> ₹<span th:text="${course.installment}"></span></p>
+                    </div>
+                    <div class="btn-container d-flex justify-content-around">
+                        <button class="btn button1">More Info</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3">
+            <h1>Right Part</h1>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - RoomRentalSagar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link th:href="@{../css/styles.css}" rel="stylesheet">
+  <style>
+    body {
+        font-size: 0.875rem;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        padding: 70px 0 0;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+        min-height: 100vh;
+    }
+
+    .sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 0.75rem 1rem;
+        margin: 0.125rem 0;
+        border-radius: 0.375rem;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+        color: var(--primary-color);
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0.5rem;
+    }
+
+    .form-container {
+        max-width: 100%;
+        margin: 50px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .btn-custom {
+        background-color: #0d6efd;
+        color: #fff;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-custom:hover {
+        background-color: #0b5ed7;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark sticky-top bg-light flex-md-nowrap p-2 shadow">
+  <div class="container-fluid">
+
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center " href="#">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0GupVn_X0cW7eVWzGcnkhdmkA5l3QN1wUaWEX3Bj_cU-33UQjI1jJlHVKLkRTsd9zQVWG2rlzHrP7PyWxXkBoQmGcfeM8yBRhaI935Kupo-5Sfy1cSjpCPXUEffEvLRb4_Jf6v6Adu4w1l7QPBuP66hFl_Ei2NaE1AENV69mU-Jv6D02K-JG3hEaYNHKl/s1650/xansaitsulutionsLogo.png" width="150" height="60" alt="Logo">
+      <span style="color:black;"><i class="bi bi-person me-1"></i>Admin</span>
+    </a>
+
+    <button class="btn btn-outline-light d-md-none me-2" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span style="color:black"><i class="bi bi-list"></i></span>
+    </button>
+
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link active" href="#home"><i
+                  class="bi bi-house me-2"></i>Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#student"><i
+                  class="bi bi-people me-2"></i>Student</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#course-part"><i
+                  class="bi bi-mortarboard me-2"></i>Course</a></li>
+          <li class="nav-item"><a class="nav-link" href="#batch-part"><i
+                  class="bi bi-book me-2"></i>Batch</a></li>
+          <li class="nav-item"><a class="nav-link" href="#project-part"><i
+                  class="bi bi-folder2-open me-2"></i>Project</a></li>
+          <li class="nav-item"><a class="nav-link" href="#message-part"><i
+                  class="bi bi-chat-dots me-2"></i>Message</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reference-part"><i
+                  class="bi bi-link-45deg me-2"></i>Reference</a></li>
+          <li class="nav-item"><a class="nav-link" href="#event-part"><i
+                  class="bi bi-calendar-check me-2"></i>Event</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="#"><i
+                  class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <!-- Home  -->
+      <div id="home" class="dashboard-section">
+        <h1>Home Part</h1>
+      </div>
+      <!-- Student Part -->
+      <div id="student" class="dashboard-section" style="display: none;">
+        <div class="row">
+          <div class="col-lg-8 col-md-8">
+            <div class="form-container">
+              <h2 class="form-title">User Master Form</h2>
+              <form>
+                <div class="mb-3">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-control" name="full_name" required>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" name="email" required>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Contact No</label>
+                  <input type="text" class="form-control" name="contact_no" maxlength="15">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" name="dob">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Address</label>
+                  <input type="text" class="form-control" name="address">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">City</label>
+                  <input type="text" class="form-control" name="city">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Photo</label>
+                  <input type="file" class="form-control" name="photo_path">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Role</label>
+                  <select class="form-select" name="role" required>
+                    <option value="">-- Select Role --</option>
+                    <option value="STUDENT">Student</option>
+                    <option value="FACULTY">Faculty</option>
+                  </select>
+                </div>
+
+                <div class="d-flex gap-2">
+                  <button type="reset" class="btn btn-secondary w-50">Reset</button>
+                  <button type="submit" class="btn btn-custom w-50">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <div class="form-container">
+              <div class="row">
+                <div class="col"><a><i class="bi bi-people me-2"></i><br>Stduent</a>
+                </div>
+                <div class="col">
+                  <a><i class="bi bi-mortarboard me-2"></i><br>Course</a>
+                </div>
+                <div class="col">
+                  <a><i class="bi bi-book me-2"></i><br>Message</a>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col">
+                  <a><i class="bi bi-folder2-open me-2"></i><br>Project</a>
+                </div>
+                <div class="col">
+                  <a><i class="bi bi-chat-dots me-2"></i><br>Message</a>
+                </div>
+                <div class="col">
+                  <a><i class="bi bi-link-45deg me-2"></i><br>Referrals</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Part -->
+      <div id="course-part" class="dashboard-section" style="display: none;">
+        <h2>Courses</h2>
+        <form class="mt-3">
+          <div class="mb-3">
+            <label class="form-label">Course Name</label>
+            <input type="text" class="form-control" placeholder="Enter course name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Course Fee</label>
+            <input type="number" class="form-control" placeholder="Enter course fee">
+          </div>
+          <button type="submit" class="btn btn-custom">Add Course</button>
+        </form>
+        <hr>
+        <h4>Available Courses</h4>
+        <ul class="list-group">
+          <li class="list-group-item">Java Full Stack</li>
+          <li class="list-group-item">Python AI/ML</li>
+          <li class="list-group-item">Web Development</li>
+        </ul>
+      </div>
+
+      <!-- Batch Part -->
+      <div id="batch-part" class="dashboard-section" style="display: none;">
+        <h2>Batch Management</h2>
+        <form class="mt-3">
+          <div class="mb-3">
+            <label class="form-label">Batch Name</label>
+            <input type="text" class="form-control" placeholder="Enter batch name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Course</label>
+            <select class="form-select">
+              <option>Java Full Stack</option>
+              <option>Python AI/ML</option>
+            </select>
+          </div>
+          <button class="btn btn-custom">Add Batch</button>
+        </form>
+        <hr>
+        <h4>Running Batches</h4>
+        <table class="table table-striped">
+          <tr>
+            <th>Batch Name</th>
+            <th>Course</th>
+            <th>Faculty</th>
+          </tr>
+          <tr>
+            <td>Batch A</td>
+            <td>Java</td>
+            <td>Mr. Sharma</td>
+          </tr>
+        </table>
+      </div>
+
+
+      <!-- Project Part -->
+      <div id="project-part" class="dashboard-section" style="display: none;">
+        <h2>Projects</h2>
+        <p>Here admin can track student/faculty projects.</p>
+        <ul class="list-group">
+          <li class="list-group-item">Festival of India - <span class="badge bg-success">Ongoing</span>
+          </li>
+          <li class="list-group-item">SagarJob Portal - <span class="badge bg-warning">Pending</span></li>
+        </ul>
+      </div>
+
+      <!-- Message Part  -->
+      <div id="message-part" class="dashboard-section" style="display: none;">
+        <h2>Messages</h2>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action">
+            <strong>Ashwin:</strong> Please approve my project.
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <strong>Ayush:</strong> Assignment deadline extension?
+          </a>
+        </div>
+      </div>
+
+      <!-- Message Part  -->
+      <div id="reference-part" class="dashboard-section" style="display: none;">
+        <h2>References</h2>
+        <ul>
+          <li><a href="https://spring.io/projects/spring-boot" target="_blank">Spring Boot Docs</a></li>
+          <li><a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL Docs</a></li>
+          <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap Docs</a></li>
+        </ul>
+      </div>
+
+      <!-- Event Part  -->
+      <div id="event-part" class="dashboard-section" style="display: none;">
+        <h2>Events</h2>
+        <table class="table table-bordered">
+          <thead class="table-dark">
+          <tr>
+            <th>Event Name</th>
+            <th>Date</th>
+            <th>Location</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Back to Bachpan (B2B)</td>
+            <td>20-09-2025</td>
+            <td>Sagar</td>
+          </tr>
+          <tr>
+            <td>XCL</td>
+            <td>10-10-2025</td>
+            <td>Sagar</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</div>
+</body>
+
+
+
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- This JavaScript closes the sidebar on small screens -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+
+      navLinks.forEach(link => {
+          link.addEventListener('click', function () {
+              // Collapse only if sidebar is currently shown (visible) and screen is small
+              if (window.innerWidth < 768) {
+                  const sidebar = document.getElementById('sidebarMenu');
+                  const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                  collapseInstance.hide();
+              }
+          });
+      });
+  });
+</script>
+
+<!-- Custom JavaScript -->
+<script>
+
+
+
+  // Dashboard Navigation
+  document.addEventListener('DOMContentLoaded', function () {
+      const navLinks = document.querySelectorAll('.sidebar .nav-link');
+      const sections = document.querySelectorAll('.dashboard-section');
+
+      navLinks.forEach(link => {
+          link.addEventListener('click', function (e) {
+              e.preventDefault();
+
+              // Remove active class from all links
+              navLinks.forEach(l => l.classList.remove('active'));
+
+              // Add active class to clicked link
+              this.classList.add('active');
+
+              // Hide all sections
+              sections.forEach(section => {
+                  section.style.display = 'none';
+              });
+
+              // Show selected section
+              const targetSection = this.getAttribute('href').substring(1);
+              const section = document.getElementById(targetSection);
+              if (section) {
+                  section.style.display = 'block';
+              }
+          });
+      });
+  });
+
+  // Mobile sidebar toggle
+  function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('show');
+  }
+
+
+</script>

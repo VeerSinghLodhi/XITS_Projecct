@@ -138,9 +138,14 @@ public class UserController {
         model.addAttribute("newadmission",new AdmissionMaster());  // Object for new Admission.
         model.addAttribute("alladmissions",admissionRepository.findAll(Sort.by(Sort.Direction.ASC,"admissionId"))); // All Admissions for Updating
         model.addAttribute("feePayment", new FeePayment()); // For new Fees
+
         List<AdmissionDTO> allAdmissions = admissionRepository.findAll()
                 .stream()
-                .map(ad -> new AdmissionDTO(ad.getAdmissionId(), ad.getUserMaster().getFullName()))
+                .map(ad -> new AdmissionDTO(
+                        ad.getAdmissionId(),
+                        ad.getUserMaster().getFullName(),
+                        ad.getCourse().getCourseId()   // include courseId
+                ))
                 .toList();
 
         model.addAttribute("alladmissions2", allAdmissions);

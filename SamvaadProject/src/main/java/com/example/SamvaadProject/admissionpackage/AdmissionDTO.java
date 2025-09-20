@@ -4,15 +4,17 @@ public class AdmissionDTO {
     private String admissionId;
     private Double fees;
     private Double discount;
+    private Double balance;
     private Long courseId;
     private String courseName;
     private String studentName;
     private String admissionDate;
     private String batchName;
 
-    public AdmissionDTO(String admissionId, String studentName) {
+    public AdmissionDTO(String admissionId, String studentName,Long courseId) {
         this.admissionId = admissionId;
         this.studentName = studentName;
+        this.courseId=courseId;
     }
 
     public AdmissionDTO(String admissionId, String courseName, String batchName, String joiningDate) {
@@ -27,6 +29,14 @@ public class AdmissionDTO {
 //                        ad.getJoinDate().toString()
 
     public AdmissionDTO() {
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public String getAdmissionDate() {

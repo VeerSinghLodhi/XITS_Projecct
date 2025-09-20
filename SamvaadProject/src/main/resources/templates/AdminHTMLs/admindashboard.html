@@ -403,6 +403,7 @@
           <li class="nav-item"><a class="nav-link" href="#course-part"><i
                   class="bi bi-mortarboard me-2"></i>Course</a></li>
           <li class="nav-item"><a class="nav-link" href="#batch-part"><i class="bi bi-book me-2"></i>Batch</a></li>
+          <li class="nav-item"><a class="nav-link" href="#fee-part"><i class="bi bi-currency-rupee me-2"></i>Fee</a></li>
           <li class="nav-item"><a class="nav-link" href="#project-part"><i
                   class="bi bi-folder2-open me-2"></i>Project</a></li>
           <li class="nav-item"><a class="nav-link" href="#message-part"><i
@@ -658,9 +659,6 @@
                         <hr>
                       </div>
 
-
-
-
                       <div class="mb-3">
                         <label class="form-label">Enter Amount</label>
                         <input type="text" id="amount" th:field="*{amount}"  class="form-control" name="amount">
@@ -676,7 +674,11 @@
                           <option value="Card">Card</option>
                         </select>
                       </div>
-                      <button type="submit" class="btn btn-primary">Submit Fee</button>
+<!--                      <button type="submit" class="btn btn-primary">Submit Fee</button>-->
+                      <div class="button">
+                        <input type="reset" value="Reset">
+                        <input type="submit"  value="Submit Fees">
+                      </div>
                     </form>
                   </div>
 
@@ -767,7 +769,13 @@
                       <!-- Discount -->
                       <div class="mb-3">
                         <label for="discount1" class="form-label">Discount</label>
-                        <input type="number" value="0.0" step="0.01" class="form-control" id="discount1" name="discount1" required>
+                        <input type="number" value="0.0" step="0.01" class="form-control" onkeyup="calculateNet2()" id="discount1" name="discount1" required>
+                      </div>
+
+                      <!-- Discount -->
+                      <div class="mb-3">
+                        <label for="balance" class="form-label">Balance</label>
+                        <input type="number"  value="0.0" step="0.01" class="form-control" id="balance1" name="balance1" readonly required>
                       </div>
 
 
@@ -793,7 +801,7 @@
 
         <!-- Course Part -->
         <div id="course-part" class="dashboard-section">
-          <h3>Course Details</h3>
+          <h3>Course Management</h3>
           <div class="row">
             <div class="col-lg-8 col-md-8">
 
@@ -936,7 +944,7 @@
 
         <!-- Batch Part -->
         <div id="batch-part" class="dashboard-section">
-          <h3>New Registration</h3>
+          <h3>Batch Management</h3>
           <div class="row">
             <div class="col-lg-8 col-md-8">
               <div class="card p-3">
@@ -1098,7 +1106,13 @@
                         <label for="batchId" class="form-label">Select Batch</label>
                         <select class="form-select" id="batchId" name="batchId" required>
                           <option value="" selected disabled>-- Choose Batch --</option>
-                          <option th:each="batch : ${allbatches}" th:value="${batch.batchId}" th:text="${batch.name}+' (Faculty - '+${batch.faculty.fullName}+')'"></option>
+<!--                          <option th:each="batch : ${allbatches}" th:value="${batch.batchId}" th:text="${batch.name}+' (Faculty - '+${batch.faculty.fullName}+')'"></option>-->
+                          <option th:each="batch : ${allbatches}"
+                                  th:value="${batch.batchId}"
+                                  th:data-courseid="${batch.course.courseId}"
+                                  th:text="${batch.name}+' (Faculty - '+${batch.faculty.fullName}+')'">
+                          </option>
+
                         </select>
                       </div>
 
@@ -1106,10 +1120,6 @@
                       <div class="mb-3">
                         <label for="admissionIds" class="form-label">Select Students</label>
                         <select class="form-select" id="admissionIds" name="admissionIds" multiple required>
-<!--                          <option th:each="admission : ${alladmissions}"-->
-<!--                                  th:value="${admission.admissionId}"-->
-<!--                                  th:text="${admission.userMaster.fullName + ' (AID - ' + admission.admissionId + ')'}">-->
-<!--                          </option>-->
                         </select>
                         <div class="form-text">Hold Ctrl (Windows) or Command (Mac) to select multiple students</div>
                       </div>
@@ -1156,8 +1166,65 @@
           </div>
           </div>
 
+        <!-- Message Part  -->
+        <div id="fee-part" class="dashboard-section">
+          <h2>Fee Management</h2>
+          <div class="row">
+            <div class="col-lg-8 col-md-8">
+              <div class="card p-3">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" id="myTab5" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="submitfee-tab" data-bs-toggle="tab" data-bs-target="#submitfee"
+                            type="button">Submit Fee</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="showfee-tab" data-bs-toggle="tab" data-bs-target="#showfee"
+                            type="button">Show Fee</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link " id="updatefee-tab" data-bs-toggle="tab" data-bs-target="#updatefee"
+                            type="button">Update Fee</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="deletefee-tab" data-bs-toggle="tab" data-bs-target="#deletefee"
+                            type="button">Assign Batches</button>
+                  </li>
 
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="feenotifications-tab" data-bs-toggle="tab"
+                            data-bs-target="#fee_notifications" type="button">Notifications</button>
+                  </li>
 
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content p-3">
+                  <div class="tab-pane fade show active" id="submitfee" role="tabpanel">
+                    <h4 class="text-center">Submit Fee</h4>
+                  </div>
+                  <div class="tab-pane fade " id="showfee" role="tabpanel">
+                    <h4 class="text-center">Show Fee</h4>
+                  </div>
+                  <div class="tab-pane fade" id="updatefee" role="tabpanel">
+                    <h4 class="text-center">Update Fee</h4>
+                  </div>
+                  <div class="tab-pane fade" role="tabpanel" id="deletefee">
+                    <h4 class="text-center mb-4">Delete Fee</h4>
+                  </div>
+                  <div class="tab-pane fade" id="fee_notifications" role="tabpanel">
+                    <h5>User Notifications</h5>
+                    <p>User Notifications list goes here.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div th:insert="~{fragments :: shortcut}"></div>
+            </div>
+          </div>
+        </div>
 
         <!-- Project Part -->
         <div id="project-part" class="dashboard-section">
@@ -1276,6 +1343,7 @@
         .then(data => {
           // Display data in a Input field
           document.getElementById("fees1").value = data;
+          document.getElementById("balance1").value = document.getElementById("fees1").value - document.getElementById("discount1").value  ;
         })
         .catch(error => console.error('Error:', error));
     } else {
@@ -1283,6 +1351,9 @@
     }
   });
 </script>
+
+
+
 
 <script>
   document.getElementById("admissionID").addEventListener("change", function() {
@@ -1297,6 +1368,7 @@
            document.getElementById("course_id1").value = data.courseId;
            document.getElementById("fees1").value = data.fees;
            document.getElementById("discount1").value = data.discount;
+           document.getElementById("balance1").value = data.balance;
 
          })
          .catch(error => console.error('Error:', error));
@@ -1424,7 +1496,6 @@
  });
 </script>
 
-
 <script th:inline="javascript">
   /*<![CDATA[*/
   let allAdmissions = [[${alladmissions2}]];
@@ -1432,17 +1503,20 @@
 </script>
 
 <script>
+
   document.getElementById("batchId").addEventListener("change", function () {
-    let batchId = this.value;
-    let admissionSelect = document.getElementById("admissionIds");
-    admissionSelect.innerHTML = ""; // clear previous
+  let batchId = this.value;
+  let courseId = this.options[this.selectedIndex].getAttribute("data-courseid");
+  let admissionSelect = document.getElementById("admissionIds");
+  admissionSelect.innerHTML = ""; // clear previous
 
-    if (!batchId) return;
+  if (!batchId) return;
 
-    fetch("/studentbatch/students/" + batchId)
-      .then(res => res.json())
-      .then(assignedIds => {
-        allAdmissions.forEach(admission => {
+  fetch("/studentbatch/students/" + batchId)
+    .then(res => res.json())
+    .then(assignedIds => {
+      allAdmissions.forEach(admission => {
+        if (admission.courseId == courseId) {   // filter by course
           let option = document.createElement("option");
           option.value = admission.admissionId;
           option.text = admission.studentName + " (AID - " + admission.admissionId + ")";
@@ -1453,9 +1527,11 @@
           }
 
           admissionSelect.appendChild(option);
-        });
+        }
       });
-  });
+    });
+});
+
 </script>
 
 <script>
@@ -1476,6 +1552,13 @@
         document.getElementById("feesbalance").innerHTML = selectedOption.getAttribute("data-balance") || "";
         document.getElementById("courseInstallment").innerHTML = selectedOption.getAttribute("data-installment") || "";
     }
+
+  function calculateNet2(){
+     const courseFee=document.getElementById("fees1").value;
+     const discount=document.getElementById("discount1").value;
+     const net=courseFee-discount;
+     document.getElementById("balance1").value = net;
+  }
 </script>
 
 <script>
@@ -1510,9 +1593,6 @@
     }
   });
 </script>
-
-
-
 
 </body>
 

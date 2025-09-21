@@ -1,5 +1,6 @@
 package com.example.SamvaadProject.studentbatchpackage;
 
+import com.example.SamvaadProject.admissionpackage.AdmissionDTO;
 import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
 import com.example.SamvaadProject.admissionpackage.AdmissionRepository;
 import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
@@ -9,10 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class StudentMapController {
@@ -66,6 +65,47 @@ public class StudentMapController {
         return students;
     }
 
+
+//    @GetMapping("/studentbatch/students/{batchId}")
+//    @ResponseBody
+//    public Map<String, Object> getStudentAccordingToBatch(@PathVariable("batchId") Long batchId) {
+//        // Step 1: Get mappings for this batch
+//        List<StudentBatchMap> mappings = studentBatchRepository.findByBatch_BatchId(batchId);
+//        System.out.println("Student Batch Map Size"+mappings.size());
+//        System.out.println("==============Before Empty checking=================");
+////        if (mappings.isEmpty()) {
+////            return Map.of("admissions", Collections.emptyList(),
+////                    "assignedIds", Collections.emptyList()
+////            );
+////        }
+//
+//        // Step 2: Get courseId from batch
+//        Long courseId = mappings.get(0).getBatch().getCourse().getCourseId();
+//
+//        // Step 3: Get all admissions of this course
+//        List<AdmissionDTO> allAdmissions = admissionRepository.findByCourse_CourseId(courseId)
+//                .stream()
+//                .map(ad -> new AdmissionDTO(ad.getAdmissionId(), ad.getUserMaster().getFullName()))
+//                .toList();
+//
+//        // Step 4: Collect IDs of admissions already assigned
+//        Set<String> assignedAdmissionIds = mappings.stream()
+//                .map(m -> m.getAdmission().getAdmissionId())
+//                .collect(Collectors.toSet());
+//
+//        System.out.println("==============OK=================");
+//        // Step 5: Return both lists
+//        return Map.of(
+//                "admissions", allAdmissions,
+//                "assignedIds", assignedAdmissionIds
+//        );
+//    }
+
+
+
+
+
+
     @GetMapping("/studentbatch/students/{batchId}")
     @ResponseBody
     public List<String> getStudentAccordingToBatch(@PathVariable("batchId")Long batchId){
@@ -74,6 +114,30 @@ public class StudentMapController {
                 .map(map -> map.getAdmission().getAdmissionId())
                 .toList();
     }
+//        // Step 1: Get all StudentBatchMap entries for this batch
+//        List<StudentBatchMap> mappings = studentBatchRepository.findByBatch_BatchId(batchId);
+//
+//        // Step 2: Create a list to store admission IDs
+//        List<String> admissionIds = new ArrayList<>();
+//
+//        // Step 3: Loop through each mapping and extract admissionId
+//        for (StudentBatchMap map : mappings) {
+//            String admissionId = map.getAdmission().getAdmissionId();
+//            admissionIds.add(admissionId);
+//        }
+//        List<String>finalAdmissions=new ArrayList<>();
+//        for(String aid : admissionIds ) {
+//            if(mappings.get(0).getBatch().getCourse().getCourseId()==
+//                    admissionRepository.findById(aid).orElse(null).getCourse().getCourseId()){
+//                finalAdmissions.add(aid);
+//            }
+//        }
+//        System.out.println(admissionIds);
+//        System.out.println(finalAdmissions);
+//
+//        // Step 4: Return the list of admission IDs
+//        return finalAdmissions;
+
 
 
 }

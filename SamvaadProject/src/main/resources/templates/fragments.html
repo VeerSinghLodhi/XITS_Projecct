@@ -3,33 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>All || Fragments</title>
+  <style>
+    .dashboard-shortcut a {
+    display: inline-block;
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease; /* smooth transition */
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+    .dashboard-shortcut a:hover i{
+      background-color: #FFBB33;
+      color: white;
+      transform: translateY(-4px); /* slight lift effect */
+    }
+footer {
+    font-size: 14px;
+}
+
+footer a {
+    color: #FFBB33;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+  </style>
 </head>
 <body>
-<div th:fragment="shortcut">
-  <div class="form-container">
-    <div class="row">
-      <div class="col"><a><i class="bi bi-people ms-3 fw-bold"></i><br>Student</a>
+<div th:fragment="shortcut" class="dashboard-shortcut">
+<!--  <div class="form-container">-->
+    <div class="row ms-3">
+      <div class="col"><a><i class="bi bi-people fw-bold"></i><br>Student</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-mortarboard ms-3 fw-bold"></i><br>Course</a>
+        <a><i class="bi bi-mortarboard fw-bold"></i><br>Course</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-book ms-3 fw-bold"></i><br>Message</a>
+        <a><i class="bi bi-book fw-bold"></i><br>Message</a>
       </div>
     </div>
     <br>
-    <div class="row">
+    <div class="row ms-3">
       <div class="col">
-        <a><i class="bi bi-folder2-open ms-3"></i><br>Project</a>
+        <a><i class="bi bi-folder2-open "></i><br>Project</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-chat-dots ms-3"></i><br>Message</a>
+        <a><i class="bi bi-chat-dots "></i><br>Message</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-link-45deg ms-3"></i><br>Referrals</a>
+        <a><i class="bi bi-link-45deg"></i><br>Referrals</a>
       </div>
     </div>
-  </div>
+<!--  </div>-->
 </div>
+
+<!-- Footer Fragment -->
+<div th:fragment="footer">
+    <div class="row mt-4 ">
+            <footer class="p-3 d-flex justify-content-center">
+                <span style="display:block;"> <span class="text-muted ms-1">&copy; Copyright </span> <span class="fw-bolder ms-1">Xansa IT Solutions.</span> <span class="text-muted ms-1"> All Rights Reserved.</span></span>
+                </br>
+                <span>Designed and Developed by </span> <span class="ms-1" style="color:#FFBB33;">Xansa IT Solutions</span>
+            </footer>
+    </div>
+</div>
+
 </body>
 </html>

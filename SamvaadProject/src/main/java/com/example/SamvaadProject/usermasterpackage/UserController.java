@@ -157,13 +157,25 @@ public class UserController {
 
     @GetMapping("/faculty/dashboard")
     public String getFacultyDashboard(HttpSession session,
-                          Model model){
+                          Model model,
+                          @RequestParam(value = "newAssignmentAdded",required = false)Boolean isNewAssignmentAdded,
+                          @RequestParam(value = "assignmentDeleted",required = false)Boolean isAssignmentDelete){
         Long userId=(Long) session.getAttribute("userId");
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
         if(userMaster==null){
             model.addAttribute("error","Session expired!");
             return "login";
         }
+
+        if (Boolean.TRUE.equals(isNewAssignmentAdded)) {
+            model.addAttribute("newAssignmentAdded", true);
+        }
+        if (Boolean.TRUE.equals(isAssignmentDelete)) {
+            model.addAttribute("assignmentDeleted", true);
+        }
+
+//        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));
+        model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId()));
         model.addAttribute("user_master",userMaster);
         return "FacultyHTMLs/facultydashboard";
     }

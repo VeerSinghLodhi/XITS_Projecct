@@ -6,6 +6,7 @@ import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import com.example.SamvaadProject.usermasterpackage.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Controller
 public class AssignmentController {
@@ -73,16 +75,15 @@ public class AssignmentController {
     }
 
 
-    @PostMapping("/delete_assignment")
-    public String deleteAssignment(@RequestParam("assignmentId") Long assignmentId,
-                                   Model model,
-                                   HttpSession session,
-                                   RedirectAttributes redirectAttributes) {
-System.out.println("Assingment Id "+assignmentId);
-//        assignmentRepository.deleteById(assignmentId);
-        redirectAttributes.addAttribute("assignmentDeleted",true);
+    @PostMapping("/delete_assignment/{assignmentId}")
+    public String deleteAssignment(@PathVariable("assignmentId") Long assignmentId,
+                                   RedirectAttributes redirectAttributes,HttpSession session) {
+        System.out.println("Assignment Id: " + assignmentId);
+        assignmentRepository.getAssignmentDelete(assignmentId);
+        redirectAttributes.addAttribute("assignmentDeleted", true);
         return "redirect:/faculty/dashboard";
     }
+
 
     private void populateModel(Model model) {
         model.addAttribute("batches", batchMasterRepository.findAll());
@@ -99,6 +100,35 @@ System.out.println("Assingment Id "+assignmentId);
                 .collect(Collectors.toList());
         model.addAttribute("groupedAssignments", groupedAssignments);
     }
+
+    @PostMapping("/update_assignment/{id}")
+    public String updatePdf(@PathVariable("id") Long id,
+                                            @RequestParam("file") MultipartFile file,
+                                            HttpSession session,
+                                            RedirectAttributes redirectAttributes) {
+        try {
+            System.out.println("Entered Inside the Update Assignment Method");
+            Optional<AssignmentMaster> assignmentOpt = assignmentRepository.findById(id);
+            if (assignmentOpt.isEmpty()) {
+                return "redirect:/faculty/dashboard";
+            }
+
+            AssignmentMaster assignment = assignmentOpt.get();
+            assignment.setPdfName(file.getOriginalFilename());
+            assignment.setPdfs(file.getBytes());
+            assignment.setPdfDate(LocalDate.now()); // update date
+            System.out.println("Update Assignment OKK");
+            assignmentRepository.save(assignment);
+
+            redirectAttributes.addAttribute("assignmentUpdated",true);
+
+            return "redirect:/faculty/dashboard";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "login";
+        }
+    }
+
 
     // Get Assignment By batch id
     @GetMapping("/allassignmetbybatchid/{batchId}")

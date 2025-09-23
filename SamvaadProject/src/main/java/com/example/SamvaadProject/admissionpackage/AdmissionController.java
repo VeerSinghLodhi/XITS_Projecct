@@ -1,172 +1,143 @@
-package com.example.SamvaadProject.admissionpackage;
+package com.example.SamvaadProject.assignmentpackage;
 
-import com.example.SamvaadProject.coursepackage.CourseMaster;
-import com.example.SamvaadProject.coursepackage.CourseRepository;
-import com.example.SamvaadProject.studentbatchpackage.StudentBatchMap;
-import com.example.SamvaadProject.studentbatchpackage.StudentBatchRepository;
+import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
+import com.example.SamvaadProject.batchmasterpackage.BatchMasterRepository;
 import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import com.example.SamvaadProject.usermasterpackage.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Controller
-public class AdmissionController {
+public class AssignmentController {
 
     @Autowired
-    AdmissionRepository admissionRepository;
+    private AssignmentRepository assignmentRepository;
 
     @Autowired
-    CourseRepository courseRepository;
+    private BatchMasterRepository batchMasterRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    StudentBatchRepository studentBatchRepository;
+    @GetMapping("/add_assignment")
+    public String showAddAssignmentPage(Model model, HttpSession session) {
+        UserMaster user = (UserMaster) session.getAttribute("user");
+        if (user == null) return "login2";
 
-    @PostMapping("/admission")
-    public String addStudent(@ModelAttribute("newadmission")AdmissionMaster newAdmission,
-                             @RequestParam("user_id")Long userId,
-                             @RequestParam("course_id")Long courseId,
-                             RedirectAttributes redirectAttributes){
+        if (user.getRole() == UserMaster.Role.ADMIN) {
+            populateModel(model);
+            return "Add_Assignment";
+        }
+        else {
+            model.addAttribute("error", "You are not authorized to access this page.");
+            return "error";
+        }
+    }
+    @PostMapping("/done")
+    public String uploadAssignment(@RequestParam("batchId") Long batchId,
+                                   @RequestParam("file") MultipartFile file,
+                                   Model model,
+                                   @RequestParam("title")String title,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            BatchMaster batch = batchMasterRepository.findById(batchId)
+                    .orElseThrow(() -> new RuntimeException("Batch not found"));
 
-        UserMaster userMaster=userRepository.findById(userId).orElse(null);
-        CourseMaster courseMaster=courseRepository.findById(courseId).orElse(null);
+            AssignmentMaster assignment = new AssignmentMaster();
+            assignment.setTitle(title);
+            assignment.setBatch(batch);
+            assignment.setPdfs(file.getBytes());
+            assignment.setProfessor(batch.getFaculty());
+            assignment.setPdfDate(LocalDate.now());
+            assignment.setPdfName(file.getOriginalFilename());
 
-        newAdmission.setAdmissionId(getAdmissionPrimaryKey());
-        newAdmission.setUserMaster(userMaster);
-        newAdmission.setCourse(courseMaster);
-        newAdmission.setJoinDate(new Date());
+            assignmentRepository.save(assignment);
 
-        admissionRepository.save(newAdmission);
-        redirectAttributes.addAttribute("newAdmissionAdded",true);
+            redirectAttributes.addAttribute("newAssignmentAdded",true);
 
-        return "redirect:/admin/dashboard";
+            return "redirect:/faculty/dashboard";
+        } catch (Exception e) {
+            model.addAttribute("error", "Error saving assignment: " + e.getMessage());
+        }
+        model.addAttribute("error","Session Expired!");
+        return "login";
     }
 
-    @GetMapping("/admissiondetail/{id}")
+
+    @PostMapping("/delete_assignment/{assignmentId}")
+    public String deleteAssignment(@PathVariable("assignmentId") Long assignmentId,
+                                   RedirectAttributes redirectAttributes,HttpSession session) {
+        System.out.println("Assignment Id: " + assignmentId);
+        assignmentRepository.getAssignmentDelete(assignmentId);
+        redirectAttributes.addAttribute("assignmentDeleted", true);
+        return "redirect:/faculty/dashboard";
+    }
+
+
+    private void populateModel(Model model) {
+        model.addAttribute("batches", batchMasterRepository.findAll());
+        model.addAttribute("assignment", new AssignmentMaster());
+        model.addAttribute("user", userRepository.findAll());
+
+        List<AssignmentMaster> allAssignments = assignmentRepository.findAll();
+
+        List<AssignmentGroup> groupedAssignments = allAssignments.stream()
+                .collect(Collectors.groupingBy(a -> a.getBatch().getName()))
+                .entrySet()
+                .stream()
+                .map(e -> new AssignmentGroup(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
+        model.addAttribute("groupedAssignments", groupedAssignments);
+    }
+
+    @PostMapping("/update_assignment/{id}")
+    public String updatePdf(@PathVariable("id") Long id,
+                                            @RequestParam("file") MultipartFile file,
+                                            HttpSession session,
+                                            RedirectAttributes redirectAttributes) {
+        try {
+            System.out.println("Entered Inside the Update Assignment Method");
+            Optional<AssignmentMaster> assignmentOpt = assignmentRepository.findById(id);
+            if (assignmentOpt.isEmpty()) {
+                return "redirect:/faculty/dashboard";
+            }
+
+            AssignmentMaster assignment = assignmentOpt.get();
+            assignment.setPdfName(file.getOriginalFilename());
+            assignment.setPdfs(file.getBytes());
+            assignment.setPdfDate(LocalDate.now()); // update date
+            System.out.println("Update Assignment OKK");
+            assignmentRepository.save(assignment);
+
+            redirectAttributes.addAttribute("assignmentUpdated",true);
+
+            return "redirect:/faculty/dashboard";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "login";
+        }
+    }
+
+
+    // Get Assignment By batch id
+    @GetMapping("/allassignmetbybatchid/{batchId}")
     @ResponseBody
-    public AdmissionDTO  getAdmissionDetailById(@PathVariable("id")String admissionId){
-
-        AdmissionMaster admission= admissionRepository.findById(admissionId).orElse(null);
-        if (admission == null) return null;
-
-        AdmissionDTO dto = new AdmissionDTO();
-        dto.setAdmissionId(admission.getAdmissionId());
-        dto.setFees(admission.getFees());
-        dto.setDiscount(admission.getDiscount());
-        dto.setCourseId(admission.getCourse().getCourseId());
-        dto.setCourseName(admission.getCourse().getCourseName());
-        dto.setBalance(admission.getBalance());
-
-        return dto;
+    public List<AssignmentDTO>getAllAssingmentByBatchId(@PathVariable("batchId")Long batchId){
+        return assignmentRepository.getAllAssignmentByBatchId(batchId)
+                .stream()
+                .map(dto -> new AssignmentDTO(dto.getAssignmentId(),dto.getTitle(),dto.getBatch().getName(), dto.getPdfName(),dto.getPdfDate().toString()))
+                .toList();
     }
 
-    // Update Admission Records
-    @PostMapping("/updateadmission")
-    public String getUpdateAdmission(@RequestParam("admissionID")String admissionID,
-                                     @RequestParam("course_id1")Long courseId,
-                                     @RequestParam("fees1")Double fees,
-                                     @RequestParam("discount1")Double discount,
-                                     RedirectAttributes redirectAttributes){
-        System.out.println("Admission Id "+admissionID);
-        AdmissionMaster admissionMaster=admissionRepository.findById(admissionID).orElse(null);
-        admissionMaster.setCourse(courseRepository.findById(courseId).orElse(null));
-        admissionMaster.setFees(fees);
-        admissionMaster.setDiscount(discount);
-
-        admissionRepository.save(admissionMaster);  // Record Updated.
-        redirectAttributes.addAttribute("admissionUpdated",true);
-        return "redirect:/admin/dashboard";
-    }
-
-
-//    @GetMapping("/admissions/{userId}")
-//    @ResponseBody
-//    public List<AdmissionDTO> getAllAdmission(@PathVariable("userId")Long userId){
-//        return admissionRepository.findByUserMaster_UserId(userId)
-//                .stream()
-//                .map(ad -> new AdmissionDTO(
-//                        ad.getAdmissionId(),
-//                        ad.getCourse().getCourseName(),
-//                        studentBatchRepository.findByAdmission_AdmissionId(ad.getAdmissionId()).getBatch().getName().toString(),
-//                        ad.getJoinDate().toString()
-//                ))
-//                .toList();
-//    }
-        @GetMapping("/admissions/{userId}")
-        @ResponseBody
-        public List<AdmissionDTO> getAllAdmission(@PathVariable("userId") Long userId) {
-            return admissionRepository.findByUserMaster_UserId(userId)
-                    .stream()
-                    .map(ad -> {
-                        var studentBatch = studentBatchRepository.findByAdmission_AdmissionId(ad.getAdmissionId());
-                        String batchName = (studentBatch != null && studentBatch.getBatch() != null)
-                                ? studentBatch.getBatch().getName()
-                                : "Not Assigned";
-
-                        return new AdmissionDTO(
-                                ad.getAdmissionId(),
-                                ad.getCourse().getCourseName(),
-                                batchName,
-                                ad.getJoinDate().toString()
-                        );
-                    })
-                    .toList();
-        }
-//@GetMapping("/admissions/{userId}")
-//@ResponseBody
-//public List<AdmissionDTO> getAllAdmission(@PathVariable("userId") Long userId) {
-//    return admissionRepository.findByUserMaster_UserId(userId)
-//            .stream()
-//            .map(ad -> {
-//                // fetch all student-batch mappings for this admission
-//                List<StudentBatchMap> studentBatches = studentBatchRepository.findByAdmission_AdmissionId(ad.getAdmissionId());
-//
-//                String batchName = studentBatches.isEmpty()
-//                        ? "Not Assigned"
-//                        : studentBatches.stream()
-//                        .map(sb -> sb.getBatch().getName())
-//                        .collect(Collectors.joining(", ")); // join with commas
-//
-//                return new AdmissionDTO(
-//                        ad.getAdmissionId(),
-//                        ad.getCourse().getCourseName(),
-//                        batchName,
-//                        ad.getJoinDate().toString()
-//                );
-//            })
-//            .toList();
-//}
-
-
-
-    public String getAdmissionPrimaryKey(){
-
-        Long maxAdmissionNumber=admissionRepository.getCount()+1;
-
-        Calendar calendar=Calendar.getInstance();
-        int year=calendar.get(Calendar.YEAR);
-        int mm=calendar.get(Calendar.MONTH)+1;
-        String format,counter;
-        if(maxAdmissionNumber<10){
-            counter="0"+maxAdmissionNumber;
-        }else{
-            counter=""+maxAdmissionNumber;
-        }
-        if(mm<10){
-            format=year+"0"+mm+""+counter;
-        }else{
-            format=year+""+mm+""+counter;
-        }
-        return format;
-    }
 }

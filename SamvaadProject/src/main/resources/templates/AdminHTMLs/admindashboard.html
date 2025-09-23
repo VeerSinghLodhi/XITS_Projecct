@@ -279,6 +279,54 @@ footer a:hover {
     text-decoration: underline;
 }
 
+   #home .dashboard-card {
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+    }
+    #home .profile-card {
+      text-align: center;
+    }
+
+    #home .study-card {
+      background: #bce7ec;
+      border-radius: 12px;
+      padding: 20px;
+      color: #1e2a38;
+    }
+   #home .study-card h6 {
+      font-weight: 600;
+    }
+
+    #home .section-title {
+      font-weight: 600;
+      color: #1e2a38;
+      margin-bottom: 12px;
+    }
+
+    #home .rewards {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    #home .reward-points {
+      font-weight: bold;
+      color: #d9534f;
+    }
+    #home .reward-points.green {
+      color: #28a745;
+    }
+
+    .nav-tabs .nav-item1 {
+  position: relative; /* for dropdown positioning */
+  display: list-item; /* default <li> behavior */
+  color:#000;
+  border:none;
+  background-color:#fff;
+  margin-left:15px;
+}
   </style>
 </head>
 <body>
@@ -458,6 +506,9 @@ footer a:hover {
 
     <!-- Main Content -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+
+        <!-- Home Page-->
         <div id="home" class="dashboard-section active">
 <!--          <h4 class="mt-3">Xansa IT Solutions Dashboard</h4>-->
           <marquee behavior="scroll" direction="left" scrollamount="6" class="mt-3" style="font-weight:bold; color:#FFBB33; font-size:25px;">
@@ -466,13 +517,31 @@ footer a:hover {
           <hr>
           <div class="row mt-4">
 
+
             <!-- Left Section (Main Content) -->
             <div class="col-lg-8 col-md-8">
+              <div class="card shadow-sm mb-3">
+                <div class="card-body">
+<!--              <div class="dashboard-card profile-card mb-3">-->
+                <h2>Admin</h2>
+                <p><b>Email:</b> contact@xansa.net</p>
+                <p><b>Phone:</b> +91 8770480826</p>
+<!--                </div>-->
+                </div>
+              </div>
+
               <div class="card shadow-sm mb-3">
                 <div class="card-body">
                   <h4>Main Content</h4>
                   <p>This area can show graphs, reports, or quick stats.</p>
                 </div>
+              </div>
+
+
+                  <div class="study-card shadow-sm mb-3">
+                    <h6>Issue Study Material</h6>
+                    <p><b>Current batch list:</b> Topic Name</p>
+                    <p><b>No. of Hours:</b> 2</p>
               </div>
 
               <div class="row">
@@ -497,20 +566,29 @@ footer a:hover {
 
             <!-- Right Section (Shortcuts) -->
             <div class="col-lg-4 col-md-4">
-              <div class="card shadow-sm">
+              <div class="card shadow-sm mb-3">
                 <div class="card-body">
                   <!-- Thymeleaf fragment for shortcuts -->
                   <div th:insert="~{fragments :: shortcut}"></div>
                 </div>
               </div>
+              <div class="card shadow-sm mb-3">
+                <div class="card-body">
+              <div class="rewards">
+                <h6 class="section-title">Rewards</h6>
+                <p>Assignments Credited <span class="reward-points">+ ₹250</span></p>
+                <p>Referrals Credited <span class="reward-points green">+ ₹280</span></p>
+              </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div th:insert="~{fragments :: footer}" class="d-flex align-self-end"></div>
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
 
         <!-- New User Registration Part -->
         <div id="student" class="dashboard-section">
-          <h3>Registration</h3>
+          <h3 class="text-center mt-3">--Registration--</h3>
           <div class="row mt-4">
             <div class="col-lg-8 col-md-8 mb-3">
               <div class="card p-3">
@@ -531,7 +609,7 @@ footer a:hover {
                             data-bs-target="#user_notifications" type="button">Notifications</button>
                   </li>
                   <li class="nav-item" role="presentation">
-                    <button class="nav-link " id="user-tab" data-bs-toggle="tab" data-bs-target="#allusers"
+                    <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#allusers"
                             type="button">All Users</button>
                   </li>
                 </ul>
@@ -621,13 +699,14 @@ footer a:hover {
               </div>
             </div>
           </div>
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
 
         <!-- Admission Part  -->
         <div id="admission" class="dashboard-section">
-          <h3>Admissions</h3>
-          <div class="row">
-            <div class="col-lg-8 col-md-8">
+          <h3 class="text-center mt-3">--Admissions--</h3>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
               <div class="card p-3">
                 <!-- Tabs -->
                 <ul class="nav nav-tabs" id="myTab3" role="tablist">
@@ -892,13 +971,14 @@ footer a:hover {
               </div>
             </div>
           </div>
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
 
         <!-- Course Part -->
         <div id="course-part" class="dashboard-section">
-          <h3>Course Management</h3>
-          <div class="row">
-            <div class="col-lg-8 col-md-8">
+          <h3 class="text-center mt-3">--Course Management--</h3>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
 
               <div class="card p-3">
                 <!-- Tabs -->
@@ -1039,15 +1119,15 @@ footer a:hover {
               </div>
             </div>
           </div>
-
+          <div th:insert="~{fragments :: footer}"></div>
 
         </div>
 
         <!-- Batch Part -->
         <div id="batch-part" class="dashboard-section">
-          <h3>Batch Management</h3>
-          <div class="row">
-            <div class="col-lg-8 col-md-8">
+          <h3 class="text-center mt-3">--Batch Management--</h3>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
               <div class="card p-3">
                 <!-- Tabs -->
                 <ul class="nav nav-tabs" id="myTab4" role="tablist">
@@ -1270,13 +1350,14 @@ footer a:hover {
               </div>
             </div>
           </div>
+          <div th:insert="~{fragments :: footer}"></div>
           </div>
 
-        <!-- Message Part  -->
+        <!-- Fee Part  -->
         <div id="fee-part" class="dashboard-section">
-          <h2>Fee Management</h2>
-          <div class="row">
-            <div class="col-lg-8 col-md-8">
+          <h2 class="text-center mt-3">--Fee Management--</h2>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
               <div class="card p-3">
                 <!-- Tabs -->
                 <ul class="nav nav-tabs" id="myTab5" role="tablist">
@@ -1336,18 +1417,7 @@ footer a:hover {
                       </tr>
                       </thead>
                       <tbody>
-<!--                      <tr th:each="fee : ${fees}">-->
-<!--                        <td th:text="${fee.feeId}"></td>-->
-<!--                        <td th:text="${fee.admission != null ? fee.admission.admissionId : 'N/A'}"></td>-->
-<!--                        <td th:text="${fee.amount}"></td>-->
-<!--                        <td th:text="${fee.paymentDate}"></td>-->
-<!--                        <td th:text="${fee.paymentMode}"></td>-->
-<!--                        <td>-->
-<!--                          <a th:href="@{'/fees/edit/' + ${fee.feeId}}" class="btn btn-warning btn-sm">Edit</a>-->
-<!--                          <a th:href="@{'/fees/delete/' + ${fee.feeId}}" class="btn btn-danger btn-sm"-->
-<!--                             onclick="return confirm('Are you sure you want to delete this fee?');">Delete</a>-->
-<!--                        </td>-->
-<!--                      </tr>-->
+
                       </tbody>
                     </table>
                   </div>
@@ -1374,71 +1444,131 @@ footer a:hover {
               </div>
             </div>
           </div>
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
 
         <!-- Project Part -->
         <div id="project-part" class="dashboard-section">
-          <h2>Projects</h2>
-          <p>Here admin can track student/faculty projects.</p>
-          <ul class="list-group">
-            <li class="list-group-item">Festival of India - <span class="badge bg-success">Ongoing</span>
-            </li>
-            <li class="list-group-item">SagarJob Portal - <span class="badge bg-warning">Pending</span>
-            </li>
-          </ul>
+          <h4 class="text-center mt-3">--Project Management--</h4>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
+              <p>Here admin can track student/faculty projects.</p>
+              <ul class="list-group">
+                <li class="list-group-item">Festival of India - <span class="badge bg-success">Ongoing</span>
+                </li>
+                <li class="list-group-item">SagarJob Portal - <span class="badge bg-warning">Pending</span>
+                </li>
+              </ul>
+            </div>
+            <!-- Right Section (Shortcuts) -->
+            <div class="col-lg-4 col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <!-- Thymeleaf fragment for shortcuts -->
+                  <div th:insert="~{fragments :: shortcut}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div th:insert="~{fragments :: footer}"></div>
+
         </div>
 
         <!-- Message Part  -->
         <div id="message-part" class="dashboard-section">
-          <h2>Messages</h2>
-          <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">
-              <strong>Ashwin:</strong> Please approve my project.
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <strong>Ayush:</strong> Assignment deadline extension?
-            </a>
+          <h4 class="text-center mt-3">--Message Management--</h4>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
+              <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action">
+                  <strong>Ashwin:</strong> Please approve my project.
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  <strong>Ayush:</strong> Assignment deadline extension?
+                </a>
+              </div>
+            </div>
+            <!-- Right Section (Shortcuts) -->
+            <div class="col-lg-4 col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <!-- Thymeleaf fragment for shortcuts -->
+                  <div th:insert="~{fragments :: shortcut}"></div>
+                </div>
+              </div>
+            </div>
           </div>
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
 
         <!-- References Part  -->
         <div id="reference-part" class="dashboard-section">
-          <h2>References</h2>
-          <ul>
-            <li><a href="https://spring.io/projects/spring-boot" target="_blank">Spring Boot
-              Docs</a>
-            </li>
-            <li><a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL Docs</a></li>
-            <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap Docs</a></li>
-          </ul>
+          <h4 class="text-center mt-3">--References Management--</h4>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
+              <ul>
+                <li><a href="https://spring.io/projects/spring-boot" target="_blank">Spring Boot
+                  Docs</a>
+                </li>
+                <li><a href="https://www.postgresql.org/docs/" target="_blank">PostgreSQL Docs</a></li>
+                <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap Docs</a></li>
+              </ul>
+            </div>
+            <!-- Right Section (Shortcuts) -->
+            <div class="col-lg-4 col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <!-- Thymeleaf fragment for shortcuts -->
+                  <div th:insert="~{fragments :: shortcut}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
 
         <!-- Event Part  -->
         <div id="event-part" class="dashboard-section">
-          <h2>Events</h2>
-          <table class="table table-bordered">
-            <thead class="table-dark">
-            <tr>
-              <th>Event Name</th>
-              <th>Date</th>
-              <th>Location</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Back to Bachpan (B2B)</td>
-              <td>20-09-2025</td>
-              <td>Sagar</td>
-            </tr>
-            <tr>
-              <td>XCL</td>
-              <td>10-10-2025</td>
-              <td>Sagar</td>
-            </tr>
-            </tbody>
-          </table>
+          <h3 class="text-center mt-3">--Events Management--</h3>
+          <div class="row mt-4">
+            <div class="col-lg-8 col-md-8 mb-3">
+              <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                  <th>Event Name</th>
+                  <th>Date</th>
+                  <th>Location</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Back to Bachpan (B2B)</td>
+                  <td>20-09-2025</td>
+                  <td>Sagar</td>
+                </tr>
+                <tr>
+                  <td>XCL</td>
+                  <td>10-10-2025</td>
+                  <td>Sagar</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Right Section (Shortcuts) -->
+            <div class="col-lg-4 col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <!-- Thymeleaf fragment for shortcuts -->
+                  <div th:insert="~{fragments :: shortcut}"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div th:insert="~{fragments :: footer}"></div>
         </div>
-      </div>
+
     </main>
   </div>
 </div>
@@ -1448,7 +1578,7 @@ footer a:hover {
 
 <!-- Custom JS -->
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelectorAll('.sidebar .nav-link');
     const sections = document.querySelectorAll('.dashboard-section');
 
@@ -1463,7 +1593,92 @@ footer a:hover {
       });
     });
   });
+/*
+   document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+            const sections = document.querySelectorAll('.dashboard-section');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    sections.forEach(section => section.classList.remove('active'));
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                    if (window.innerWidth < 992) {
+                        const sidebar = document.getElementById('sidebarMenu');
+                        const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                        collapseInstance.hide();
+                    }
+                });
+            });
+        });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+    const sections = document.querySelectorAll('.dashboard-section');
+    const sidebar = document.getElementById('sidebarMenu');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent page jump
+
+            // Remove active from all links and sections
+            navLinks.forEach(l => l.classList.remove('active'));
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Add active to clicked link
+            this.classList.add('active');
+
+            // Show the corresponding section
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Collapse sidebar if on small screens
+            if (window.innerWidth < 992 && sidebar) {
+                const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                collapseInstance.hide();
+            }
+        });
+    });
+});*/
 </script>
+<script>
+ /* document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.dashboard-section');
+    const sidebar = document.getElementById('sidebarMenu');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Remove active from all links and sections
+        navLinks.forEach(l => l.classList.remove('active'));
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Add active to clicked link + show section
+        this.classList.add('active');
+        const targetId = this.getAttribute('href').substring(1);
+        document.getElementById(targetId)?.classList.add('active');
+
+        // Collapse sidebar if on small screen
+        if (window.innerWidth < 992 && sidebar) {
+          const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+          collapseInstance.hide();
+        }
+      });
+    });
+
+    // Show default section
+    document.querySelector('.dashboard-section.active')?.classList.add('active');
+  }); */
+</script>
+
+
+
 
 <script>
   document.getElementById("course_id").addEventListener("change", function() {
@@ -1501,8 +1716,6 @@ footer a:hover {
     }
   });
 </script>
-
-
 
 
 <script>

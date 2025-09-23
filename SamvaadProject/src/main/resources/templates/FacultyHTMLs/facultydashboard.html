@@ -163,6 +163,21 @@
             opacity: 1;
             bottom: 50px;
         }
+
+         .loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
     </style>
 </head>
 
@@ -185,6 +200,18 @@
 </div>
 <script th:if="${assignmentDeleted}">
     popup = document.getElementById("popupMessage2");
+    popup.classList.add("show");
+    //Time
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 5000);
+</script>
+
+<div id="popupMessage3" class="popup">
+    ✅ Assignment has been updated successful!
+</div>
+<script th:if="${assignmentUpdated}">
+    popup = document.getElementById("popupMessage3");
     popup.classList.add("show");
     //Time
     setTimeout(() => {
@@ -296,7 +323,7 @@
                             <ul class="nav nav-tabs" id="myTab2" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="newassignment-tab" data-bs-toggle="tab"
-                                            data-bs-target="#addnewassignment" type="button">Add New Assignment</button>
+                                            data-bs-target="#addnewassignment" type="button">New Assignment</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="updateassignment-tab" data-bs-toggle="tab"
@@ -344,6 +371,31 @@
                                 </div>
                                 <div class="tab-pane fade " id="updateassignment" role="tabpanel">
                                     <h4>Update Assignment</h4>
+                                    <form>
+                                    <div class="mb-3">
+                                        <label for="updateAssignmentBatchId" class="form-label">Select Batch:</label>
+                                        <select id="updateAssignmentBatchId" name="assignmentBatchId" class="form-select" required>
+                                            <option value="" selected disabled>-- Select Batch --</option>
+                                            <option th:each="batch : ${batches}" th:value="${batch.batchId}"
+                                                    th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
+                                        </select>
+                                    </div>
+                                </form>
+                                    <div id="updatepdf" style="display:none;">
+                                        <h3>Existing Assignments</h3>
+                                        <table class="table table-bordered" id="updatetable">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Assignments</th>
+                                                <th>Update</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="deleteassignment" role="tabpanel">
@@ -357,12 +409,12 @@
                                             </select>
                                         </div>
                                     </form>
+                                    <div id="showdeletepdf" style="display:none;">
                                     <h3>Existing Assignments</h3>
                                     <table class="table table-bordered" id="assignmenttable">
                                         <thead class="table-light">
                                         <tr>
                                             <th>Title</th>
-                                            <th>Batch</th>
                                             <th>Assignments</th>
                                             <th>Delete</th>
                                         </tr>
@@ -371,6 +423,7 @@
 
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                                 <div class="tab-pane fade" id="allassignments" role="tabpanel">
                                     <h5>All Assignments </h5>
@@ -412,7 +465,7 @@
 
 <!-- Custom JS for section navigation -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+  /*  document.addEventListener('DOMContentLoaded', function () {
         const navLinks = document.querySelectorAll('.sidebar .nav-link');
         const sections = document.querySelectorAll('.dashboard-section');
 
@@ -427,13 +480,48 @@
                 document.getElementById(targetId).classList.add('active');
             });
         });
-    });
+    }); */
+
+     document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+            const sections = document.querySelectorAll('.dashboard-section');
+            const sidebar = document.getElementById('sidebarMenu');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent page jump
+
+                    // Remove active from all links and sections
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Add active to clicked link
+                    this.classList.add('active');
+
+                    // Show the corresponding section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+
+                    // Collapse sidebar if on small screens
+                    if (window.innerWidth < 992 && sidebar) {
+                        const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                        collapseInstance.hide();
+                    }
+                });
+            });
+        });
+
 </script>
 
+<!--Delete Assignments-->
 <script>
     document.getElementById("assignmentBatchId").addEventListener("change", function() {
        var assignmentBatchId = this.value;
         console.log("Course id "+assignmentBatchId);
+        document.getElementById("showdeletepdf").style.display="block";
        if(assignmentBatchId) {
          fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint
            .then(response => response.json()) // Either JSON OR TEXT.
@@ -450,14 +538,18 @@
            let row = `
              <tr>
                <td>${assignment.title}</td>
-               <td>${assignment.batchName}</td>
-               <td>${assignment.pdfName} ${assignment.pdfDate}</td>
+                         <td>
+                ${assignment.pdfName} ${assignment.pdfDate}
+                <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
+            </td>
+
                <td>
-               <form action="/delete_assignment" method="post" style="margin:0;">
-                            <input type="hidden" name="assignmentId" value="${assignment.assignmentId}" />
-                            <button type="submit" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Delete this assignment?');">Delete</button>
-                        </form>
+                   <form action="/delete_assignment/${assignment.assignmentId}" method="post"
+                          onsubmit="return confirm('Delete this assignment?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+
+
                </td>
              </tr>
            `;
@@ -471,7 +563,82 @@
      });
 </script>
 
+<!--Update Assignments-->
+<script>
+    document.getElementById("updateAssignmentBatchId").addEventListener("change", function() {
+      var assignmentBatchId = this.value;
+       console.log("Course id "+assignmentBatchId);
+       document.getElementById("updatepdf").style.display="block";
+      if(assignmentBatchId) {
+        fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint
+          .then(response => response.json()) // Either JSON OR TEXT.
+          .then(data => {
+            let tbody = document.querySelector("#updatetable tbody");
+               tbody.innerHTML = "";
 
+            if(data.length === 0) {
+              tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";
+              return;
+            }
+
+        data.forEach(assignment => {
+          let row = `
+            <tr>
+              <td>${assignment.title}</td>
+              <td>${assignment.pdfName} ${assignment.pdfDate}
+               <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
+                </td>
+           <td>
+            <form id="updateAssignmentForm" action="/update_assignment/${assignment.assignmentId}" onsubmit="return checkUpdateForm(event)" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="_method" value="put"/>
+                        <input type="file" name="file" class="mb-3" accept="application/pdf" required>
+                       <button type="submit" class="btn btn-sm btn-warning" id="assignmentUpdateButton">Update</button>
+                   </form>
+               </td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+          })
+          .catch(error => console.error('Error:', error));
+      } else {
+        //document.getElementById("fees").value = '0.0';
+      }
+    });
+</script>
+
+<!--Update Popup-->
+<div id="updatePopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+     background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; padding:20px; border-radius:10px; text-align:center;">
+        <div class="loader"></div>
+        <h3>⏳ Please wait...</h3>
+        <p>Your assignment is being updated.</p>
+    </div>
+</div>
+
+    <script>
+ function checkUpdateForm(event) {
+    event.preventDefault(); // Prevent default form submission
+        console.log("Inside On Submit Method");
+
+      let userAns = confirm("Do you want to update?");
+      if(!userAns)
+            return false;
+    // Disable the button to prevent multiple clicks
+    let btn = document.getElementById("assignmentUpdateButton");
+    btn.disabled = true;
+    btn.innerText = "⏳ Updating...";
+
+    // Show the popup
+    document.getElementById("updatePopup").style.display = "flex";
+
+    // Submit the form after a short delay to allow popup to render
+    setTimeout(() => {
+        event.target.submit();
+    }, 4000); // 1s delay
+}
+</script>
 
 </body>
 

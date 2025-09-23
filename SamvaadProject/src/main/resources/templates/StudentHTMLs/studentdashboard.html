@@ -54,6 +54,42 @@
         .dashboard-section.active {
           display: block;
         }
+        .nav-tabs .nav-link {
+      color: #000;
+      font-weight: 500;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: #f39c12 !important;
+    }
+
+    .card {
+      border-radius: 12px;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+         .dashboard-shortcut a {
+    display: inline-block;
+    text-align: center;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease; /* smooth transition */
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+    .dashboard-shortcut a:hover i{
+      background-color: #FFBB33;
+      color: white;
+      transform: translateY(-4px); /* slight lift effect */
+    }
+    .dashboard-shortcut a:hover {
+  background-color: #FFBB33;
+  color: white;
+  transform: translateY(-4px); /* slight lift effect */
+}
+
+
     </style>
 </head>
 
@@ -104,10 +140,11 @@
                     <li class="nav-item"><a class="nav-link active" href="#home"><i class="bi bi-house me-2"></i>Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profile"><i class="bi bi-person me-2"></i>Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="#batch"><i class="bi bi-people me-2"></i>My Batch</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#notes"><i class="bi bi-people me-2"></i>Notes</a></li>
                     <li class="nav-item"><a class="nav-link" href="#assignments"><i class="bi bi-journal-text me-2"></i>Assignments</a></li>
                     <li class="nav-item"><a class="nav-link" href="#attendance"><i class="bi bi-calendar-check me-2"></i>Attendance</a></li>
                     <li class="nav-item"><a class="nav-link" href="#results"><i class="bi bi-bar-chart-line me-2"></i>Results</a></li>
-                    <li class="nav-item"><a class="nav-link text-danger" href="/logout"><i class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
+<!--                    <li class="nav-item"><a class="nav-link text-danger" href="/logout"><i class="bi bi-box-arrow-left me-2"></i>Logout</a></li>-->
                 </ul>
             </div>
         </nav>
@@ -129,6 +166,68 @@
             <!-- Batch -->
             <div id="batch" class="dashboard-section">
                 <h3>My Batch</h3>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div class="card p-3">
+
+
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="newuser-tab" data-bs-toggle="tab" data-bs-target="#addnewuser"
+                                            type="button">Add New User</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="userupdate-tab" data-bs-toggle="tab" data-bs-target="#update_user"
+                                            type="button">Update</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="usernotifications-tab" data-bs-toggle="tab"
+                                            data-bs-target="#user_notifications" type="button">Notifications</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#allusers"
+                                            type="button">All Users</button>
+                                </li>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade" id="allusers" role="tabpanel">
+                                    <h5>User Profile</h5>
+                                    <p>All User will be show here.</p>
+                                </div>
+                                <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">
+                                    <h4>Add New User</h4>
+
+                                </div>
+                                <div class="tab-pane fade" id="update_user" role="tabpanel">
+                                    <h4 class="mb-3">Available User</h4>
+                                    <h3>Users Details to be updated here.</h3>
+                                </div>
+                                <div class="tab-pane fade" id="user_notifications" role="tabpanel">
+                                    <h5>User Notifications</h5>
+                                    <p>User Notifications list goes here.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section (Shortcuts) -->
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
+            </div>
+
+            <!-- Notes -->
+            <div id="notes" class="dashboard-section">
+                <h3>My Notes</h3>
                 <p>📚 Batch details and schedule.</p>
             </div>
 

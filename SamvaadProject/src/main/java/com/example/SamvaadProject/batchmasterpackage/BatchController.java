@@ -105,5 +105,24 @@ public class BatchController {
     }
 
 
+    // Faculties Batches
+
+    @GetMapping("/faculties/{facultyId}/batches")
+    @ResponseBody
+    public List<BatchDTO>getFacultyBatches(@PathVariable("facultyId")Long facultyId){
+
+        return batchMasterRepository.getAllBatchesByFaculty(facultyId)
+                .stream()
+                .map(faculty ->new BatchDTO(faculty.getBatchId(),
+                        faculty.getStartDate().toString(),
+                        faculty.getStatus(),
+                        faculty.getMode(),
+                        faculty.getCourse().getCourseId(),
+                        faculty.getFaculty().getUserId(),
+                        faculty.getCourse().getCourseName(),faculty.getName()))
+                .toList();
+    }
+
+
 }
 

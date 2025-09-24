@@ -9,6 +9,38 @@ public class BatchDTO {
         private String mode;
         private Long courseId;
         private Long facultyId;
+        private String courseName;
+        private String batchName;
+
+    public BatchDTO() {
+    }
+
+    public BatchDTO(Long batchId, String startDate, String status, String mode, Long courseId, Long facultyId,String courseName ,String batchName){
+        this.batchId = batchId;
+        this.startDate = startDate;
+        this.status = status;
+        this.mode = mode;
+        this.courseId = courseId;
+        this.facultyId = facultyId;
+        this.courseName=courseName;
+        this.batchName=batchName;
+    }
+
+    public String getBatchName() {
+        return batchName;
+    }
+
+    public void setBatchName(String batchName) {
+        this.batchName = batchName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     public Long getBatchId() {
         return batchId;

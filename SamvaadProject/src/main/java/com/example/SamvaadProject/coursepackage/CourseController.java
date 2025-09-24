@@ -116,11 +116,4 @@ public class CourseController {
     }
 
 
-    //Data in json
-    @GetMapping("/debug")
-    @ResponseBody
-    public List<CourseMaster> debugCourses() {
-        return courseRepository.findAll();
-    }
-
 }

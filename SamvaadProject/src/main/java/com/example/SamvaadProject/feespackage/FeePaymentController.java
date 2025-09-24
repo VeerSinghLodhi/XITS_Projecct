@@ -52,11 +52,20 @@ public class FeePaymentController {
         return "redirect:/admin/dashboard";
     }
 
-    @GetMapping("/list")
-    public String listFees(Model model) {
-
-        model.addAttribute("fees", feePaymentRepository.findAllByOrderByFeeIdDesc()); //decending order list
-        return "fee-list";
+    @GetMapping("/feelist/admission/{admissionId}")
+    @ResponseBody
+    public List<FeeDTO> listFees(@PathVariable("admissionId")String admissionId, Model model) {
+//        model.addAttribute("fees", feePaymentRepository.findAllByOrderByFeeIdDesc()); //decending order list
+        return feePaymentRepository.findByAdmission_AdmissionId(admissionId)
+                .stream()
+                .map(fee -> new FeeDTO(fee.getFeeId(),
+                        fee.getAdmission().getAdmissionId(),
+                        fee.getAmount(),
+                        fee.getPaymentDate().toString(),
+                        fee.getPaymentMode(),
+                        fee.getAdmission().getCourse().getCourseName()))
+                .toList();
+//        return feePayment;
     }
 
     @GetMapping("/edit/{id}")
@@ -113,12 +122,3 @@ public class FeePaymentController {
         return "student-fee-list";
     }
 }
-
-
-
-
-
-
-
-
-

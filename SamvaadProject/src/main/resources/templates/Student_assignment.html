@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Assignments</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background:#f8f9fa; }
+        .wrap { max-width:900px; margin:0 auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,0.06); }
+        h2 { text-align:center; }
+        table { width:100%; border-collapse:collapse; margin-top:16px; }
+        th, td { padding:10px; border:1px solid #e6e6e6; text-align:left; }
+        th { background:#0366d6; color:white; }
+        .btn { padding:6px 12px; border-radius:6px; border:none; cursor:pointer; }
+        .btn-submit { background:#28a745; color:white; }
+        .btn-submitted { background:gray; color:white; cursor:not-allowed; }
+        .btn-danger { background:#dc3545; color:white; }
+        a.pdf-link { color:#0366d6; text-decoration:none; margin-left: 10px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h2>Assignments for your batch</h2>
+
+    <div th:if="${assignments.empty}">
+        <p>No assignments available right now.</p>
+    </div>
+
+    <table th:if="${!assignments.empty}">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Assignment</th>
+            <th>Batch</th>
+            <th>Professor</th>
+            <th>PDF</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="a, iter : ${assignments}">
+            <td th:text="${iter.index + 1}"></td>
+            <td th:text="${a.pdfName}"></td>
+            <td th:text="${a.batch != null ? a.batch.name : 'N/A'}"></td>
+            <td th:text="${a.professor != null ? a.professor.fullName : 'N/A'}"></td>
+            <td>
+                <a th:href="@{/studentAssignments/pdfs/{id}(id=${a.assignmentId})}" target="_blank" class="pdf-link">View PDF</a>
+            </td>
+            <td>
+
+                <form th:if="${!submittedAssignmentIds.contains(a.assignmentId)}"
+                      th:action="@{/studentAssignments/submit}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="assignmentId" th:value="${a.assignmentId}" />
+                    <input type="file" name="file"  accept="application/pdf" required />
+                    <button type="submit" class="btn btn-submit">Submit</button>
+                </form>
+
+                <div th:if="${submittedAssignmentIds.contains(a.assignmentId)}">
+
+                    <form th:if="${deletableMap[a.assignmentId]}" th:action="@{/studentAssignments/delete/{id}(id=${a.assignmentId})}"
+                          method="post" style="display:inline"
+                          onsubmit="return confirm('Are you sure you want to delete this submission?');">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <a th:href="@{/studentAssignments/submittedPdf/{id}(id=${a.assignmentId})}" target="_blank" class="pdf-link">View Your Submission</a>
+
+                    <button th:if="${!deletableMap[a.assignmentId]}" class="btn btn-submitted" disabled>Submitted</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

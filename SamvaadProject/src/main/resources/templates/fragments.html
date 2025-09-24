@@ -19,43 +19,42 @@
       color: white;
       transform: translateY(-4px); /* slight lift effect */
     }
-footer {
-    font-size: 14px;
+    .dashboard-shortcut a:hover {
+  background-color: #FFBB33;
+  color: white;
+  transform: translateY(-4px); /* slight lift effect */
 }
 
-footer a {
-    color: #FFBB33;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
+ footer {
+      background: #fff;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+      padding: 10px 0;
+    }
   </style>
 </head>
 <body>
 <div th:fragment="shortcut" class="dashboard-shortcut">
 <!--  <div class="form-container">-->
     <div class="row ms-3">
-      <div class="col"><a><i class="bi bi-people fw-bold"></i><br>Student</a>
+      <div class="col"><a href="#student" class="nav-link"><i class="bi bi-people fw-bold"></i><br>Student</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-mortarboard fw-bold"></i><br>Course</a>
+        <a href="#course-part" class="nav-link"><i class="bi bi-mortarboard fw-bold"></i><br>Course</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-book fw-bold"></i><br>Message</a>
+        <a href="#batch-part" class="nav-link"><i class="bi bi-book fw-bold"></i><br>Batches</a>
       </div>
     </div>
     <br>
     <div class="row ms-3">
       <div class="col">
-        <a><i class="bi bi-folder2-open "></i><br>Project</a>
+        <a href="#project-part" class="nav-link"><i class="bi bi-folder2-open "></i><br>Project</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-chat-dots "></i><br>Message</a>
+        <a href="#message-part" class="nav-link"><i class="bi bi-chat-dots "></i><br>Message</a>
       </div>
       <div class="col">
-        <a><i class="bi bi-link-45deg"></i><br>Referrals</a>
+        <a href="#reference-part" class="nav-link"><i class="bi bi-link-45deg"></i><br>Referrals</a>
       </div>
     </div>
 <!--  </div>-->
@@ -63,14 +62,42 @@ footer a:hover {
 
 <!-- Footer Fragment -->
 <div th:fragment="footer">
-    <div class="row mt-4 ">
-            <footer class="p-3 d-flex justify-content-center">
-                <span style="display:block;"> <span class="text-muted ms-1">&copy; Copyright </span> <span class="fw-bolder ms-1">Xansa IT Solutions.</span> <span class="text-muted ms-1"> All Rights Reserved.</span></span>
-                </br>
-                <span>Designed and Developed by </span> <span class="ms-1" style="color:#FFBB33;">Xansa IT Solutions</span>
-            </footer>
-    </div>
+    <footer class="text-center my-4">
+        <div class="container">
+            <span class="text-muted">&copy;Copyright </span>
+            <span class="fw-bold">Xansa IT Solutions.</span>
+            <span class="text-muted"> All Rights Reserved.</span>
+            <br>
+            <span class="text-muted">Designed and Developed by </span>
+            <span class="fw-bold" style="color:#FFBB33;">Xansa IT Solutions</span>
+        </div>
+    </footer>
 </div>
+
+
+<!--<div th:fragment="footer">-->
+<!--    <footer class="footer mt-auto py-3 text-center bg-light"-->
+<!--            style="position: fixed; bottom: 0; left: 0; width: 100%; box-shadow: 0 -2px 6px rgba(0,0,0,0.05);">-->
+<!--        <div class="container">-->
+<!--            <span class="text-muted">&copy; Copyright </span>-->
+<!--            <span class="fw-bold">Xansa IT Solutions.</span>-->
+<!--            <span class="text-muted"> All Rights Reserved.</span>-->
+<!--            <br>-->
+<!--            <span class="text-muted">Designed and Developed by </span>-->
+<!--            <span class="fw-bold" style="color:#FFBB33;">Xansa IT Solutions</span>-->
+<!--        </div>-->
+<!--    </footer>-->
+<!--</div>-->
+
+<!--<div th:fragment="footer">-->
+<!--    <div class="row mt-4 ">-->
+<!--            <footer class="p-3 d-flex justify-content-center">-->
+<!--                <span style="display:block;"> <span class="text-muted ms-1">&copy; Copyright </span> <span class="fw-bolder ms-1">Xansa IT Solutions.</span> <span class="text-muted ms-1"> All Rights Reserved.</span></span>-->
+<!--                </br>-->
+<!--                <span>Designed and Developed by </span> <span class="ms-1" style="color:#FFBB33;">Xansa IT Solutions</span>-->
+<!--            </footer>-->
+<!--    </div>-->
+<!--</div>-->
 
 </body>
 </html>

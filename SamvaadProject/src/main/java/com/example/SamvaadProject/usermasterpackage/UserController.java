@@ -91,7 +91,9 @@ public class UserController {
                           @RequestParam(value = "admissionUpdated",required = false)Boolean isAdmissionUpdated,
                           @RequestParam(value = "batchUpdated",required = false)Boolean isBatchUpdated,
                           @RequestParam(value = "studentsMapped",required = false)Boolean isStudentsMapped,
-                          @RequestParam(value = "feeSubmitted",required = false)Boolean isFeeSubmitted){
+                          @RequestParam(value = "feeSubmitted",required = false)Boolean isFeeSubmitted,
+                          @RequestParam(value = "studyMaterialUploaded",required = false)Boolean isStudyMaterialUploaded,
+                          @RequestParam(value = "notePdfDeleted",required = false)Boolean isNotePdfDeleted){
 
         Long userId=(Long) session.getAttribute("userId");
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
@@ -123,6 +125,12 @@ public class UserController {
         }
         if (Boolean.TRUE.equals(isFeeSubmitted)) {
             model.addAttribute("feeSubmitted", true);
+        }
+        if (Boolean.TRUE.equals(isStudyMaterialUploaded)) {
+            model.addAttribute("studyMaterialUploaded", true);
+        }
+        if (Boolean.TRUE.equals(isNotePdfDeleted)) {
+            model.addAttribute("notePdfDeleted", true);
         }
 
 
@@ -159,7 +167,8 @@ public class UserController {
     public String getFacultyDashboard(HttpSession session,
                           Model model,
                           @RequestParam(value = "newAssignmentAdded",required = false)Boolean isNewAssignmentAdded,
-                          @RequestParam(value = "assignmentDeleted",required = false)Boolean isAssignmentDelete){
+                          @RequestParam(value = "assignmentDeleted",required = false)Boolean isAssignmentDelete,
+                          @RequestParam(value = "assignmentUpdated",required = false)Boolean isAssignmentUpdate            ){
         Long userId=(Long) session.getAttribute("userId");
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
         if(userMaster==null){
@@ -172,6 +181,9 @@ public class UserController {
         }
         if (Boolean.TRUE.equals(isAssignmentDelete)) {
             model.addAttribute("assignmentDeleted", true);
+        }
+        if (Boolean.TRUE.equals(isAssignmentUpdate)) {
+            model.addAttribute("assignmentUpdated", true);
         }
 
 //        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));

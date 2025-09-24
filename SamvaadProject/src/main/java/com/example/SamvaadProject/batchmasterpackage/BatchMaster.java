@@ -122,12 +122,5 @@ public class BatchMaster {
         this.assignments = assignments;
     }
 
-//    public List<PdfMaster> getPdfs() {
-//        return pdfs;
-//    }
-//
-//    public void setPdfs(List<PdfMaster> pdfs) {
-//        this.pdfs = pdfs;
-//    }
 }
 

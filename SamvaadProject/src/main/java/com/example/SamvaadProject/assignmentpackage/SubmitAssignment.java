@@ -4,6 +4,8 @@ import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
 import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "submit_assignment")
 public class SubmitAssignment {
@@ -21,7 +23,41 @@ public class SubmitAssignment {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    private UserMaster professor; // Linked with UserMaster
+    private UserMaster professor;
+
+    @Column(name = "pdf")
+    private byte[] pdf;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "submitted_at")
+    private Date submittedAt;
+
+    public Date getSubmittedAt() {
+        return submittedAt;
+    }
+
+    public void setSubmittedAt(Date submittedAt) {
+        this.submittedAt = submittedAt;
+    }
+
+    public SubmitAssignment() {
+    }
+
+    public SubmitAssignment(Long submitId, AssignmentMaster assignment, AdmissionMaster admission, UserMaster professor, byte[] pdf) {
+        this.submitId = submitId;
+        this.assignment = assignment;
+        this.admission = admission;
+        this.professor = professor;
+        this.pdf = pdf;
+    }
+
+    public byte[] getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(byte[] pdf) {
+        this.pdf = pdf;
+    }
 
     public Long getSubmitId() {
         return submitId;

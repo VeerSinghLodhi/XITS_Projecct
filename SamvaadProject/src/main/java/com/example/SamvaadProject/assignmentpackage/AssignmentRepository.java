@@ -1,6 +1,11 @@
 package com.example.SamvaadProject.assignmentpackage;
 
+import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -9,4 +14,14 @@ import java.util.List;
 @Repository
 public interface AssignmentRepository extends JpaRepository<AssignmentMaster,Long> {
     List<AssignmentMaster> findByPdfDateBefore(LocalDate date);
+    List<AssignmentMaster> findByBatch_BatchIdIn(List<Long> batchIds);
+//    List<AssignmentMaster> findByBatch_BatchIdIn(Long batchId);
+    @Query("Select a from AssignmentMaster a where a.batch.batchId=:batchId")
+    List<AssignmentMaster>getAllAssignmentByBatchId(@Param("batchId")Long batchId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM AssignmentMaster a WHERE a.assignmentId = :assignmentId")
+    void getAssignmentDelete(@Param("assignmentId") Long assignmentId);
+
 }

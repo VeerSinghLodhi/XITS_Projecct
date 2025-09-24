@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<UserMaster,Long> {
 
     Optional<UserMaster> findByUsernameAndPassword(String username, String password);
 
+    UserMaster getByUsernameAndPassword(String username, String password);
+
     @Query("select MAX(a.userId) from  UserMaster a")
     public Long getMaxCount();
 

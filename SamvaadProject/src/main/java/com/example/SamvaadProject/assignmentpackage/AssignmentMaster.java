@@ -14,7 +14,12 @@ public class AssignmentMaster {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assignmentId;
 
-    private byte [] pdfs;
+
+    @Column(name = "pdfs")
+    private byte[] pdfs;
+
+
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "batchId")
@@ -59,6 +64,14 @@ public class AssignmentMaster {
 
     public UserMaster getProfessor() {
         return professor;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setProfessor(UserMaster professor) {

@@ -327,6 +327,16 @@ footer a:hover {
   background-color:#fff;
   margin-left:15px;
 }
+    /* User Null Photo  */
+    .passport-photo {
+      width: 150px;
+      height: 180px;
+      background-color: #FFBB33;
+    }
+    .passport-photo i {
+      font-size: 7rem;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -461,6 +471,18 @@ footer a:hover {
   }, 5000);
 </script>
 
+<div id="popupMessage11" class="popup">
+  ✅ Record has been updated successfully!!
+</div>
+
+<script th:if="${facultyUpdated}">
+  const popup = document.getElementById("popupMessage11");
+  popup.classList.add("show");
+  //Time
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 5000);
+</script>
 
 <!-- Navbar -->
 <nav class="navbar navbar-dark sticky-top bg-light flex-md-nowrap p-2 shadow">
@@ -476,7 +498,7 @@ footer a:hover {
       <div class="dropdown">
         <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser"
            data-bs-toggle="dropdown">
-          <img th:if="${user_master.photoPath != null}" th:src="@{/userphoto}"
+          <img th:if="${user_master.photoPath != null}" th:src="@{/userphoto/{id}(id=${user_master.userId})}"
                class="rounded-circle me-2 shadow-sm " width="40" height="40">
           <div th:if="${user_master.photoPath == null}" >
             <i class="bi bi-person-circle rounded-circle me-2 fs-3 shadow-sm text-dark"></i>
@@ -735,7 +757,7 @@ footer a:hover {
         </div>
 
 
-      <!-- Student Material Part -->
+      <!-- Study Material Part -->
       <div id="studymaterial" class="dashboard-section">
         <h4 class="text-center mt-3">--Study Material Management--</h4>
         <div class="row mt-4">
@@ -836,16 +858,183 @@ footer a:hover {
 
       <!-- Students Part -->
       <div id="allstudents" class="dashboard-section">
-        <h4 class="text-center mt-3">--Project Management--</h4>
+        <h4 class="text-center mt-3">--Student Management--</h4>
         <div class="row mt-4">
           <div class="col-lg-8 col-md-8 mb-3">
-            <p>Here admin can track student/faculty projects.</p>
-            <ul class="list-group">
-              <li class="list-group-item">Festival of India - <span class="badge bg-success">Ongoing</span>
-              </li>
-              <li class="list-group-item">SagarJob Portal - <span class="badge bg-warning">Pending</span>
-              </li>
-            </ul>
+            <div class="card p-3">
+
+
+              <!-- Tabs -->
+              <ul class="nav nav-tabs" id="myTab8" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="all-student-tab" data-bs-toggle="tab" data-bs-target="#studentbatches"
+                          type="button">Student Batches</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="update-student-tab" data-bs-toggle="tab" data-bs-target="#studentupdate"
+                          type="button">Update Student</button>
+                </li>
+              </ul>
+
+              <!-- Tab Content -->
+              <div class="tab-content p-3">
+                <div class="tab-pane fade show active" id="studentbatches" role="tabpanel">
+                  <h4 class="text-center">--Student & Batch Management--</h4>
+                  <!-- Faculty Select -->
+                  <form id="userForm2" class="card p-4 shadow rounded mb-4">
+                    <div class="mb-3">
+                      <label for="userId" class="form-label">Select User</label>
+                      <select class="form-select" id="userId2" name="userId" required>
+                        <option value="" selected disabled>-- Select User --</option>
+                        <!--                          <option th:each="userStudent : ${allstudentusers}" th:value="${userStudent.userId}" th:text="${userStudent.fullName} + '(UID - '+ ${userStudent.userId} + ')'}"></option>-->
+                        <option th:each="userStudent : ${allstudentusers}"
+                                th:value="${userStudent.userId}"
+                                th:text="|${userStudent.fullName} (UID - ${userStudent.userId})|">
+                      </select>
+                    </div>
+                  </form>
+
+                  <div id="alldetailofstudent" style="display:none;">
+                    <hr class="border border-success">
+                  <div class="row mb-3">
+                    <div class="row mb-3">
+                      <div class="col">
+                        <span>Total Batch: <span class="fw-bold fst-italic" >4</span></span>
+                      </div>
+                      <div class="col">
+                        <span>Attendance: <span class="fw-bold " >76%</span></span>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col">
+                        <span>Balance: <span class="fw-bold fst-italic" >₹2000 (all admissions)</span></span>
+                      </div>
+                      <div class="col">
+                        <span>Abc: <span class="fw-bold " >Veer</span></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Table to show admissions -->
+                  <div class="mt-4">
+                    <h5>Admissions List</h5>
+                    <table class="table table-bordered table-striped" id="admissionsTable2">
+                      <thead class="table-dark">
+                      <tr>
+                        <th>AID</th>
+                        <th>Course</th>
+                        <th>Batch</th>
+                        <th>Date</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <!-- Filled dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="studentupdate" role="tabpanel">
+                  <h4 class="text-center">--Update Student--</h4>
+
+                  <form method="post" id="facultyUpdateForm1" action="/faculty/update" th:object="${newUser}" enctype="multipart/form-data">
+
+                    <div class="mb-4">
+                      <label for="studentSelectId" class="form-label fw-bold">Select Faculty</label>
+                      <select id="studentSelectId" name="facultySelectId" class="form-select">
+                        <option value="" selected disabled>-- Select Student --</option>
+                        <option th:each="s : ${allstudents}" th:value="${s.userId}" th:text="${s.fullName}+' (UID - '+${s.userId}+')'"></option>
+                      </select>
+                    </div>
+
+                    <div id="studentDetailsForm" style="display:none;">
+                      <hr class="border border-success">
+
+
+                      <div class="row mb-3">
+                        <!-- Left side: Name & Email -->
+                        <div class="col-md-8">
+                          <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="studentName" th:value="${newUser.fullName}" name="fullName"  required>
+                          </div>
+
+                          <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="studentEmail" th:value="${newUser.email}" name="email"  required>
+                          </div>
+
+                          <div class="mb-3">
+                            <label class="form-label">Contact No</label>
+                            <input type="text" class="form-control" id="studentContactNo" name="contactNo" th:value="${newUser.contactNo}"
+                                   maxlength="15" required>
+                          </div>
+
+                        </div>
+
+                        <!-- Right side: Passport Photo -->
+                        <div class="col-md-4 text-center">
+                          <label class="form-label">Student Photo</label>
+                          <div class="mb-3">
+                            <!-- Preview box --><div>
+                            <img id="studentPhotoPreview"
+                                 src=""
+                                 alt="Student Photo"
+                                 class="img-thumbnail mb-2 ms-5 border border-success"
+                                 style="width:150px; height:180px; object-fit:cover;display:none;">
+<!--                            Null Picture-->
+                            <div id="studentnullpic" class="passport-photo border border-2 border-success rounded ms-5" style="display:none;">
+                              <i class="bi bi-person"></i>
+                            </div>
+                          </div>
+                          </div>
+                          <div>
+                            <span id="enabledId1" style="display:none;"><i class="bi bi-check-circle-fill status-icon" style="color:green;font-size: 1rem;">Active Profile</i></span>
+                            <span id="disabledId1" style="display:none;"><i class="bi bi-x-circle-fill status-icon" style="color:red;font-size: 1rem;">Inactive Profile</i></span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="studentDOB" th:value="${newUser.dob}" name="dob" required>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" th:value="${newUser.address}" id="studentAddress" name="address" required></textarea>
+                        <!--                        <input type="text" class="form-control" th:value="${newUser.address}" name="address">-->
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-control" id="studentCity" th:value="${newUser.city}" name="city" required>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Photo(Optional)</label>
+                        <input type="file" class="form-control" name="facultyPhoto">
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label">Set Status (IMPORTANT ROLE)</label>
+                        <select class="form-select" name="status" id="studentStatus" th:value="${newUser.status}" required>
+                          <option value="" disabled>-- Set Status --</option>
+                          <option value="true" selected>Enabled</option>
+                          <option value="false">Disabled</option>
+                        </select>
+                      </div>
+
+                      <div class="button">
+                        <input type="reset" value="Reset">
+                        <input type="submit" id="" value="Update">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Right Section (Shortcuts) -->
           <div class="col-lg-4 col-md-4">
@@ -1146,11 +1335,11 @@ footer a:hover {
               <ul class="nav nav-tabs" id="myTab6" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="all-faculties-tab" data-bs-toggle="tab" data-bs-target="#showfaculties"
-                          type="button">Show Faculties</button>
+                          type="button">Faculty Batches</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="del-faculties" data-bs-toggle="tab" data-bs-target="#delete_faculties"
-                          type="button">Update</button>
+                          type="button">Update Faculty</button>
                 </li>
               </ul>
 
@@ -1192,8 +1381,109 @@ footer a:hover {
                 </div>
 
               <div class="tab-pane fade" id="delete_faculties" role="tabpanel">
-                <h4 class="text-center">--Delete Faculties--</h4>
-                <p>All User will be show here.</p>
+                <h4 class="text-center">--Update Faculty--</h4>
+
+                <form method="post" id="facultyUpdateForm" action="/faculty/update" th:object="${newUser}" enctype="multipart/form-data">
+
+                <div class="mb-4">
+                  <label for="facultySelectId" class="form-label fw-bold">Select Faculty</label>
+                  <select id="facultySelectId" name="facultySelectId" class="form-select">
+                    <option value="" selected disabled>-- Select Faculty --</option>
+                    <option th:each="f : ${allfaculties}" th:value="${f.userId}" th:text="${f.fullName}+' (UID - '+${f.userId}+')'"></option>
+                  </select>
+                </div>
+
+                <div id="facultyDetailsForm" style="display:none;">
+                  <hr class="border border-success">
+
+
+                    <div class="row mb-3">
+                      <!-- Left side: Name & Email -->
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label class="form-label">Full Name</label>
+                          <input type="text" class="form-control" id="facultyName" th:value="${newUser.fullName}" name="fullName"  required>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label">Email</label>
+                          <input type="email" class="form-control" id="facultyEmail" th:value="${newUser.email}" name="email"  required>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label">Contact No</label>
+                          <input type="text" class="form-control" id="facultyContactNo" name="contactNo" th:value="${newUser.contactNo}"
+                                 maxlength="15" required>
+                        </div>
+
+                      </div>
+
+                      <!-- Right side: Passport Photo -->
+                      <div class="col-md-4 text-center">
+                        <label class="form-label">Faculty Photo</label>
+                        <div class="mb-3">
+                          <!-- Preview box -->
+<!--                          <img id="facultyPhotoPreview"-->
+<!--                               src=""-->
+<!--                               alt="Faculty Photo"-->
+<!--                               class="img-thumbnail mb-2 border border-success"-->
+<!--                               style="width:150px; height:180px; object-fit:cover;">-->
+                          <!-- Preview box --><div>
+                          <img id="facultyPhotoPreview"
+                               src=""
+                               alt="Faculty Photo"
+                               class="img-thumbnail mb-2 ms-5 border border-success"
+                               style="width:150px; height:180px; object-fit:cover;display:none;">
+                          <!--                            Null Picture-->
+                          <div id="facultynullpic" class="passport-photo border border-2 border-success rounded ms-5" style="display:none;">
+                            <i class="bi bi-person"></i>
+                          </div>
+                        </div>
+
+                     </div>
+                        <div>
+                          <span id="enabledId" style="display:none;"><i class="bi bi-check-circle-fill status-icon" style="color:green;font-size: 1rem;">Active Profile</i></span>
+                          <span id="disabledId" style="display:none;"><i class="bi bi-x-circle-fill status-icon" style="color:red;font-size: 1rem;">Inactive Profile</i></span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Date of Birth</label>
+                      <input type="date" class="form-control" id="facultyDOB" th:value="${newUser.dob}" name="dob" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Address</label>
+                      <textarea class="form-control" th:value="${newUser.address}" id="facultyAddress" name="address" required></textarea>
+                      <!--                        <input type="text" class="form-control" th:value="${newUser.address}" name="address">-->
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">City</label>
+                      <input type="text" class="form-control" id="facultyCity" th:value="${newUser.city}" name="city" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Photo(Optional)</label>
+                      <input type="file" class="form-control" name="facultyPhoto">
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Set Status (IMPORTANT ROLE)</label>
+                      <select class="form-select" name="status" id="facultyStatus" th:value="${newUser.status}" required>
+                        <option value="" disabled>-- Set Status --</option>
+                        <option value="true" selected>Enabled</option>
+                        <option value="false">Disabled</option>
+                      </select>
+                    </div>
+
+                    <div class="button">
+                      <input type="reset" value="Reset">
+                      <input type="submit" value="Update">
+                    </div>
+                </div>
+                  </form>
               </div>
               </div>
             </div>
@@ -1814,6 +2104,95 @@ footer a:hover {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Custom JS -->
+
+
+<!--Faculty Update Js-->
+<script>
+  document.getElementById("facultySelectId").addEventListener("change", function() {
+     var facultyId = this.value;
+     console.log("facultyId  " + facultyId);
+     document.getElementById("facultyDetailsForm").style.display = "block";
+     if(facultyId) {
+       fetch('/faculty/data/' + facultyId)   // Call Spring Boot GET endpoint
+         .then(response => response.json())
+         .then(data => {
+           // Display data in a Input field
+           document.getElementById("facultyName").value = data.facultyName;
+           document.getElementById("facultyEmail").value = data.facultyEmail;
+           document.getElementById("facultyContactNo").value = data.facultyContactNo;
+           document.getElementById("facultyDOB").value = data.facultyDOB;
+           document.getElementById("facultyAddress").value = data.facultyAddress;
+           document.getElementById("facultyCity").value = data.facultyCity;
+           document.getElementById("facultyStatus").value = data.facultyStatus;
+           document.getElementById("facultyPhotoPreview").src= "/userphoto/"+data.facultyId;
+           if(data.facultyStatus=="true"){
+            document.getElementById("enabledId").style.display="block";
+            document.getElementById("disabledId").style.display="none";
+            }else{
+            document.getElementById("enabledId").style.display="none";
+            document.getElementById("disabledId").style.display="block";
+            }
+              if(data.photo!=null){
+                document.getElementById("facultyPhotoPreview").style.display="block";
+                document.getElementById("facultynullpic").style.display="none";
+            }else{
+                 document.getElementById("facultyPhotoPreview").style.display="none";
+                document.getElementById("facultynullpic").style.display="block";
+            }
+
+         })
+         .catch(error => console.error('Error:', error));
+     } else {
+       // Reset fields if no admission selected
+     }
+   });
+</script>
+
+<!--Student Update Js-->
+<script>
+  document.getElementById("studentSelectId").addEventListener("change", function() {
+     var studentId = this.value;
+     console.log("studentId  " + studentId);
+     document.getElementById("studentDetailsForm").style.display = "block";
+     if(studentId) {
+       fetch('/faculty/data/' + studentId)   // Call Spring Boot GET endpoint
+         .then(response => response.json())
+         .then(data => {
+           // Display data in a Input field
+           document.getElementById("studentName").value = data.facultyName;
+           document.getElementById("studentEmail").value = data.facultyEmail;
+           document.getElementById("studentContactNo").value = data.facultyContactNo;
+           document.getElementById("studentDOB").value = data.facultyDOB;
+           document.getElementById("studentAddress").value = data.facultyAddress;
+           document.getElementById("studentCity").value = data.facultyCity;
+           document.getElementById("studentStatus").value = data.facultyStatus;
+           document.getElementById("studentPhotoPreview").src= "/userphoto/"+data.facultyId;
+           if(data.facultyStatus=="true"){
+            document.getElementById("enabledId1").style.display="block";
+            document.getElementById("disabledId1").style.display="none";
+            }else{
+            document.getElementById("enabledId1").style.display="none";
+            document.getElementById("disabledId1").style.display="block";
+            }
+
+            if(data.photo!=null){
+                document.getElementById("studentPhotoPreview").style.display="block";
+                document.getElementById("studentnullpic").style.display="none";
+            }else{
+                 document.getElementById("studentPhotoPreview").style.display="none";
+                document.getElementById("studentnullpic").style.display="block";
+            }
+
+         })
+         .catch(error => console.error('Error:', error));
+     } else {
+       // Reset fields if no admission selected
+     }
+   });
+</script>
+
+
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
          const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
@@ -2181,6 +2560,37 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
           let tbody = document.querySelector("#admissionsTable tbody");
+          tbody.innerHTML = "";
+
+          if(data.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No admissions found</td></tr>";
+            return;
+          }
+
+          data.forEach(admission => {
+            let row = `
+              <tr>
+                <td>${admission.admissionId}</td>
+                <td>${admission.courseName}</td>
+                <td>${admission.batchName}</td>
+                <td>${admission.admissionDate}</td>
+              </tr>
+            `;
+            tbody.innerHTML += row;
+          });
+        })
+        .catch(error => console.error("Error fetching admissions:", error));
+    }
+  });
+
+  document.getElementById("userId2").addEventListener("change", function() {
+    let userId = this.value;
+    document.getElementById("alldetailofstudent").style.display="block";
+    if(userId) {
+      fetch("/admissions/" + userId) // Spring Boot endpoint returning JSON
+        .then(response => response.json())
+        .then(data => {
+          let tbody = document.querySelector("#admissionsTable2 tbody");
           tbody.innerHTML = "";
 
           if(data.length === 0) {

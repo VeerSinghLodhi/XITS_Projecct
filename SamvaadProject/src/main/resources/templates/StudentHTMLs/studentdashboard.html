@@ -313,22 +313,38 @@
 
 <!-- Custom JS for section navigation -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const navLinks = document.querySelectorAll('.sidebar .nav-link');
-      const sections = document.querySelectorAll('.dashboard-section');
+  document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+            const sections = document.querySelectorAll('.dashboard-section');
+            const sidebar = document.getElementById('sidebarMenu');
 
-      navLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent page jump
 
-          sections.forEach(section => section.classList.remove('active'));
-          const targetId = this.getAttribute('href').substring(1);
-          document.getElementById(targetId).classList.add('active');
+                    // Remove active from all links and sections
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Add active to clicked link
+                    this.classList.add('active');
+
+                    // Show the corresponding section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+
+                    // Collapse sidebar if on small screens
+                    if (window.innerWidth < 992 && sidebar) {
+                        const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                        collapseInstance.hide();
+                    }
+                });
+            });
         });
-      });
-    });
+
 </script>
 </body>
 

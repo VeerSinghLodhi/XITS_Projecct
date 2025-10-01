@@ -107,7 +107,7 @@
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser"
                    data-bs-toggle="dropdown">
-                    <img th:if="${user_master.photoPath != null}" th:src="@{/userphoto}"
+                    <img th:if="${user_master.photoPath != null}" th:src="@{/userphoto/{id}(id=${user_master.userId})}"
                          class="rounded-circle me-2 shadow-sm " width="40" height="40">
                     <div th:if="${user_master.photoPath == null}" >
                         <i class="bi bi-person-circle rounded-circle me-2 fs-3 shadow-sm text-dark"></i>
@@ -233,8 +233,64 @@
 
             <!-- Assignments -->
             <div id="assignments" class="dashboard-section">
-                <h3>Assignments</h3>
-                <p>📝 Your pending and submitted assignments.</p>
+                <h3>My Batch</h3>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div class="card p-3">
+
+
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs" id="myTab3" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="assignment-tab" data-bs-toggle="tab" data-bs-target="#assignment_tab"
+                                            type="button">Add New User</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="assign2-tab" data-bs-toggle="tab" data-bs-target="#assign2"
+                                            type="button">Update</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="assign3-tab" data-bs-toggle="tab"
+                                            data-bs-target="#assign3" type="button">Notifications</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="assign4-tab" data-bs-toggle="tab" data-bs-target="#assign4"
+                                            type="button">All Users</button>
+                                </li>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade" id="assignment_tab" role="tabpanel">
+                                    <h5>Assignments</h5>
+                                    <p>All assignments will be show here.</p>
+                                </div>
+                                <div class="tab-pane fade show active" id="assign2" role="tabpanel">
+                                    <h4>Add New User</h4>
+
+                                </div>
+                                <div class="tab-pane fade" id="assign3" role="tabpanel">
+                                    <h4 class="mb-3">Available User</h4>
+                                    <h3>Users Details to be updated here.</h3>
+                                </div>
+                                <div class="tab-pane fade" id="assign4" role="tabpanel">
+                                    <h5>User Notifications</h5>
+                                    <p>User Notifications list goes here.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section (Shortcuts) -->
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
             </div>
 
             <!-- Attendance -->

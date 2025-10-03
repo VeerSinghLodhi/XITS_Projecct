@@ -220,14 +220,52 @@
 </script>
 
 
+<div id="popupMessage4" class="popup">
+    ✅ Attendance has been marked successful!
+</div>
+<script th:if="${attendanceMarked}">
+    popup = document.getElementById("popupMessage4");
+    popup.classList.add("show");
+    //Time
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 5000);
+</script>
+
+<div id="popupMessage5" class="popup">
+    ✅ Attendance has been updated successful!
+</div>
+<script th:if="${attendanceUpdated}">
+    popup = document.getElementById("popupMessage5");
+    popup.classList.add("show");
+    //Time
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 5000);
+</script>
+
+<div id="popupMessage6" class="popup" style="background-color: red;">
+    <i class="bi bi-x-circle text-white" style="font-size: 1.3rem;"></i> Attendance already marked!!
+</div>
+<script th:if="${attendanceAlreadyErrorMessage}">
+    popup = document.getElementById("popupMessage6");
+    popup.classList.add("show");
+    //Time
+    setTimeout(() => {
+        popup.classList.remove("show");
+    }, 5000);
+</script>
+
+
+
 <!-- Navbar -->
 <nav class="navbar navbar-dark sticky-top bg-light flex-md-nowrap p-2 shadow">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center " href="#">
             <!--            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png" width="45" height="45" class="me-2">-->
             <img src="../Images/xansaitsulutionsLogo.png" width="150" height="60" alt="Logo">
-            <span style="color:black;"><i class="bi bi-person-badge me-1"></i><span
-                    th:text="${user_master.fullName}"></span></span>
+<!--            <span style="color:black;"><i class="bi bi-person-badge me-1"></i><span-->
+<!--                    th:text="${user_master.fullName}"></span></span>-->
         </a>
 
         <div class="d-flex align-items-center">
@@ -239,7 +277,7 @@
                     <div th:unless="${user_master.photoPath != null}">
                         <i class="fas fa-user-circle rounded-circle me-2 fs-1"></i>
                     </div>
-                    <span class="d-none d-sm-inline text-dark" th:text="${user_master.fullName}"></span>
+                    <span class="text-dark" th:text="${user_master.fullName}"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
@@ -254,7 +292,7 @@
         <button class="btn btn-outline-light d-md-none me-2" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                 aria-label="Toggle navigation">
-            <span style="color:black"><i class="bi bi-list"></i></span>
+            <span style="color:black"><i class="bi bi-list fs-3"></i></span>
         </button>
 
     </div>
@@ -280,8 +318,8 @@
                             class="bi bi-calendar-check me-2"></i>Attendance</a></li>
                     <li class="nav-item"><a class="nav-link" href="#messages"><i
                             class="bi bi-chat-dots me-2"></i>Messages</a></li>
-                    <li class="nav-item"><a class="nav-link text-danger" href="/logout"><i
-                            class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
+<!--                    <li class="nav-item"><a class="nav-link text-danger" href="/logout"><i-->
+<!--                            class="bi bi-box-arrow-left me-2"></i>Logout</a></li>-->
                 </ul>
             </div>
         </nav>
@@ -296,8 +334,75 @@
 
             <!-- Profile -->
             <div id="profile" class="dashboard-section">
-                <h3>My Profile</h3>
-                <p>📌 Faculty details will appear here.</p>
+                <h4 class="mt-3">My Profile</h4>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div class="card p-3 mb-5 bg-white rounded">
+                            <div class="card-body text-center">
+                                <!-- Profile Photo -->
+                                <img th:if="${user_master.photoPath != null}"
+                                     th:src="@{/userphoto/{id}(id=${user_master.userId})}"
+                                     class="rounded-circle mb-3 border border-1" width="150" height="150" alt="Profile Picture"/>
+                                <img  th:if="${user_master.photoPath == null}"
+                                      src="../Images/noprofilepic.png"
+                                      class="rounded-circle mb-3" width="150" height="150" alt="Profile Picture"/>
+
+                                <!-- Name -->
+                                <h3 th:text="${user_master.fullName}" >Muskan Shroti</h3>
+                                <p class="text-muted">STUDENT</p>
+
+                                <hr>
+
+                                <!-- Profile Details -->
+                                <table class="table table-bordered text-start">
+                                    <tbody>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td th:text="${user_master.email}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Username</th>
+                                        <td th:text="${user_master.username}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contact No</th>
+                                        <td th:text="${user_master.contactNo}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td><textarea th:text="${user_master.address}"  style="border:none;outline:none;width:100%;"  readonly> Bhopal, Madhya Pradesh</textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth</th>
+                                        <td th:text="${user_master.dob}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Registered On</th>
+                                        <td th:text="${user_master.createdOn}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Edit Profile Button -->
+                                <!--                                <a href="#" class="btn btn-primary mt-3">Update Profile</a>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section (Shortcuts) -->
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
             </div>
 
             <!-- Students -->
@@ -447,8 +552,156 @@
 
             <!-- Attendance -->
             <div id="attendance" class="dashboard-section">
-                <h3>Attendance</h3>
-                <p>✅ Record and view student attendance.</p>
+                <h3 class="text-center mt-3">--Assignment Management--</h3>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div class="card p-3">
+
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs" id="myTab3" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="newattendance-tab" data-bs-toggle="tab"
+                                            data-bs-target="#addnewattendance" type="button">Marked Attendance</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="updateattendance-tab" data-bs-toggle="tab"
+                                            data-bs-target="#updateattendances" type="button">Update</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="showattendance-tab" data-bs-toggle="tab"
+                                            data-bs-target="#showstudentattendance" type="button">Show Attendance</button>
+                                </li>
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade show active" id="addnewattendance" role="tabpanel">
+                                    <h3 class="mb-4 text-center " style="color : rgb(224, 224, 60);">Mark Attendance</h3>
+                                    <form th:action="@{/MarkedAttendance}" method="post" onsubmit="validateDate(event)">
+                                        <div class="mb-3">
+                                            <label for="batchSelect" class="form-label">Select Course</label>
+                                            <select id="batchSelect" name="batchSelect" class="form-select shadow-sm" required>
+                                                <option value="" selected disabled>--Select a batch--</option>
+                                                <option th:if="${batches == null || batches.isEmpty()}"  disabled selected>Yet Course Assigned To You</option>
+                                                <option th:unless="${batches == null || batches.isEmpty()}"  disabled selected>Select Option</option>
+                                                <option th:each="batch : ${batches}"  th:value="${batch.batchId}" th:text="${batch.name}"  th:selected="${batch.batchId} == ${selectedBatchId}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="attendanceDate" class="form-label">Select Date</label>
+                                            <input type="date" id="attendanceDate" name="attendance" th:value="${selectedDate}" class="form-control shadow-sm" required>
+                                            <p id="dateError" class="text-danger mt-1" style="display: none;"></p>
+                                        </div>
+
+
+                                        <div class="mb-3 ">
+                                            <label class="form-label fw-bold ">Students</label>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="selectAll">
+                                                <label class="form-check-label" for="selectAll" >Marked All</label>
+                                            </div>
+                                            <div id="studentList" class="mt-2 ps-3" >
+<!--                                                <div class="form-check form-switch">-->
+<!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
+<!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
+<!--                                                </div>-->
+                                            </div>
+<!--                                            <div id="studentList" class="mt-2 ps-3" th:each="names : ${Studentname}">-->
+<!--                                                <div class="form-check form-switch">-->
+<!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
+<!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-primary px-4">Save Attendance</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+
+                                <div class="tab-pane fade " id="updateattendances" role="tabpanel">
+                                    <h5 class="text-center mb-3">Update Attendance</h5>
+                                    <form id="attendanceForm" th:action="@{/UpdateAttendance}" method="post">
+                                        <div class="row justify-content-end">
+                                            <div class="col-md-12"> <!-- Adjust width (col-md-4, col-md-3, etc.) -->
+                                                <div class="input-group mb-3">
+                                                    <span for="Getdate" class="input-group-text">Select Date</span>
+                                                    <input type="date" id="Getdate" name="attendanceDate" class="form-control" >
+
+                                                    <span class="input-group-text">Select Batch</span>
+                                                    <select id="GetBatch" name="Batchid" class="form-select shadow-sm" required>
+                                                        <option th:if="${batches == null || batches.isEmpty()}"  disabled selected>Batch Not Assigned To You</option>
+                                                        <option th:unless="${batches == null || batches.isEmpty()}" value="" disabled selected>Select Option</option>
+                                                        <option th:each="batch : ${batches}"  th:value="${batch.batchId}" th:text="${batch.name}"  th:selected="${batch.batchId} == ${SelectedBatchId}"></option>
+                                                    </select>
+
+                                                    <a id="SearchDate" class="btn btn-success">Search</a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div>
+                                            <table   class="table-responsive table table-bordered table-striped text-center">
+                                                <thead class="table-dark">
+                                                <tr>
+                                                    <td>Admission ID</td>
+                                                    <td>Name </td>
+                                                    <td>Status </td>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="studentattendancetable">
+<!--                                                <tr>-->
+<!--                                                    <td  th:text="${student.admission.admissionId}">20251103</td>-->
+<!--                                                    <td  th:text="${student.admission.userMaster.fullName}">Alice</td>-->
+<!--                                                    <td>-->
+<!--                                                        <select class="form-select" name="status" th:value="${student.status}">-->
+<!--                                                            <option th:selected="${student.status=='Present'}" id="Present" value="Present">Present</option>-->
+<!--                                                            <option th:selected="${student.status=='Absent'}" id="Absent" value="Absent">Absent</option>-->
+<!--                                                        </select>-->
+<!--                                                        <input type="hidden" name="attendanceId" th:value="${student.attendanceId}"/>-->
+<!--                                                        <input type="hidden" name="attendanceDate" th:value="${student.attendanceDate}"/>-->
+<!--                                                    </td>-->
+<!--                                                </tr>-->
+                                                </tbody>
+
+                                                <tfoot>
+                                                <tr>
+                                                    <td colspan="3" class="text-center">
+                                                        <button type="submit" class="btn btn-primary mt-2 mb-2">Update Attendance</button>
+                                                    </td>
+                                                </tr>
+                                                </tfoot>
+
+                                            </table>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                                <div class="tab-pane fade" id="showstudentattendance" role="tabpanel">
+                                    <h5>All Assignments </h5>
+                                    <p>User Notifications list goes here.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section (Shortcuts) -->
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
             </div>
 
             <!-- Messages -->
@@ -515,6 +768,98 @@
         });
 
 </script>
+
+<!--Get Student For Update-->
+<script>
+    document.getElementById('SearchDate').addEventListener('click',function() {
+  console.log('Click ho Gya');
+  let selectedDate=document.getElementById('Getdate').value;
+  let selectedBatchId=document.getElementById('GetBatch').value;
+        if(selectedDate && selectedBatchId) {
+        console.log("Entered inside the if");
+        fetch('/getstudentupdate/'+selectedDate+ '/' +selectedBatchId)   // Call Spring Boot GET endpoint
+          .then(response => response.json()) // Either JSON OR TEXT.
+          .then(data => {
+            let tbody = document.getElementById("studentattendancetable");
+               tbody.innerHTML = "";
+
+            if(data.length === 0) {
+              tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Student found</td></tr>";
+              return;
+            }
+
+        data.forEach(student => {
+          let row = `
+              <tr>
+                <td>${student.admission_id}</td>
+                <td>${student.name}</td>
+                <td>
+                  <select class="form-select" name="status">
+                    <option value="Present" ${student.status === 'Present' ? 'selected' : ''}>Present</option>
+                    <option value="Absent" ${student.status === 'Absent' ? 'selected' : ''}>Absent</option>
+                  </select>
+                  <input type="hidden" name="attendanceId" value="${student.attendanceId}"/>
+                </td>
+              </tr>
+            `;
+
+          tbody.innerHTML += row;
+        });
+          })
+          .catch(error => console.error('Error:', error));
+      } else {
+        //document.getElementById("fees").value = '0.0';
+      }
+      });
+</script>
+
+<!--Get Student For Attendance-->
+<script>
+    document.getElementById("batchSelect").addEventListener("change", function() {
+       var batchId = this.value;
+        console.log("Batch id "+batchId);
+     //   document.getElementById("showdeletepdf").style.display="block";
+       if(batchId) {
+         fetch('/getstudentsforattendance/' + batchId)   // Call Spring Boot GET endpoint
+           .then(response => response.json()) // Either JSON OR TEXT.
+           .then(data => {
+             let studentListDiv = document.getElementById("studentList");
+
+            studentListDiv.innerHTML="";
+
+             if(data.length === 0) {
+               studentListDiv.innerHTML = "<h4  class='text-center text-muted'>No Student found</h4>";
+               return;
+             }
+
+         data.forEach(student => {
+           let row = `
+
+           <div class="form-check form-switch">
+                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" id="'student-' + ${student.admission_id} " value="${student.admission_id}">
+                    <label class="form-check-label" for="'student-' + ${student.admission_id}" >${student.fullName}</label>
+           </div>
+           `;
+           studentListDiv.innerHTML += row;
+         });
+           })
+           .catch(error => console.error('Error:', error));
+       } else {
+         //document.getElementById("fees").value = '0.0';
+       }
+     });
+
+    // Select All functionality
+ document.getElementById('selectAll').addEventListener('change', function() {
+
+   // let checked=this.checked;
+
+   document.querySelectorAll('.student-checkbox').forEach(cb => {
+       cb.checked = this.checked;
+   });
+ });
+</script>
+
 
 <!--Delete Assignments-->
 <script>

@@ -503,7 +503,7 @@ footer a:hover {
           <div th:if="${user_master.photoPath == null}" >
             <i class="bi bi-person-circle rounded-circle me-2 fs-3 shadow-sm text-dark"></i>
           </div>
-          <span class="d-none d-sm-inline text-dark" th:text="${user_master.fullName}"></span>
+          <span class=" text-dark" >XITS</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
@@ -516,11 +516,10 @@ footer a:hover {
     </div>
     <button class="btn btn-outline-light d-md-none me-2" type="button" data-bs-toggle="collapse"
             data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span style="color:black"><i class="bi bi-list"></i></span>
+      <span style="color:black"><i class="bi bi-list fs-3"></i></span>
     </button>
   </div>
 </nav>
-
 
 
 <div class="container-fluid">
@@ -539,6 +538,8 @@ footer a:hover {
           <li class="nav-item"><a class="nav-link" href="#studymaterial"><i class="bi bi-people me-2"></i>Study Material</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="#admission"><i class="bi bi-people me-2"></i>Admission</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#attendance"><i class="bi bi-people me-2"></i>Attendance</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="#course-part"><i
                   class="bi bi-mortarboard me-2"></i>Course</a></li>
@@ -655,25 +656,13 @@ footer a:hover {
                             type="button">Add New User</button>
                   </li>
                   <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="userupdate-tab" data-bs-toggle="tab" data-bs-target="#update_user"
-                            type="button">Update</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
                     <button class="nav-link" id="usernotifications-tab" data-bs-toggle="tab"
                             data-bs-target="#user_notifications" type="button">Notifications</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#allusers"
-                            type="button">All Users</button>
                   </li>
                 </ul>
 
                 <!-- Tab Content -->
                 <div class="tab-content p-3">
-                  <div class="tab-pane fade" id="allusers" role="tabpanel">
-                    <h5>User Profile</h5>
-                    <p>All User will be show here.</p>
-                  </div>
                   <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">
                     <h4>Add New User</h4>
                     <!--                    <div class="form-container">-->
@@ -731,10 +720,6 @@ footer a:hover {
                       </div>
                     </form>
                     <!--                    </div>-->
-                  </div>
-                  <div class="tab-pane fade" id="update_user" role="tabpanel">
-                    <h4 class="mb-3">Available User</h4>
-                    <h3>Users Details to be updated here.</h3>
                   </div>
                   <div class="tab-pane fade" id="user_notifications" role="tabpanel">
                     <h5>User Notifications</h5>
@@ -816,7 +801,7 @@ footer a:hover {
                       <!-- Batches Table -->
                       <div class="card shadow-sm" id="materialTable" style="display:none;">
                         <div class="card-body">
-                          <h5 class="card-title">Batches</h5>
+                          <h5 class="card-title">Notes</h5>
                           <table class="table table-bordered table-hover mt-3">
                             <thead class="table-dark">
                             <tr>
@@ -1322,6 +1307,80 @@ footer a:hover {
           </div>
           <div th:insert="~{fragments :: footer}"></div>
         </div>
+
+
+      <!-- New User Registration Part -->
+      <div id="attendance" class="dashboard-section">
+        <h3 class="text-center mt-3">--Registration--</h3>
+        <div class="row mt-4">
+          <div class="col-lg-8 col-md-8 mb-3">
+            <div class="card p-3">
+
+
+              <!-- Tabs -->
+              <ul class="nav nav-tabs" id="myTab9" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="showattendance-tab" data-bs-toggle="tab" data-bs-target="#showattendance"
+                          type="button">Show Attendance</button>
+                </li>
+              </ul>
+
+              <!-- Tab Content -->
+              <div class="tab-content p-3">
+                <div class="tab-pane fade show active" id="showattendance" role="tabpanel">
+                  <h4>Show Student Attendance</h4>
+                  <div class="row justify-content-end mb-3">
+                    <div class="col">
+                      <div class="input-group">
+                        <span class="input-group-text">Select Batch</span>
+                        <select class="form-select" id="getbatchid">
+                          <option th:if="${allbatches == null || allbatches.isEmpty()}" disabled selected>No Batches Currently
+                            Running
+                          </option>
+                          <option th:unless="${allbatches == null || allbatches.isEmpty()}" value="" disabled selected>Select
+                            Batch
+                          </option>
+                          <option th:each="batch : ${allbatches}" th:text="${batch.name}" th:value="${batch.course.courseId}"
+                                  th:selected="${batch.course.courseId} == ${SelectedCourseId}"></option>
+                        </select>
+                        <a id="ShowAll" class="btn btn-success">Show</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <table class="table table-bordered text-center align-middle">
+                    <thead class="table-dark">
+                    <tr>
+                      <th>Admission ID</th>
+                      <th>Student Name</th>
+                      <th>Presenties</th>
+                      <th>Percentage</th>
+                      <th>Remark</th>
+                    </tr>
+                    </thead>
+                    <tbody id="showattendancetable">
+
+
+                    </tbody>
+                  </table>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Right Section (Shortcuts) -->
+          <div class="col-lg-4 col-md-4">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <!-- Thymeleaf fragment for shortcuts -->
+                <div th:insert="~{fragments :: shortcut}"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div th:insert="~{fragments :: footer}"></div>
+      </div>
 
       <!-- Faculties Part -->
       <div id="allfaculties" class="dashboard-section">
@@ -2640,6 +2699,35 @@ document.addEventListener('DOMContentLoaded', function () {
     event.target.submit(); // submit form manually
   }, 1000);
   });
+</script>
+
+<!--For show attendance-->
+<script>
+  document.getElementById("getbatchid").addEventListener("change", function() {
+   let batchId = this.value;
+   let tbody = document.getElementById("showattendancetable");
+   tbody.innerHTML = "";
+
+   if (batchId) {
+     fetch("/getstudentsattendance/" + batchId)
+       .then(res => res.json())
+       .then(data => {
+         if (data.length === 0) {
+           tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>No Student Found</td></tr>";
+           return;
+         }
+
+           data.forEach(student => {
+             let row = `<tr>
+               <td>${student.admissionId}</td>
+               <td>${student.studentName}</td>
+             </tr>`;
+             tbody.innerHTML += row;
+           });
+
+       });
+   }
+ });
 </script>
 
 <script>

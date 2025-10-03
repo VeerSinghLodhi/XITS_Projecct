@@ -202,7 +202,10 @@ public class UserController {
                           Model model,
                           @RequestParam(value = "newAssignmentAdded",required = false)Boolean isNewAssignmentAdded,
                           @RequestParam(value = "assignmentDeleted",required = false)Boolean isAssignmentDelete,
-                          @RequestParam(value = "assignmentUpdated",required = false)Boolean isAssignmentUpdate            ){
+                          @RequestParam(value = "assignmentUpdated",required = false)Boolean isAssignmentUpdate ,
+                          @RequestParam(value = "attendanceMarked",required = false)Boolean isAttendanceMarked,
+                          @RequestParam(value = "attendanceUpdated",required = false)Boolean isAttendanceUpdated,
+                          @RequestParam(value = "attendanceAlreadyErrorMessage",required = false)Boolean isAttendanceAlreadyErrorMessage){
         Long userId=(Long) session.getAttribute("userId");
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
         if(userMaster==null){
@@ -219,10 +222,26 @@ public class UserController {
         if (Boolean.TRUE.equals(isAssignmentUpdate)) {
             model.addAttribute("assignmentUpdated", true);
         }
+        if (Boolean.TRUE.equals(isAttendanceMarked)) {
+            model.addAttribute("attendanceMarked", true);
+        }
+        if (Boolean.TRUE.equals(isAttendanceUpdated)) {
+            model.addAttribute("attendanceUpdated", true);
+        }
+        if (Boolean.TRUE.equals(isAttendanceAlreadyErrorMessage)) {
+            model.addAttribute("attendanceAlreadyErrorMessage", true);
+        }
 
 //        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));
         model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId()));
         model.addAttribute("user_master",userMaster);
+
+
+//        Attendance Part
+        model.addAttribute("selectedDate",LocalDate.now());
+
+
+
         return "FacultyHTMLs/facultydashboard";
     }
 
@@ -243,7 +262,7 @@ public class UserController {
                 .toList();
 
         List<BatchMaster> batches1 = batchMasterRepository.findAllById(batchIds1);
-        model.addAttribute("batches", batches1);
+        model.addAttribute("studentbatches", batches1);
 
 ////
 //        // Student batches

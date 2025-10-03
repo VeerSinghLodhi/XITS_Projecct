@@ -69,6 +69,16 @@
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
         }
 
+         .card.shadow-sm {
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card.shadow-sm:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
         .dashboard-shortcut a {
             display: inline-block;
             text-align: center;
@@ -94,6 +104,16 @@
             /* slight lift effect */
         }
 
+         /* Remove arrows */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
     </style>
 </head>
 
@@ -104,8 +124,8 @@
         <a class="navbar-brand d-flex align-items-center " href="#">
             <!--            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="45" height="45" class="me-2">-->
             <img src="../Images/xansaitsulutionsLogo.png" width="150" height="60" alt="Logo">
-            <span style="color:black;"><i class="bi bi-person-circle me-1"></i><span
-                    th:text="${user_master.fullName}"></span></span>
+<!--            <span style="color:black;"><i class="bi bi-person-circle me-1"></i><span-->
+<!--                    th:text="${user_master.fullName}"></span></span>-->
         </a>
 
         <div class="d-flex align-items-center">
@@ -115,10 +135,11 @@
                     <img th:if="${user_master.photoPath != null}"
                          th:src="@{/userphoto/{id}(id=${user_master.userId})}" class="rounded-circle me-2 shadow-sm "
                          width="40" height="40">
-                    <div th:if="${user_master.photoPath == null}">
-                        <i class="bi bi-person-circle rounded-circle me-2 fs-3 shadow-sm text-dark"></i>
-                    </div>
-                    <span class="d-none d-sm-inline text-dark" th:text="${user_master.fullName}"></span>
+                    <img th:unless="${user_master.photoPath != null}"
+                         src="../Images/noprofilepic.png" class="rounded-circle me-2 shadow-sm "
+                         width="40" height="40">
+<!--                    <span class="d-none d-sm-inline text-dark" th:text="${user_master.fullName}"></span>-->
+                    <span class=" text-dark" th:text="${user_master.fullName}"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
@@ -167,19 +188,180 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!-- Home -->
             <div id="home" class="dashboard-section active">
-                <h2>Welcome Student 🎓</h2>
-                <p class="text-muted">This is your dashboard overview.</p>
+                <div class="alert alert-primary shadow-sm mt-3" role="alert">
+                    👋 Welcome back, <strong th:text="${user_master.fullName}"></strong>!
+                    Here’s your dashboard overview.
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="row text-center mb-4">
+                    <div class="col-md-3 mb-2">
+                        <div class="card shadow-sm p-3">
+                            <h5>My Total Batches</h5>
+                            <p><span class="badge bg-success"  th:text="${studentbatches.size()}"></span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="card shadow-sm p-3">
+                            <h5>Assignments</h5>
+                            <p><span class="badge bg-danger">2 Pending</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="card shadow-sm p-3">
+                            <h5>Attendance</h5>
+                            <p><span class="badge bg-success">85%</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="card shadow-sm p-3">
+                            <h5>Latest Result</h5>
+                            <p class="text-muted">8.5 CGPA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enrolled Batches -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        🎓 My Batches
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <ul class="list-group">
+                                <li th:each="batch : ${studentbatches}"
+                                    class="list-group-item d-flex justify-content-between align-items-center">
+
+                                    <!-- Batch Name & ID -->
+                                    <span th:text="${batch.name} + ' (BID - ' + ${batch.batchId} + ')'"></span>
+
+                                    <!-- Status -->
+                                    <span th:if="${batch.status} == 'ACTIVE'" class="badge bg-primary">Ongoing</span>
+                                    <span th:unless="${batch.status} == 'ACTIVE'" class="badge bg-secondary">Completed</span>
+                                </li>
+                            </ul>
+
+                            <!--                            <li class="list-group-item d-flex justify-content-between align-items-center">-->
+<!--                                Java Full Stack (Morning Batch)-->
+<!--                                <span class="badge bg-primary">Ongoing</span>-->
+<!--                            </li>-->
+<!--                            <li class="list-group-item d-flex justify-content-between align-items-center">-->
+<!--                                Python Data Science (Evening Batch)-->
+<!--                                <span class="badge bg-primary">Ongoing</span>-->
+<!--                            </li>-->
+<!--                            <li class="list-group-item d-flex justify-content-between align-items-center">-->
+<!--                                C++ Basics (Weekend Batch)-->
+<!--                                <span class="badge bg-secondary">Completed</span>-->
+<!--                            </li>-->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Announcements -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        📢 Coaching Announcements
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Holiday on <strong>2th Oct</strong> for Gandhi Jayanti.</li>
+                            <li>Guest Lecture on Cloud Computing on <strong>10th Oct</strong>.</li>
+                            <li>Mock Test scheduled on <strong>12th Oct</strong> for Python Batch.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Upcoming Deadlines -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning">
+                        ⏳ Upcoming Assignments & Exams
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Assignment 2 (Java Batch) submission: <strong>8th Oct</strong></li>
+                            <li>Python Quiz Test: <strong>9th Oct</strong></li>
+                            <li>Project Proposal (Data Science Batch): <strong>15th Oct</strong></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <!-- Profile -->
             <div id="profile" class="dashboard-section">
-                <h3>My Profile</h3>
-                <p>📌 Student details will appear here.</p>
+                <h4 class="mt-3">My Profile</h4>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div class="card p-3 mb-5 bg-white rounded">
+                            <div class="card-body text-center">
+                                <!-- Profile Photo -->
+                                <img th:if="${user_master.photoPath != null}"
+                                     th:src="@{/userphoto/{id}(id=${user_master.userId})}"
+                                     class="rounded-circle mb-3 border border-1" width="150" height="150" alt="Profile Picture"/>
+                                <img  th:if="${user_master.photoPath == null}"
+                                      src="../Images/noprofilepic.png"
+                                     class="rounded-circle mb-3" width="150" height="150" alt="Profile Picture"/>
+
+                                <!-- Name -->
+                                <h3 th:text="${user_master.fullName}" ></h3>
+                                <p class="text-muted">STUDENT</p>
+
+                                <hr>
+
+                                <!-- Profile Details -->
+                                <table class="table table-bordered text-start">
+                                    <tbody>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td th:text="${user_master.email}">muskan@example.com</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Username</th>
+                                        <td th:text="${user_master.username}">muskan123</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contact No</th>
+                                        <td th:text="${user_master.contactNo}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td><textarea th:text="${user_master.address}"  style="border:none;outline:none;width:100%;"  readonly> Bhopal, Madhya Pradesh</textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth</th>
+                                        <td th:text="${user_master.dob}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Registered On</th>
+                                        <td th:text="${user_master.createdOn}">02-Oct-2025</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Edit Profile Button -->
+<!--                                <a href="#" class="btn btn-primary mt-3">Update Profile</a>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section (Shortcuts) -->
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
             </div>
 
             <!-- Batch -->
             <div id="batch" class="dashboard-section">
-                <h3>My Batch</h3>
+                <h4 class="mt-3">My Batch</h4>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3">
@@ -241,7 +423,7 @@
 
             <!-- Notes -->
             <div id="notes" class="dashboard-section">
-                <h3>📚 My Notes</h3>
+                <h4 class="mt-3">📚 My Notes</h4>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3">
@@ -262,7 +444,7 @@
                                         <label for="batchId" class="form-label">Select your batch to get notes:</label>
                                         <select id="batch_id" name="batchId" class="form-select" required>
                                             <option value="" selected disabled>-- Select Batch --</option>
-                                            <option th:each="batch : ${batches}" th:value="${batch.batchId}"
+                                            <option th:each="batch : ${studentbatches}" th:value="${batch.batchId}"
                                                     th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
                                         </select>
                                     </div>
@@ -307,7 +489,7 @@
 
             <!-- Assignments -->
             <div id="assignments" class="dashboard-section">
-                <h3>Assignments</h3>
+                <h4 class="mt-3">Assignments</h4>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3">
@@ -341,7 +523,7 @@
                                         <label for="batchId" class="form-label">Select Batch:</label>
                                         <select id="batchId" name="batchId" class="form-select" required>
                                             <option value="" selected disabled>-- Select Batch --</option>
-                                            <option th:each="batch : ${batches}" th:value="${batch.batchId}"
+                                            <option th:each="batch : ${studentbatches}" th:value="${batch.batchId}"
                                                     th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
                                         </select>
                                     </div>
@@ -398,13 +580,13 @@
 
             <!-- Attendance -->
             <div id="attendance" class="dashboard-section">
-                <h3>Attendance</h3>
+                <h4 class="mt-3">Attendance</h4>
                 <p>✅ Your attendance record.</p>
             </div>
 
             <!-- Results -->
             <div id="results" class="dashboard-section">
-                <h3>Results</h3>
+                <h4 class="mt-3">Results</h4>
                 <p>📊 Your academic performance and grades.</p>
             </div>
         </main>
@@ -416,7 +598,7 @@
 
 <!-- Custom JS for section navigation -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+  /*  document.addEventListener('DOMContentLoaded', function () {
         const navLinks = document.querySelectorAll('.sidebar .nav-link');
         const sections = document.querySelectorAll('.dashboard-section');
 
@@ -431,7 +613,39 @@
                 document.getElementById(targetId).classList.add('active');
             });
         });
-    });
+    });  */
+    document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+            const sections = document.querySelectorAll('.dashboard-section');
+            const sidebar = document.getElementById('sidebarMenu');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent page jump
+
+                    // Remove active from all links and sections
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Add active to clicked link
+                    this.classList.add('active');
+
+                    // Show the corresponding section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+
+                    // Collapse sidebar if on small screens
+                    if (window.innerWidth < 992 && sidebar) {
+                        const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                        collapseInstance.hide();
+                    }
+                });
+            });
+        });
+
 </script>
 
 <!--For Assignment according to student batches-->

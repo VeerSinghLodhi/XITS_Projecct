@@ -1311,7 +1311,7 @@ footer a:hover {
 
       <!-- New User Registration Part -->
       <div id="attendance" class="dashboard-section">
-        <h3 class="text-center mt-3">--Registration--</h3>
+        <h3 class="text-center mt-3">--Attendance--</h3>
         <div class="row mt-4">
           <div class="col-lg-8 col-md-8 mb-3">
             <div class="card p-3">
@@ -1340,14 +1340,14 @@ footer a:hover {
                           <option th:unless="${allbatches == null || allbatches.isEmpty()}" value="" disabled selected>Select
                             Batch
                           </option>
-                          <option th:each="batch : ${allbatches}" th:text="${batch.name}" th:value="${batch.course.courseId}"
+                          <option th:each="batch : ${allbatches}" th:text="${batch.name}" th:value="${batch.batchId}"
                                   th:selected="${batch.course.courseId} == ${SelectedCourseId}"></option>
                         </select>
                         <a id="ShowAll" class="btn btn-success">Show</a>
                       </div>
                     </div>
                   </div>
-
+                  <div id="attendancetable" style="display:none">
                   <table class="table table-bordered text-center align-middle">
                     <thead class="table-dark">
                     <tr>
@@ -1360,12 +1360,11 @@ footer a:hover {
                     </thead>
                     <tbody id="showattendancetable">
 
-
                     </tbody>
                   </table>
-
-
+                  </div>
                 </div>
+                <div id="showattendance2"></div>
               </div>
             </div>
           </div>
@@ -2703,32 +2702,204 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!--For show attendance-->
 <script>
-  document.getElementById("getbatchid").addEventListener("change", function() {
-   let batchId = this.value;
-   let tbody = document.getElementById("showattendancetable");
-   tbody.innerHTML = "";
+  document.getElementById("getbatchid").addEventListener("change", function () {
+    let batchId = this.value;
 
-   if (batchId) {
-     fetch("/getstudentsattendance/" + batchId)
-       .then(res => res.json())
-       .then(data => {
-         if (data.length === 0) {
-           tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>No Student Found</td></tr>";
-           return;
-         }
+   // console.log("Batch Id " + batchId);
 
-           data.forEach(student => {
-             let row = `<tr>
-               <td>${student.admissionId}</td>
-               <td>${student.studentName}</td>
-             </tr>`;
-             tbody.innerHTML += row;
-           });
+    if (batchId) {
+     // console.log("Inside the attendance mapping");
+     document.getElementById("attendancetable").style.display="block";
+      let tbody = document.getElementById("showattendancetable");
+      tbody.innerHTML = "";
 
-       });
-   }
- });
+      fetch("/getstudentsattendance/" + batchId)
+        .then(res => res.json())
+        .then(data => {
+          if (data.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='5' class='text-center text-muted'>No Student Found</td></tr>";
+            return;
+          }
+
+          data.forEach(student => {
+            let row = `
+              <tr>
+                <td>
+                  <button type="button" class="btn"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modal_${student.admissionId}">
+                    <span>${student.admissionId}</span>
+                  </button>
+                </td>
+
+                <td>
+                  <button type="button" class="btn"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modal_${student.admissionId}">
+                    <span>${student.fullName}</span>
+                  </button>
+                </td>
+
+                <td data-bs-toggle="tooltip"
+                    title="Present: ${student.presentCount}, Absent: ${student.absentCount}">
+                  ${student.presentCount} Out Of ${student.totalAttendance}
+                </td>
+
+                <td>
+                  <div class="progress" style="height: 20px;">
+                    <div class="progress-bar ${student.badgeClass}"
+                         style="width: ${student.percentage}%; ">
+                      ${student.percentage.toFixed(2)}%
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="${student.badgeClass}">
+                    ${student.status}
+                  </span>
+                </td>
+              </tr>
+            `;
+            tbody.innerHTML += row;
+          });
+        });
+
+      let showattendanceDiv = document.getElementById("showattendance2");
+
+fetch("/getstudentsattendancefulldetails/" + batchId)
+  .then(res => res.json())
+  .then(data => {
+    let students = data.students;
+    let attendance = data.attendance;
+
+    // Clear previous modals
+    showattendanceDiv.innerHTML = "";
+
+    if (!students || students.length === 0) {
+      showattendanceDiv.innerHTML = "<tr><td colspan='5' class='text-center text-muted'>No Attendance Found</td></tr>";
+      return;
+    }
+
+    //console.log("Jay Ho");
+
+    students.forEach(student => {
+      let studentAttendance = attendance.filter(att => att.admission_id === student.admissionId);
+     // console.log("Size is "+studentAttendance.length);
+
+        let rows = studentAttendance.map(att => `
+        <tr>
+          <td>${att.attendanceDate}</td>
+          <td>${att.status}</td>
+        </tr>
+      `).join("");
+
+    //  console.log("rows "+rows);
+
+          let row = `
+      <div class="modal fade" id="modal_${student.admissionId}" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Attendance for ${student.fullName}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-bordered table-striped table-hover text-center align-middle">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    showattendanceDiv.innerHTML += row;
+
+    });
+  });
+
+    }
+  });
 </script>
+
+
+
+
+<!--<script>-->
+<!--  document.getElementById("getbatchid").addEventListener("change", function() {-->
+<!--   let batchId = this.value;-->
+<!--   let tbody = document.getElementById("showattendancetable");-->
+<!--   tbody.innerHTML = "";-->
+<!--    console.log("Batch Id "+batchId);-->
+<!--   if (batchId) {-->
+<!--    console.log("Inside the attendance mapping");-->
+<!--     fetch("/getstudentsattendance/" + batchId)-->
+<!--       .then(res => res.json())-->
+<!--       .then(data => {-->
+<!--         if (data.length === 0) {-->
+<!--           tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>No Student Found</td></tr>";-->
+<!--           return;-->
+<!--         }-->
+
+<!--           data.forEach(student => {-->
+<!--             let row = `-->
+<!--             <tr>-->
+<!--            <td>-->
+<!--                <button type="button" class="btn "-->
+<!--                        data-bs-toggle="modal"-->
+<!--                        th:attr="data-bs-target='#modal_' + ${student.admissionId}">-->
+<!--                    <span text="${student.admissionId}"></span>-->
+<!--                </button>-->
+<!--            </td>-->
+
+
+<!--            <td>-->
+<!--                <button type="button" class="btn"-->
+<!--                        data-bs-toggle="modal"-->
+<!--                       attr="data-bs-target='#modal_' + ${student.admissionId}">-->
+<!--                    <span text="${student.fullName}"></span>-->
+<!--                </button>-->
+<!--            </td>-->
+<!--            <td data-bs-toggle="tooltip"-->
+<!--                title="'Present : ' + ${student.presentCount} + ' , Absent : ' + ${student.absentCount}"-->
+<!--                th:text="${student.presentCount} + ' Out Of ' + ${TotalAttendance}">-->
+<!--                7 Out Of 15-->
+<!--            </td>-->
+<!--            <td>-->
+<!--                <div class="progress" style="height: 20px;">-->
+<!--                    <div class="progress-bar"-->
+<!--                         class="${student.badgeClass}"-->
+<!--                         style="'width:' + ${student.percentage} + '%;'"-->
+<!--                         text="${#numbers.formatDecimal(student.percentage,0,2)} + '%'">-->
+<!--                        0%-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </td>-->
+
+
+<!--            <td>-->
+<!--        <span class="${student.badgeClass}" th:text="${student.status}">-->
+<!--            Status-->
+<!--        </span>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--             `;-->
+<!--             tbody.innerHTML += row;-->
+<!--           });-->
+
+<!--       });-->
+<!--   }-->
+<!-- });-->
+<!--</script>-->
 
 <script>
   document.getElementById("batchSelect").addEventListener("change", function() {

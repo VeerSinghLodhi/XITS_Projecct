@@ -1,9 +1,11 @@
 package com.example.SamvaadProject.attendancepackage;
 
+import com.example.SamvaadProject.admissionpackage.AdmissionDTO;
 import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
 import com.example.SamvaadProject.admissionpackage.AdmissionRepository;
 import com.example.SamvaadProject.attendance_view.AttendanceView;
 import com.example.SamvaadProject.attendance_view.AttendanceViewDTO;
+import com.example.SamvaadProject.attendance_view.ShowAttendanceDTO;
 import com.example.SamvaadProject.attendance_view.attendanceview_repo;
 import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
 import com.example.SamvaadProject.batchmasterpackage.BatchMasterRepository;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -59,12 +62,16 @@ public class AttendanceController {
 //    Get Student for attendance
     @GetMapping("/getstudentsforattendance/{batchId}")
     @ResponseBody
-    public List<AttendanceViewDTO> getStudent(@PathVariable("batchId") Long batchId){
-        System.out.println("Batch Id "+batchId);
-        return attendanceviewRepo.findByBatchId(batchId.longValue())
+    public List<AdmissionDTO> getStudent(@PathVariable("batchId") Long batchId){
+       return admissionRepository.findByBatchId(batchId)
                 .stream()
-                .map(av->new AttendanceViewDTO(av.getAdmission_id(),av.getFull_name()))
+                .map(adm->new AdmissionDTO(adm.getAdmissionId(),adm.getUserMaster().getFullName()))
                 .toList();
+
+//        return attendanceviewRepo.findByBatchId(batchId.longValue())
+//                .stream()
+//                .map(av->new AttendanceViewDTO(av.getAdmission_id(),av.getFull_name()))
+//                .toList();
     }
 
     @GetMapping("/coursePage")
@@ -94,7 +101,8 @@ public class AttendanceController {
                              @RequestParam("batchSelect")Long batchId,
                              RedirectAttributes redirectAttributes) {
 
-        List<AttendanceView> admissionidList=attendanceviewRepo.findByBatchId(batchId); // admission ids of student ;
+//        List<AttendanceView> admissionidList=attendanceviewRepo.findByBatchId(batchId); // admission ids of student ;
+        List<AdmissionMaster>admissionidList=admissionRepository.findByBatchId(batchId);
 //        System.out.println("Total AdIDs ");
 //        for(AttendanceView view : admissionidList ){
 //            System.out.print(", "+view.getAdmission_id());
@@ -104,10 +112,10 @@ public class AttendanceController {
         for( int i=0;i<admissionidList.size();i++)
         {
 
-            boolean isPresent =  attendanceStatus != null && attendanceStatus.contains(String.valueOf(admissionidList.get(i).getAdmission_id()));
+            boolean isPresent =  attendanceStatus != null && attendanceStatus.contains(String.valueOf(admissionidList.get(i).getAdmissionId()));
             System.out.println("Admission Id "+admissionidList.get(i)+" isPresent "+isPresent);
 //            check date is already exist or not
-            Optional<AttendanceMaster> existingAttendance=attendanceRepository.findByAdmission_AdmissionIdAndAttendanceDate(String.valueOf(admissionidList.get(i).getAdmission_id()),attendanceDate);
+            Optional<AttendanceMaster> existingAttendance=attendanceRepository.findByAdmission_AdmissionIdAndAttendanceDate(String.valueOf(admissionidList.get(i).getAdmissionId()),attendanceDate);
             if (existingAttendance.isPresent()) {
                 // Attendance already marked; send message to view
                 redirectAttributes.addAttribute("attendanceAlreadyErrorMessage", true);//"Attendance is already marked.");
@@ -125,7 +133,7 @@ public class AttendanceController {
 
             // Create an AdmissionMaster object and set its ID
             AdmissionMaster admission = new AdmissionMaster();
-            admission.setAdmissionId(String.valueOf(admissionidList.get(i).getAdmission_id()));
+            admission.setAdmissionId(String.valueOf(admissionidList.get(i).getAdmissionId()));
 
             attendanceMaster.setAdmission(admission);
 //            System.out.println(admission);
@@ -158,13 +166,13 @@ public class AttendanceController {
         System.out.println("Entered Inside the update student attendance method!");
         java.sql.Date currdate= java.sql.Date.valueOf(date); //Convert Date
 
-        List<AttendanceView> admissionId=attendanceviewRepo.findByBatchId(batchId);
+        List<AdmissionMaster> admissionId=admissionRepository.findByBatchId(batchId);
 //        System.out.println("BATCH Id"+batchId);
 
         List<String> admissionidList=new ArrayList<>(); //Store all admission Ids in This List
         for(int i=0;i<admissionId.size();i++)
         {
-            admissionidList.add(admissionId.get(i).getAdmission_id().toString());
+            admissionidList.add(admissionId.get(i).getAdmissionId());
 //            System.out.println(admissionId.get(i).getAdmission_id().toString());
         }
 
@@ -474,59 +482,51 @@ public class AttendanceController {
         return "AdminAttendance";
     }
 
+
     @GetMapping("/getstudentsattendance/{batchId}")
-    public void getStudentsAttendance(@PathVariable("batchId")Long batchId){
-        Long courseId=batchMasterRepository.findById(batchId).orElse(null).getCourse().getCourseId();
-        List<AdmissionMaster> ids=admissionRepository.findByCourse(courseId);
-        List<String> AdmissionIds=new ArrayList<>();
-        Long count=0L;
-        for(int i=0;i<ids.size();i++)
-        {
-            AdmissionIds.add(ids.get(i).getAdmissionId());
-            System.out.println(ids.get(i).getUserMaster().getFullName());
-            System.out.println(ids.get(i).getAdmissionId());
-            count++;
+    @ResponseBody
+    public List<ShowAttendanceDTO> getStudentsAttendance(@PathVariable("batchId") Long batchId) {
+
+
+        System.out.println("Batch Id"+batchId);
+
+        // Find admissions directly by batch
+        List<AdmissionMaster> admissions = admissionRepository.findByBatchId(batchId);
+
+        List<String> admissionIds = admissions.stream()
+                .map(AdmissionMaster::getAdmissionId)
+                .toList();
+
+        if (admissionIds.isEmpty()) {
+            System.out.println("Empty List");
+            return Collections.emptyList();
         }
+        System.out.println("After Empty List");
 
-        //Distinct Ids of Attendance Master ;
-        List<AttendanceMaster> attendanceMasterList=attendanceRepository.findLatestByAdmissionIds(AdmissionIds);
-        for(int i=0;i<attendanceMasterList.size();i++)
-        {
-            System.out.println(attendanceMasterList.get(i).getStatus());
-        }
-        //Find All Date Attendance for modals
-        List<AttendanceMaster> AllattendanceOfStudents=attendanceRepository.findByAdmissionIds(AdmissionIds);
+        // admissionId → fullName
+        Map<String, String> admissionNameMap = admissions.stream()
+                .collect(Collectors.toMap(AdmissionMaster::getAdmissionId,
+                        a -> a.getUserMaster().getFullName()));
 
-        //Count Total Attendance
-        Long TotalAttendance= attendanceRepository.findByTotalAttendanceCount(AdmissionIds);
-        System.out.println(TotalAttendance);
-        TotalAttendance/=count;
+        Long studentCount = (long) admissionIds.size();
 
-        Long presenties=attendanceRepository.findByCount(AdmissionIds);
-        System.out.println("Presenties "+presenties);
+        // total sessions (per student basis)
+        Long totalAttendance = attendanceRepository.findByTotalAttendanceCount(admissionIds);
+        totalAttendance = totalAttendance / studentCount;
 
-        List<Object[]> results = attendanceRepository.findPresentCountPerAdmission(AdmissionIds);
-        List<Map<String,Object>> AllStudent=new ArrayList<>();
+        // per student present count
+        List<Object[]> results = attendanceRepository.findPresentCountPerAdmission(admissionIds);
+
+        List<ShowAttendanceDTO> allStudents = new ArrayList<>();
 
         for (Object[] row : results) {
             String admissionId = (String) row[0];
             Long presentCount = (Long) row[1];
-            Long absentCount = TotalAttendance-presentCount;
-            Map<String,Object> map=new HashMap<>();
+            Long absentCount = totalAttendance - presentCount;
 
-            String fullName="";
-            for(AdmissionMaster ads : ids)
-            {
-                if(ads.getAdmissionId().equals(admissionId))
-                {
-                    fullName=ads.getUserMaster().getFullName();
-                    System.out.println("Full Name Is "+fullName);
-                    break;
-                }
-            }
-            double perc = (presentCount * 100.0) / TotalAttendance;
+            double perc = (presentCount * 100.0) / totalAttendance;
+
             String badgeClass, status;
-
             if (perc >= 75) {
                 badgeClass = "badge bg-success";
                 status = "Good";
@@ -538,36 +538,108 @@ public class AttendanceController {
                 status = "Poor";
             }
 
-            System.out.println("Student " + admissionId + " is present: " + presentCount +"Absent is "+absentCount);
-            map.put("admissionId",admissionId);
-            map.put("presentCount",presentCount);
-            map.put("absentCount",absentCount);
-            map.put("badgeClass",badgeClass);
-            map.put("fullName",fullName);
-            map.put("status",status);
-            map.put("percentage",perc);
-            AllStudent.add(map);
+            allStudents.add(new ShowAttendanceDTO(
+                    admissionId,
+                    admissionNameMap.get(admissionId),
+                    presentCount,
+                    absentCount,
+                    perc,
+                    badgeClass,
+                    status,
+                    totalAttendance
+            ));
         }
 
+        System.out.println("Ended");
+        System.out.println(allStudents.size());
+//
+        return allStudents;
     }
 
-    @GetMapping("/showallstudent")
-    public String showAllStudent(HttpSession session,@RequestParam("courseId") Long courseId, Model model) {
-        // load students by courseId
-        List<BatchMaster> batchlist= (List<BatchMaster>) session.getAttribute("Batches");
-        System.out.println(courseId);
 
-        List<AdmissionMaster> ids=admissionRepository.findByCourse(courseId);
-        List<String> AdmissionIds=new ArrayList<>();
-        Long count=0L;
-        for(int i=0;i<ids.size();i++)
-        {
-            AdmissionIds.add(ids.get(i).getAdmissionId());
-            System.out.println(ids.get(i).getUserMaster().getFullName());
-            System.out.println(ids.get(i).getAdmissionId());
-            count++;
-        }
-        System.out.println(AdmissionIds);
+    @GetMapping("/getstudentsattendancefulldetails/{batchId}")
+    @ResponseBody
+    public Map<String,Object> getStudentsAttendanceFullDetails(@PathVariable("batchId") Long batchId) {
+        List<AdmissionMaster> allAdmissions = admissionRepository.findByBatchId(batchId);
+
+        List<StudentDTO> students = allAdmissions.stream()
+                .map(ad -> {
+                    StudentDTO dto = new StudentDTO();
+                    dto.setAdmissionId(ad.getAdmissionId());
+                    dto.setFullName(ad.getUserMaster().getFullName()); // ya jo field hai
+                    return dto;
+                }).toList();
+
+        List<AttendanceDTO> attendance = attendanceRepository.findByAdmissionIds(
+                allAdmissions.stream().map(AdmissionMaster::getAdmissionId).toList()
+        ).stream().map(att->new AttendanceDTO(att.getAdmission().getAdmissionId(),att.getStatus(),att.getAttendanceDate().toString())).toList();
+
+        System.out.println("Total Student size "+students.size());
+        System.out.println("Attendance Size "+attendance.size());
+        Map<String,Object> objectMap = new HashMap<>();
+        objectMap.put("students", students);
+    objectMap.put("attendance", attendance);
+    return objectMap;
+}
+
+
+//    @GetMapping("/getstudentsattendancefulldetails/{batchId}")
+//    @ResponseBody
+//    public StudentAttendanceResponse getStudentsAttendanceFullDetails(@PathVariable("batchId") Long batchId) {
+//        System.out.println("Hao bhaiya aa gay apan andar");
+//
+//        List<AdmissionMaster> allAdmissions = admissionRepository.findByBatchId(batchId);
+//        List<String> admissionIds = new ArrayList<>();
+//        for (AdmissionMaster ad : allAdmissions) {
+//            admissionIds.add(ad.getAdmissionId());
+//        }
+//
+//        List<AttendanceMaster> allAttendanceOfStudents = attendanceRepository.findByAdmissionIds(admissionIds);
+//
+//        StudentAttendanceResponse response = new StudentAttendanceResponse();
+//        response.setStudents(allAdmissions);
+//        response.setAttendance(allAttendanceOfStudents);
+//
+//        return response;
+//    }
+
+
+//    @GetMapping("/getstudentsattendancefulldetails/{batchId}")
+//    @ResponseBody
+//    public Map<Integer,Object> getStudentsAttendanceFullDetails(@PathVariable("batchId")Long batchId){
+//        System.out.println("Hao bhaiya aa gay apan andar");
+//        List<AdmissionMaster>allAdmissions=admissionRepository.findByBatchId(batchId);
+//        List<String> admissionIds=new ArrayList<>();
+//        for(AdmissionMaster ad : allAdmissions){
+//            admissionIds.add(ad.getAdmissionId());
+//        }
+//        List<AttendanceMaster> allAttendanceOfStudents=attendanceRepository.findByAdmissionIds(admissionIds);
+//        Map<Integer,Object>objectMap=new HashMap<>();
+//        objectMap.put(1,allAdmissions);
+//        objectMap.put(2,allAttendanceOfStudents);
+////        objectMap.get(1)
+//        return objectMap;
+////        objectMap
+//
+//    }
+
+@GetMapping("/showallstudent")
+public String showAllStudent(HttpSession session,@RequestParam("courseId") Long courseId, Model model) {
+    // load students by courseId
+    List<BatchMaster> batchlist= (List<BatchMaster>) session.getAttribute("Batches");
+    System.out.println(courseId);
+
+    List<AdmissionMaster> ids=admissionRepository.findByCourse(courseId);
+    List<String> AdmissionIds=new ArrayList<>();
+    Long count=0L;
+    for(int i=0;i<ids.size();i++)
+    {
+        AdmissionIds.add(ids.get(i).getAdmissionId());
+        System.out.println(ids.get(i).getUserMaster().getFullName());
+        System.out.println(ids.get(i).getAdmissionId());
+        count++;
+    }
+    System.out.println(AdmissionIds);
 
         //Distinct Ids of Attendance Master ;
         List<AttendanceMaster> attendanceMasterList=attendanceRepository.findLatestByAdmissionIds(AdmissionIds);

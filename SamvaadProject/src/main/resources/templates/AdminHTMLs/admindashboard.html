@@ -13,6 +13,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Lato', sans-serif;
       font-size: 0.9rem;
@@ -381,7 +385,7 @@ footer a:hover {
 </script>
 
 <div id="popupMessage4" class="popup">
-  ✅ New Batch added successfully!
+  ✅ New admission has been added successfully!
 </div>
 
 <script th:if="${newAdmissionAdded}">
@@ -545,14 +549,14 @@ footer a:hover {
                   class="bi bi-mortarboard me-2"></i>Course</a></li>
           <li class="nav-item"><a class="nav-link" href="#batch-part"><i class="bi bi-book me-2"></i>Batch</a></li>
           <li class="nav-item"><a class="nav-link" href="#fee-part"><i class="bi bi-currency-rupee me-2"></i>Fee</a></li>
-          <li class="nav-item"><a class="nav-link" href="#project-part"><i
-                  class="bi bi-folder2-open me-2"></i>Project</a></li>
-          <li class="nav-item"><a class="nav-link" href="#message-part"><i
-                  class="bi bi-chat-dots me-2"></i>Message</a></li>
-          <li class="nav-item"><a class="nav-link" href="#reference-part"><i
-                  class="bi bi-link-45deg me-2"></i>Reference</a></li>
-          <li class="nav-item"><a class="nav-link" href="#event-part"><i
-                  class="bi bi-calendar-check me-2"></i>Event</a></li>
+<!--          <li class="nav-item"><a class="nav-link" href="#project-part"><i-->
+<!--                  class="bi bi-folder2-open me-2"></i>Project</a></li>-->
+<!--          <li class="nav-item"><a class="nav-link" href="#message-part"><i-->
+<!--                  class="bi bi-chat-dots me-2"></i>Message</a></li>-->
+<!--          <li class="nav-item"><a class="nav-link" href="#reference-part"><i-->
+<!--                  class="bi bi-link-45deg me-2"></i>Reference</a></li>-->
+<!--          <li class="nav-item"><a class="nav-link" href="#event-part"><i-->
+<!--                  class="bi bi-calendar-check me-2"></i>Event</a></li>-->
           <!--          <li class="nav-item"><a class="nav-link text-danger" th:href="@{/logout}"><i-->
           <!--                  class="bi bi-box-arrow-left me-2"></i>Logout</a></li>-->
         </ul>
@@ -666,7 +670,7 @@ footer a:hover {
                   <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">
                     <h4>Add New User</h4>
                     <!--                    <div class="form-container">-->
-                    <form method="post" id="registerForm" action="/registration" th:object="${newUser}" enctype="multipart/form-data">
+                    <form method="post" id="registerForm" th:action="@{'/admin/registration'}" th:object="${newUser}" enctype="multipart/form-data">
                       <div class="mb-3">
                         <label class="form-label">Full Name</label>
                         <input type="text" class="form-control" name="fullName" th:value="${newUser.fullName}"
@@ -759,10 +763,10 @@ footer a:hover {
                       <button class="nav-link" id="showcoursematerial-tab" data-bs-toggle="tab" data-bs-target="#showcoursematerial"
                               type="button">Show</button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="updatecoursematerial-tab" data-bs-toggle="tab" data-bs-target="#updatecoursematerial"
-                              type="button">Update</button>
-                    </li>
+<!--                    <li class="nav-item" role="presentation">-->
+<!--                      <button class="nav-link" id="updatecoursematerial-tab" data-bs-toggle="tab" data-bs-target="#updatecoursematerial"-->
+<!--                              type="button">Update</button>-->
+<!--                    </li>-->
                   </ul>
 
                   <!-- Tab Content -->
@@ -770,7 +774,7 @@ footer a:hover {
                     <div class="tab-pane fade show active" id="allcoursematerial" role="tabpanel">
                       <h4 class="text-center">--Study & Batch Material Management--</h4>
 
-                      <form action="/admin/upload/material" method="post" enctype="multipart/form-data">
+                      <form th:action="@{'/admin/upload/material'}" method="post" enctype="multipart/form-data">
                         <div class="mb-4">
                           <label for="courseMaterial" class="form-label">Select a Course</label>
                           <select class="form-select" id="courseMaterial" name="course" required>
@@ -820,10 +824,10 @@ footer a:hover {
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane fade" id="updatecoursematerial" role="tabpanel">
-                      <h4 class="text-center">--Delete Faculties--</h4>
-                      <p>All User will be show here.</p>
-                    </div>
+<!--                    <div class="tab-pane fade" id="updatecoursematerial" role="tabpanel">-->
+<!--                      <h4 class="text-center">&#45;&#45;Delete Faculties&#45;&#45;</h4>-->
+<!--                      <p>All User will be show here.</p>-->
+<!--                    </div>-->
                     </div>
                   </div>
                   </div>
@@ -852,18 +856,19 @@ footer a:hover {
               <!-- Tabs -->
               <ul class="nav nav-tabs" id="myTab8" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="all-student-tab" data-bs-toggle="tab" data-bs-target="#studentbatches"
-                          type="button">Student Batches</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="update-student-tab" data-bs-toggle="tab" data-bs-target="#studentupdate"
+                  <button class="nav-link active" id="update-student-tab" data-bs-toggle="tab" data-bs-target="#studentupdate"
                           type="button">Update Student</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link " id="all-student-tab" data-bs-toggle="tab" data-bs-target="#studentbatches"
+                          type="button">Student Batches</button>
+                </li>
+
               </ul>
 
               <!-- Tab Content -->
               <div class="tab-content p-3">
-                <div class="tab-pane fade show active" id="studentbatches" role="tabpanel">
+                <div class="tab-pane fade " id="studentbatches" role="tabpanel">
                   <h4 class="text-center">--Student & Batch Management--</h4>
                   <!-- Faculty Select -->
                   <form id="userForm2" class="card p-4 shadow rounded mb-4">
@@ -920,10 +925,10 @@ footer a:hover {
                   </div>
                 </div>
 
-                <div class="tab-pane fade" id="studentupdate" role="tabpanel">
+                <div class="tab-pane fade show active" id="studentupdate" role="tabpanel">
                   <h4 class="text-center">--Update Student--</h4>
 
-                  <form method="post" id="facultyUpdateForm1" action="/faculty/update" th:object="${newUser}" enctype="multipart/form-data">
+                  <form method="post" id="facultyUpdateForm1" th:action="@{'/admin/faculty/update'}" th:object="${newUser}" enctype="multipart/form-data">
 
                     <div class="mb-4">
                       <label for="studentSelectId" class="form-label fw-bold">Select Faculty</label>
@@ -1186,7 +1191,7 @@ footer a:hover {
 
                   <div class="tab-pane fade show active" id="addnewadmission" role="tabpanel">
                       <h4 class="mb-4">Admission Master Form</h4>
-                      <form method="post" action="/admission" th:object="${newadmission}">
+                      <form method="post" th:action="@{'/admin/admission'}" th:object="${newadmission}">
 
                         <!-- User ID -->
                         <div class="mb-3">
@@ -1240,7 +1245,7 @@ footer a:hover {
                   </div>
                   <div class="tab-pane fade" id="update_admission" role="tabpanel">
                     <h4 class="mb-3">Update Admissions</h4>
-                    <form method="post" action="/updateadmission" >
+                    <form method="post" th:action="@{'/admin/updateadmission'}" >
 
                       <!-- Admission ID -->
                       <div class="mb-3">
@@ -1392,18 +1397,18 @@ footer a:hover {
               <!-- Tabs -->
               <ul class="nav nav-tabs" id="myTab6" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="all-faculties-tab" data-bs-toggle="tab" data-bs-target="#showfaculties"
-                          type="button">Faculty Batches</button>
+                  <button class="nav-link active" id="del-faculties" data-bs-toggle="tab" data-bs-target="#delete_faculties"
+                          type="button">Update Faculty</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="del-faculties" data-bs-toggle="tab" data-bs-target="#delete_faculties"
-                          type="button">Update Faculty</button>
+                  <button class="nav-link " id="all-faculties-tab" data-bs-toggle="tab" data-bs-target="#showfaculties"
+                          type="button">Faculty Batches</button>
                 </li>
               </ul>
 
               <!-- Tab Content -->
               <div class="tab-content p-3">
-                <div class="tab-pane fade show active" id="showfaculties" role="tabpanel">
+                <div class="tab-pane fade " id="showfaculties" role="tabpanel">
                   <h4 class="text-center">--Faculty & Batch Management--</h4>
                   <!-- Faculty Select -->
                   <div class="mb-4">
@@ -1438,10 +1443,10 @@ footer a:hover {
                   </div>
                 </div>
 
-              <div class="tab-pane fade" id="delete_faculties" role="tabpanel">
+              <div class="tab-pane fade show active" id="delete_faculties" role="tabpanel">
                 <h4 class="text-center">--Update Faculty--</h4>
 
-                <form method="post" id="facultyUpdateForm" action="/faculty/update" th:object="${newUser}" enctype="multipart/form-data">
+                <form method="post" id="facultyUpdateForm" th:action="@{'/admin/faculty/update'}" th:object="${newUser}" enctype="multipart/form-data">
 
                 <div class="mb-4">
                   <label for="facultySelectId" class="form-label fw-bold">Select Faculty</label>
@@ -1631,22 +1636,61 @@ footer a:hover {
                       </div>
 
                       <div class="form-group mb-3">
-                        <label for="lumpSum" class="form-label"><b>Lump sum
+                        <label for="feesofcourse" class="form-label"><b>Course Fee</b></label>
+                        <input type="number" name="feesOfCourse" id="feesofcourse" th:field="*{feesOfCourse}" class="form-control"
+                               placeholder="Enter course fee" onkeyup="calculateInstallment();" required>
+                      </div>
+
+                      <div class="form-group mb-3">
+                        <label for="lumpSum" class="form-label"><b>Lumpsum
                           Amount</b></label>
-                        <input type="text" name="lumpSum" id="lumpSum" th:field="*{lumpSum}" class="form-control"
-                               placeholder="Enter Lump sum amount" required>
+                        <input type="number" name="lumpSum" id="lumpSum" th:field="*{lumpSum}" class="form-control"
+                               placeholder="Enter Lumpsum amount" onkeyup="calculateInstallment();" required>
                         <p th:each="err : ${#fields.errors('lumpSum')}" th:text="${err}"
                            style="color: red; font-size: 14px; margin-top: 5px;"></p>
                       </div>
 
                       <div class="form-group mb-3">
-                        <label for="installment" class="form-label"><b>Installment
-                          Amount</b></label>
-                        <input type="number" name="installment" id="installment" th:field="*{installment}"
-                               class="form-control" placeholder="Enter installment amount" required>
-                        <p th:each="err : ${#fields.errors('installment')}" th:text="${err}"
-                           style="color: red; font-size: 14px; margin-top: 5px;"></p>
+                        <label for="registrationFee" class="form-label"><b>Registration Fee</b></label>
+                        <input type="number" name="registrationFees" value="0" id="registrationFee" th:field="*{registrationFees}" class="form-control"
+                               placeholder="Enter registration fee" onkeyup="calculateInstallment();" required>
                       </div>
+
+                      <hr class="border border-success mb-3">
+
+                      <div class="row mb-3">
+                          <div class="col">
+                            Course Fee: <span id="courseFees" class="fw-bolder">4600</span>
+                          </div>
+                        <div class="col">
+                            Registration Fee: <span id="registrationFees" class="fw-bolder">2000</span>
+                        </div>
+                        <div class="col">
+                          Rest amount: <span id="restFees" class="fw-bolder">2600</span>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+
+                        <div class="col d-flex flex-row">
+                          <span>Make Installment:</span> <input id="makeInstallment" value="1" type="number" class="form-control" onkeyup="calculateInstallment();">
+                        </div>
+                        <div class="col">
+                          Per Installment: <span id="perInstallment" class="fw-bolder">1234</span>
+                        </div>
+                      </div>
+                      <hr class="border border-success mb-3">
+
+
+
+
+<!--                      <div class="form-group mb-3">-->
+<!--                        <label for="installment" class="form-label"><b>Installment-->
+<!--                          Amount</b></label>-->
+<!--                        <input type="number" name="installment" id="installment" th:field="*{installment}"-->
+<!--                               class="form-control" placeholder="Enter installment amount" required>-->
+<!--                        <p th:each="err : ${#fields.errors('installment')}" th:text="${err}"-->
+<!--                           style="color: red; font-size: 14px; margin-top: 5px;"></p>-->
+<!--                      </div>-->
                       <!--     Submit Button    -->
                       <div class="button">
                         <input type="reset" value="Reset">
@@ -1769,7 +1813,7 @@ footer a:hover {
 
                             </div>
                             <div class="mt-3 d-flex justify-content-end">
-                              <a th:href="@{'admin/batch/edit/' + ${b.batchId}}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+<!--                              <a th:href="@{'admin/batch/edit/' + ${b.batchId}}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i>Edit</a>-->
                             </div>
                           </div>
 <!--                        </div>-->
@@ -1777,7 +1821,7 @@ footer a:hover {
                   </div>
                   <div class="tab-pane fade show active" id="addnewbatch" role="tabpanel">
                     <h4 class="text-center">Add New Batch</h4>
-                    <form method="post" action="/admin/batch/assign" th:object="${newbatch}">
+                    <form method="post" th:action="@{'/admin/assign'}" th:object="${newbatch}">
                       <div class="mb-3">
                         <label for="batch" class="form-label">Batch Name</label>
                         <input type="text" id="batch" name="name" class="form-control" required>
@@ -1815,7 +1859,7 @@ footer a:hover {
                   </div>
                   <div class="tab-pane fade" id="update_batch" role="tabpanel">
                     <h4 class="text-center">Update Batch</h4>
-                    <form method="post" action="/admin/batch/update" >
+                    <form method="post" th:action="@{'/admin/batch/update'}" >
                       <div class="mb-3">
                         <label for="batch" class="form-label">Select a batch to update</label>
 <!--                        <input type="text" id="batch2" name="name" class="form-control" required>-->
@@ -1866,7 +1910,7 @@ footer a:hover {
                   <div class="tab-pane fade"  role="tabpanel" id="assignbatch">
                     <h4 class="text-center mb-4">Assign Students to Batch</h4>
 
-                    <form id="studentBatchForm" method="POST" action="/studentbatch/save">
+                    <form id="studentBatchForm" method="POST" th:action="@{'/admin/studentbatch/save'}">
                       <!-- Batch Dropdown -->
                       <div class="mb-3">
                         <label for="batchId" class="form-label">Select Batch</label>
@@ -2250,107 +2294,158 @@ footer a:hover {
 </script>
 
 
-
+<!--Nav link JS-->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-         const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-         const sections = document.querySelectorAll('.dashboard-section');
-         const sidebar = document.getElementById('sidebarMenu');
+      const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+      const sections = document.querySelectorAll('.dashboard-section');
+      const sidebar = document.getElementById('sidebarMenu');
 
-         navLinks.forEach(link => {
-             link.addEventListener('click', function (e) {
-                 e.preventDefault(); // Prevent page jump
+      // Function to activate a section
+      function activateSection(targetId) {
+          // Remove active from all links and sections
+          navLinks.forEach(l => l.classList.remove('active'));
+          sections.forEach(section => section.classList.remove('active'));
 
-                 // Remove active from all links and sections
-                 navLinks.forEach(l => l.classList.remove('active'));
-                 sections.forEach(section => section.classList.remove('active'));
+          // Find the target link and section
+          const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
+          const targetSection = document.getElementById(targetId);
 
-                 // Add active to clicked link
-                 this.classList.add('active');
+          if (targetLink && targetSection) {
+              targetLink.classList.add('active');
+              targetSection.classList.add('active');
+          }
+      }
 
-                 // Show the corresponding section
-                 const targetId = this.getAttribute('href').substring(1);
-                 const targetSection = document.getElementById(targetId);
-                 if (targetSection) {
-                     targetSection.classList.add('active');
-                 }
+      // Handle sidebar clicks
+      navLinks.forEach(link => {
+          link.addEventListener('click', function (e) {
+              e.preventDefault(); // Prevent default scroll
+              const targetId = this.getAttribute('href').substring(1);
+              activateSection(targetId);
 
-                 // Collapse sidebar if on small screens
-                 if (window.innerWidth < 992 && sidebar) {
-                     const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                     collapseInstance.hide();
-                 }
-             });
-         });
-     });
+              // Collapse sidebar on small screens
+              if (window.innerWidth < 992 && sidebar) {
+                  const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                  collapseInstance.hide();
+              }
 
-/*
-document.addEventListener('DOMContentLoaded', function () {
- const navLinks = document.querySelectorAll('.sidebar .nav-link');
- const sections = document.querySelectorAll('.dashboard-section');
+              // Update the URL hash (so refresh/redirect keeps state)
+              history.replaceState(null, null, `#${targetId}`);
+          });
+      });
 
- navLinks.forEach(link => {
-   link.addEventListener('click', function (e) {
-     e.preventDefault();
-     navLinks.forEach(l => l.classList.remove('active'));
-     this.classList.add('active');
-     sections.forEach(section => section.classList.remove('active'));
-     const targetId = this.getAttribute('href').substring(1);
-     document.getElementById(targetId).classList.add('active');
-   });
- });
-});
+      // ✅ Handle case: page loaded or redirected with hash (like #admission)
+      const currentHash = window.location.hash;
+      if (currentHash) {
+          const targetId = currentHash.substring(1);
+          activateSection(targetId);
+      } else {
+          // Optionally activate a default section (like home)
+          activateSection('home');
+      }
+  });
 
-document.addEventListener('DOMContentLoaded', function () {
-         const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-         const sections = document.querySelectorAll('.dashboard-section');
-         navLinks.forEach(link => {
-             link.addEventListener('click', function (e) {
-             navLinks.forEach(l => l.classList.remove('active'));
-                 this.classList.add('active');
-                 sections.forEach(section => section.classList.remove('active'));
-                 const targetId = this.getAttribute('href').substring(1);
-                 document.getElementById(targetId).classList.add('active');
-                 if (window.innerWidth < 992) {
-                     const sidebar = document.getElementById('sidebarMenu');
-                     const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                     collapseInstance.hide();
-                 }
-             });
-         });
-     });
 
-document.addEventListener('DOMContentLoaded', function () {
- const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
- const sections = document.querySelectorAll('.dashboard-section');
- const sidebar = document.getElementById('sidebarMenu');
+   /* document.addEventListener('DOMContentLoaded', function () {
+           const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+           const sections = document.querySelectorAll('.dashboard-section');
+           const sidebar = document.getElementById('sidebarMenu');
 
- navLinks.forEach(link => {
+           navLinks.forEach(link => {
+               link.addEventListener('click', function (e) {
+                   e.preventDefault(); // Prevent page jump
+
+                   // Remove active from all links and sections
+                   navLinks.forEach(l => l.classList.remove('active'));
+                   sections.forEach(section => section.classList.remove('active'));
+
+                   // Add active to clicked link
+                   this.classList.add('active');
+
+                   // Show the corresponding section
+                   const targetId = this.getAttribute('href').substring(1);
+                   const targetSection = document.getElementById(targetId);
+                   if (targetSection) {
+                       targetSection.classList.add('active');
+                   }
+
+                   // Collapse sidebar if on small screens
+                   if (window.innerWidth < 992 && sidebar) {
+                       const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                       collapseInstance.hide();
+                   }
+               });
+           });
+       });
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+   const navLinks = document.querySelectorAll('.sidebar .nav-link');
+   const sections = document.querySelectorAll('.dashboard-section');
+
+   navLinks.forEach(link => {
      link.addEventListener('click', function (e) {
-         e.preventDefault(); // Prevent page jump
-
-         // Remove active from all links and sections
-         navLinks.forEach(l => l.classList.remove('active'));
-         sections.forEach(section => section.classList.remove('active'));
-
-         // Add active to clicked link
-         this.classList.add('active');
-
-         // Show the corresponding section
-         const targetId = this.getAttribute('href').substring(1);
-         const targetSection = document.getElementById(targetId);
-         if (targetSection) {
-             targetSection.classList.add('active');
-         }
-
-         // Collapse sidebar if on small screens
-         if (window.innerWidth < 992 && sidebar) {
-             const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-             collapseInstance.hide();
-         }
+       e.preventDefault();
+       navLinks.forEach(l => l.classList.remove('active'));
+       this.classList.add('active');
+       sections.forEach(section => section.classList.remove('active'));
+       const targetId = this.getAttribute('href').substring(1);
+       document.getElementById(targetId).classList.add('active');
      });
- });
-});*/
+   });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+           const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+           const sections = document.querySelectorAll('.dashboard-section');
+           navLinks.forEach(link => {
+               link.addEventListener('click', function (e) {
+               navLinks.forEach(l => l.classList.remove('active'));
+                   this.classList.add('active');
+                   sections.forEach(section => section.classList.remove('active'));
+                   const targetId = this.getAttribute('href').substring(1);
+                   document.getElementById(targetId).classList.add('active');
+                   if (window.innerWidth < 992) {
+                       const sidebar = document.getElementById('sidebarMenu');
+                       const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                       collapseInstance.hide();
+                   }
+               });
+           });
+       });
+
+  document.addEventListener('DOMContentLoaded', function () {
+   const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+   const sections = document.querySelectorAll('.dashboard-section');
+   const sidebar = document.getElementById('sidebarMenu');
+
+   navLinks.forEach(link => {
+       link.addEventListener('click', function (e) {
+           e.preventDefault(); // Prevent page jump
+
+           // Remove active from all links and sections
+           navLinks.forEach(l => l.classList.remove('active'));
+           sections.forEach(section => section.classList.remove('active'));
+
+           // Add active to clicked link
+           this.classList.add('active');
+
+           // Show the corresponding section
+           const targetId = this.getAttribute('href').substring(1);
+           const targetSection = document.getElementById(targetId);
+           if (targetSection) {
+               targetSection.classList.add('active');
+           }
+
+           // Collapse sidebar if on small screens
+           if (window.innerWidth < 992 && sidebar) {
+               const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+               collapseInstance.hide();
+           }
+       });
+   });
+  });*/
 </script>
 <script>
  /* document.addEventListener('DOMContentLoaded', function () {
@@ -2448,7 +2543,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
       }
 
-      fetch("/admin/batch/faculties/" + facultyId + "/batches") // Spring Boot endpoint returning JSON
+      fetch("/admin/batch/faculty/" + facultyId + "/batches") // Spring Boot endpoint returning JSON
           .then(response => response.json())
           .then(batches => {
               tableBody.innerHTML = "";
@@ -2832,75 +2927,6 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 </script>
 
 
-
-
-<!--<script>-->
-<!--  document.getElementById("getbatchid").addEventListener("change", function() {-->
-<!--   let batchId = this.value;-->
-<!--   let tbody = document.getElementById("showattendancetable");-->
-<!--   tbody.innerHTML = "";-->
-<!--    console.log("Batch Id "+batchId);-->
-<!--   if (batchId) {-->
-<!--    console.log("Inside the attendance mapping");-->
-<!--     fetch("/getstudentsattendance/" + batchId)-->
-<!--       .then(res => res.json())-->
-<!--       .then(data => {-->
-<!--         if (data.length === 0) {-->
-<!--           tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>No Student Found</td></tr>";-->
-<!--           return;-->
-<!--         }-->
-
-<!--           data.forEach(student => {-->
-<!--             let row = `-->
-<!--             <tr>-->
-<!--            <td>-->
-<!--                <button type="button" class="btn "-->
-<!--                        data-bs-toggle="modal"-->
-<!--                        th:attr="data-bs-target='#modal_' + ${student.admissionId}">-->
-<!--                    <span text="${student.admissionId}"></span>-->
-<!--                </button>-->
-<!--            </td>-->
-
-
-<!--            <td>-->
-<!--                <button type="button" class="btn"-->
-<!--                        data-bs-toggle="modal"-->
-<!--                       attr="data-bs-target='#modal_' + ${student.admissionId}">-->
-<!--                    <span text="${student.fullName}"></span>-->
-<!--                </button>-->
-<!--            </td>-->
-<!--            <td data-bs-toggle="tooltip"-->
-<!--                title="'Present : ' + ${student.presentCount} + ' , Absent : ' + ${student.absentCount}"-->
-<!--                th:text="${student.presentCount} + ' Out Of ' + ${TotalAttendance}">-->
-<!--                7 Out Of 15-->
-<!--            </td>-->
-<!--            <td>-->
-<!--                <div class="progress" style="height: 20px;">-->
-<!--                    <div class="progress-bar"-->
-<!--                         class="${student.badgeClass}"-->
-<!--                         style="'width:' + ${student.percentage} + '%;'"-->
-<!--                         text="${#numbers.formatDecimal(student.percentage,0,2)} + '%'">-->
-<!--                        0%-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </td>-->
-
-
-<!--            <td>-->
-<!--        <span class="${student.badgeClass}" th:text="${student.status}">-->
-<!--            Status-->
-<!--        </span>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--             `;-->
-<!--             tbody.innerHTML += row;-->
-<!--           });-->
-
-<!--       });-->
-<!--   }-->
-<!-- });-->
-<!--</script>-->
-
 <script>
   document.getElementById("batchSelect").addEventListener("change", function() {
    let batchId = this.value;
@@ -2932,6 +2958,83 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
   let allAdmissions = [[${alladmissions2}]];
   /*]]>*/
 </script>
+
+<!--JS for calculate installment-->
+<script>
+  function calculateInstallment() {
+      console.log("OK");
+      let courseFee = document.getElementById('feesofcourse').value;
+      let registrationFee = document.getElementById('registrationFee').value;
+      let lumpSum = document.getElementById('lumpSum').value;
+      let varRest = document.getElementById('restFees');
+      let installments = document.getElementById('perInstallment');
+      let makeInstallment = document.getElementById('makeInstallment').value;
+
+      document.getElementById('courseFees').innerHTML = courseFee;
+      document.getElementById('registrationFees').innerHTML = registrationFee;
+
+      if (courseFee < registrationFee) {
+            registrationFee=courseFee;
+          document.getElementById('registrationFee').value = courseFee;
+      }
+      if (courseFee <= lumpSum) {
+            lumpSum=courseFee;
+          document.getElementById('lumpSum').value = courseFee;
+      }
+
+      let restAmount = courseFee - registrationFee;
+      varRest.innerHTML = restAmount;
+
+      if (makeInstallment > 0) {
+          installments.innerHTML = (restAmount / makeInstallment).toFixed(2);
+      } else {
+          installments.innerHTML = "0";
+      }
+  }
+</script>
+<script>
+
+  function calculateInstallment2() {
+      console.log("OK");
+
+      // Get values and convert to numbers
+      let courseFee = document.getElementById('feesofcourse').value;
+      let registrationFee = document.getElementById('registrationFee').value;
+      let lumpSum = Number(document.getElementById('lumpSum').value);
+      let makeInstallment = document.getElementById('makeInstallment').value;
+
+      // Elements to display results
+      let varRest = document.getElementById('restFees');
+      let installments = document.getElementById('perInstallment');
+
+      // Display fees
+      document.getElementById('courseFees').innerHTML = courseFee;
+      document.getElementById('registrationFees').innerHTML = registrationFee;
+
+      // Validations
+      if (registrationFee > courseFee) {
+          registrationFee = courseFee;
+          document.getElementById('registrationFee').value = courseFee;
+      }
+
+      if (lumpSum > courseFee) {
+          lumpSum = courseFee;
+          document.getElementById('lumpSum').value = courseFee;
+      }
+
+      // Calculate remaining amount
+      let restAmount = courseFee - registrationFee;
+      varRest.innerHTML = restAmount;
+
+      // Calculate installment per month (avoid divide by zero)
+      if (makeInstallment > 0) {
+          installments.innerHTML = (restAmount / makeInstallment).toFixed(2);
+      } else {
+          installments.innerHTML = "0";
+      }
+  }
+</script>
+
 
 <script>
 

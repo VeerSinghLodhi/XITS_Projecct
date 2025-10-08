@@ -114,6 +114,20 @@
         -moz-appearance: textfield;
     }
 
+        #home .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        #home .card:hover {
+            transform: translateY(-5px);
+        }
+
+        #home .emoji {
+            font-size: 2rem;
+        }
     </style>
 </head>
 
@@ -189,36 +203,45 @@
             <!-- Home -->
             <div id="home" class="dashboard-section active">
                 <div class="alert alert-primary shadow-sm mt-3" role="alert">
-                    👋 Welcome back, <strong th:text="${user_master.fullName}"></strong>!
+                    👋 Welcome back <strong th:text="${user_master.fullName}"></strong>!
                     Here’s your dashboard overview.
                 </div>
 
                 <!-- Quick Stats -->
-                <div class="row text-center mb-4">
+                <div class="row g-3 text-center mb-4">
                     <div class="col-md-3 mb-2">
-                        <div class="card shadow-sm p-3">
+                        <div class="card text-center p-3 bg-primary text-white">
+                            <div class="emoji mb-2">🎓</div>
                             <h5>My Total Batches</h5>
-                            <p><span class="badge bg-success"  th:text="${studentbatches.size()}"></span></p>
+<!--                            <p><span class="badge bg-success"  th:text="${studentbatches.size()}"></span></p>-->
+                            <h3 th:text="${studentbatches.size()}"></h3>
                         </div>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <div class="card shadow-sm p-3">
+                        <div class="card text-center p-3 bg-success text-white">
+                            <div class="emoji mb-2">📚</div>
                             <h5>Assignments</h5>
-                            <p><span class="badge bg-danger">2 Pending</span></p>
+<!--                            <p><span class="badge bg-danger">2 Pending</span></p>-->
+                            <h3>2 Pending</h3>
                         </div>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <div class="card shadow-sm p-3">
+                        <div class="card text-center p-3 bg-warning text-white">
+                            <div class="emoji mb-2">📅</div>
                             <h5>Attendance</h5>
-                            <p><span class="badge bg-success">85%</span></p>
+<!--                            <p><span class="badge bg-success">85%</span></p>-->
+                            <h3>75%</h3>
                         </div>
                     </div>
                     <div class="col-md-3 mb-2">
-                        <div class="card shadow-sm p-3">
+                        <div class="card text-center p-3 bg-danger text-white">
+                            <div class="emoji mb-2">📝</div>
                             <h5>Latest Result</h5>
-                            <p class="text-muted">8.5 CGPA</p>
+                            <h3 class="text-muted">8.5 CGPA</h3>
                         </div>
                     </div>
+
+
                 </div>
 
                 <!-- Enrolled Batches -->
@@ -284,6 +307,7 @@
                         </ul>
                     </div>
                 </div>
+                <div th:insert="~{fragments :: footer}"></div>
             </div>
 
             <!-- Profile -->
@@ -720,7 +744,7 @@
                           <td>${pdf.documentName}</td>
                           <td>${pdf.uploadedAt}</td>
                           <td>
-                          <a href="/admin/view/${pdf.pdfId}" class="btn btn-sm btn-outline-success mb-3 mb-lg-0 mb-sm-0">View</a>
+                          <a href="/student/pdf/view/${pdf.pdfId}" class="btn btn-sm btn-outline-success mb-3 mb-lg-0 mb-sm-0">View</a>
                           <a href="/student/notes/download/${pdf.pdfId}" class="btn btn-primary btn-sm" >Download</a>
                           </td>
                       </tr>

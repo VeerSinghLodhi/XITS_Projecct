@@ -32,7 +32,7 @@ public class AdmissionController {
     @Autowired
     StudentBatchRepository studentBatchRepository;
 
-    @PostMapping("/admission")
+    @PostMapping("/admin/admission")
     public String addStudent(@ModelAttribute("newadmission")AdmissionMaster newAdmission,
                              @RequestParam("user_id")Long userId,
                              @RequestParam("course_id")Long courseId,
@@ -49,7 +49,7 @@ public class AdmissionController {
         admissionRepository.save(newAdmission);
         redirectAttributes.addAttribute("newAdmissionAdded",true);
 
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard#admission";
     }
 
     @GetMapping("/admissiondetail/{id}")
@@ -71,7 +71,7 @@ public class AdmissionController {
     }
 
     // Update Admission Records
-    @PostMapping("/updateadmission")
+    @PostMapping("/admin/updateadmission")
     public String getUpdateAdmission(@RequestParam("admissionID")String admissionID,
                                      @RequestParam("course_id1")Long courseId,
                                      @RequestParam("fees1")Double fees,
@@ -109,6 +109,8 @@ public class AdmissionController {
                     .stream()
                     .map(ad -> {
                         var studentBatch = studentBatchRepository.findByAdmission_AdmissionId(ad.getAdmissionId());
+                        Double balance=admissionRepository.getBalanceByStudent(userId);
+                        System.out.println("Balance is "+balance);
                         String batchName = (studentBatch != null && studentBatch.getBatch() != null)
                                 ? studentBatch.getBatch().getName()
                                 : "Not Assigned";

@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+//@RequestMapping("")
 public class PdfController {
     @Autowired
     PdfRepository pdfRepository;
@@ -26,7 +26,7 @@ public class PdfController {
     @Autowired
     CourseRepository courseRepository;
 
-    @GetMapping("/document")
+    @GetMapping("/admin/document")
     public String documents(@RequestParam(value = "course", required = false) Long cId,
                             Model model) {
         model.addAttribute("courses", courseRepository.findAll());
@@ -34,20 +34,20 @@ public class PdfController {
         return "document";
     }
 
-    @GetMapping("/view/{id}")
+    @GetMapping("/admin/view/{id}")
     public ResponseEntity<byte[]> view(@PathVariable Long id) {
         PdfMaster pdf = pdfRepository.findById(id)
                 .orElse(null);
 
-        byte[] pdfContent = pdf.getDocumentPath();
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + pdf.getDocumentName() + "\"")
                 .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfContent);
+                .body(pdf.getDocumentPath());
+
     }
 
 
-    @PostMapping("/upload/material")
+    @PostMapping("/admin/upload/material")
     public String upload(@RequestParam("course") CourseMaster courseId,
                          @RequestParam("document") MultipartFile file,
                          RedirectAttributes redirectAttributes,
@@ -64,7 +64,7 @@ public class PdfController {
 
             redirectAttributes.addFlashAttribute("studyMaterialUploaded", true);
 
-            return "redirect:/admin/dashboard";
+            return "redirect:/admin/dashboard#studymaterial";
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class PdfController {
     }
 
 
-    @GetMapping("/course/material/{courseId}")
+    @GetMapping("/admin/course/material/{courseId}")
     @ResponseBody
     public List<PdfDTO> getMaterialByCourse(@PathVariable("courseId")Long courseId){
         return pdfRepository.findByCourse_CourseId(courseId)
@@ -85,7 +85,9 @@ public class PdfController {
     }
 
 
-    @GetMapping("/delete/material/{pdfId}")
+
+
+    @GetMapping("/admin/delete/material/{pdfId}")
     public String getDeletePdf(@PathVariable("pdfId")Long pdfId,
                                RedirectAttributes redirectAttributes,
                                HttpSession session){
@@ -97,7 +99,17 @@ public class PdfController {
     }
 
 
+    @GetMapping("/student/pdf/view/{id}")
+    public ResponseEntity<byte[]> viewForFaculty(@PathVariable Long id) {
+        PdfMaster pdf = pdfRepository.findById(id)
+                .orElse(null);
 
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + pdf.getDocumentName() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf.getDocumentPath());
+
+    }
 
 
 

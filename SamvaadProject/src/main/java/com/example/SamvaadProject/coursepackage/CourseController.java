@@ -57,7 +57,7 @@ public class CourseController {
 
         redirectAttributes.addAttribute("newCourseAdded",true);  // New Course Added Confirmation.
 
-        return "redirect:/admin/dashboard";  // Back to Dashboard.
+        return "redirect:/admin/dashboard#course-part";  // Back to Dashboard.
 //        return "coursemaster/showallcourse";
     }
 
@@ -115,5 +115,12 @@ public class CourseController {
         return courseRepository.getCourseFees(cid);
     }
 
+
+    //Data in json
+//    @GetMapping("/debug")
+//    @ResponseBody
+//    public List<CourseMaster> debugCourses() {
+//        return courseRepository.findAll();
+//    }
 
 }

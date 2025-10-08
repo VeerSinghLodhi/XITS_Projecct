@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Faculty || Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -65,6 +68,8 @@
             /* Highlighted color like your screenshot */
         }
 
+        /*
+
         .card {
             border-radius: 12px;
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
@@ -78,7 +83,7 @@
         .card.shadow-sm:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
+        } */
 
         .dashboard-shortcut a {
             display: inline-block;
@@ -164,20 +169,41 @@
             bottom: 50px;
         }
 
-         .loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite;
-  margin: auto;
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: auto;
 
-}
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .emoji {
+            font-size: 2rem;
+        }
     </style>
 </head>
 
@@ -264,16 +290,17 @@
         <a class="navbar-brand d-flex align-items-center " href="#">
             <!--            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png" width="45" height="45" class="me-2">-->
             <img src="../Images/xansaitsulutionsLogo.png" width="150" height="60" alt="Logo">
-<!--            <span style="color:black;"><i class="bi bi-person-badge me-1"></i><span-->
-<!--                    th:text="${user_master.fullName}"></span></span>-->
+            <!--            <span style="color:black;"><i class="bi bi-person-badge me-1"></i><span-->
+            <!--                    th:text="${user_master.fullName}"></span></span>-->
         </a>
 
         <div class="d-flex align-items-center">
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser"
                    data-bs-toggle="dropdown">
-                    <img th:if="${user_master.photoPath != null}" th:src="@{/userphoto/{id}(id=${user_master.userId})}" class="rounded-circle me-2"
-                         width="40" height="40">
+                    <img th:if="${user_master.photoPath != null}"
+                         th:src="@{/userphoto/{id}(id=${user_master.userId})}" class="rounded-circle me-2" width="40"
+                         height="40">
                     <div th:unless="${user_master.photoPath != null}">
                         <i class="fas fa-user-circle rounded-circle me-2 fs-1"></i>
                     </div>
@@ -308,18 +335,16 @@
                             class="bi bi-house me-2"></i>Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profile"><i class="bi bi-person me-2"></i>My
                         Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#students"><i
-                            class="bi bi-people me-2"></i>Students</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#courses"><i
-                            class="bi bi-mortarboard me-2"></i>Courses</a></li>
+<!--                    <li class="nav-item"><a class="nav-link" href="#students"><i-->
+<!--                            class="bi bi-people me-2"></i>Students</a></li>-->
+<!--                    <li class="nav-item"><a class="nav-link" href="#courses"><i-->
+<!--                            class="bi bi-mortarboard me-2"></i>Courses</a></li>-->
                     <li class="nav-item"><a class="nav-link" href="#assignments"><i
                             class="bi bi-journal-text me-2"></i>Assignments</a></li>
                     <li class="nav-item"><a class="nav-link" href="#attendance"><i
                             class="bi bi-calendar-check me-2"></i>Attendance</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#messages"><i
-                            class="bi bi-chat-dots me-2"></i>Messages</a></li>
-<!--                    <li class="nav-item"><a class="nav-link text-danger" href="/logout"><i-->
-<!--                            class="bi bi-box-arrow-left me-2"></i>Logout</a></li>-->
+<!--                    <li class="nav-item"><a class="nav-link" href="#messages"><i-->
+<!--                            class="bi bi-chat-dots me-2"></i>Messages</a></li>-->
                 </ul>
             </div>
         </nav>
@@ -328,8 +353,52 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!-- Home -->
             <div id="home" class="dashboard-section active">
-                <h2>Welcome Faculty 👨‍🏫</h2>
-                <p class="text-muted">This is your dashboard overview.</p>
+                <div class="alert alert-primary shadow-sm mt-3" role="alert">
+                    👋 Welcome back <strong th:text="${user_master.fullName}"></strong>!
+                    Here’s your dashboard overview.
+                </div>
+                <div class="container-fluid mt-4">
+                    <!-- Dashboard Cards -->
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="card text-center p-3 bg-primary text-white">
+                                <div class="emoji mb-2">🎓</div>
+                                <h5>Total Students</h5>
+                                <h3>120</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center p-3 bg-success text-white">
+                                <div class="emoji mb-2">📚</div>
+                                <h5>Courses Assigned</h5>
+                                <h3>8</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center p-3 bg-warning text-white">
+                                <div class="emoji mb-2">📝</div>
+                                <h5>Assignments Given</h5>
+                                <h3>15</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center p-3 bg-danger text-white">
+                                <div class="emoji mb-2">📅</div>
+                                <h5>Attendance Today</h5>
+                                <h3>95%</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Optional Message Section -->
+                    <div class="mt-5">
+                        <div class="card p-4">
+                            <h5 class="mb-3">Announcements 📢</h5>
+                            <p class="text-muted">No new announcements yet. Stay tuned for updates!</p>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
             </div>
 
             <!-- Profile -->
@@ -342,13 +411,13 @@
                                 <!-- Profile Photo -->
                                 <img th:if="${user_master.photoPath != null}"
                                      th:src="@{/userphoto/{id}(id=${user_master.userId})}"
-                                     class="rounded-circle mb-3 border border-1" width="150" height="150" alt="Profile Picture"/>
-                                <img  th:if="${user_master.photoPath == null}"
-                                      src="../Images/noprofilepic.png"
-                                      class="rounded-circle mb-3" width="150" height="150" alt="Profile Picture"/>
+                                     class="rounded-circle mb-3 border border-1" width="150" height="150"
+                                     alt="Profile Picture" />
+                                <img th:if="${user_master.photoPath == null}" src="../Images/noprofilepic.png"
+                                     class="rounded-circle mb-3" width="150" height="150" alt="Profile Picture" />
 
                                 <!-- Name -->
-                                <h3 th:text="${user_master.fullName}" >Muskan Shroti</h3>
+                                <h3 th:text="${user_master.fullName}">Muskan Shroti</h3>
                                 <p class="text-muted">STUDENT</p>
 
                                 <hr>
@@ -370,7 +439,9 @@
                                     </tr>
                                     <tr>
                                         <th>Address</th>
-                                        <td><textarea th:text="${user_master.address}"  style="border:none;outline:none;width:100%;"  readonly> Bhopal, Madhya Pradesh</textarea></td>
+                                        <td><textarea th:text="${user_master.address}"
+                                                      style="border:none;outline:none;width:100%;"
+                                                      readonly> Bhopal, Madhya Pradesh</textarea></td>
                                     </tr>
                                     <tr>
                                         <th>Date of Birth</th>
@@ -406,16 +477,16 @@
             </div>
 
             <!-- Students -->
-            <div id="students" class="dashboard-section">
-                <h3>Students</h3>
-                <p>👥 Manage student details and performance.</p>
-            </div>
+<!--            <div id="students" class="dashboard-section">-->
+<!--                <h3>Students</h3>-->
+<!--                <p>👥 Manage student details and performance.</p>-->
+<!--            </div>-->
 
             <!-- Courses -->
-            <div id="courses" class="dashboard-section">
-                <h3>Courses</h3>
-                <p>📚 Courses assigned to you.</p>
-            </div>
+<!--            <div id="courses" class="dashboard-section">-->
+<!--                <h3>Courses</h3>-->
+<!--                <p>📚 Courses assigned to you.</p>-->
+<!--            </div>-->
 
             <!-- Assignments -->
             <div id="assignments" class="dashboard-section">
@@ -477,15 +548,17 @@
                                 <div class="tab-pane fade " id="updateassignment" role="tabpanel">
                                     <h4>Update Assignment</h4>
                                     <form>
-                                    <div class="mb-3">
-                                        <label for="updateAssignmentBatchId" class="form-label">Select Batch:</label>
-                                        <select id="updateAssignmentBatchId" name="assignmentBatchId" class="form-select" required>
-                                            <option value="" selected disabled>-- Select Batch --</option>
-                                            <option th:each="batch : ${batches}" th:value="${batch.batchId}"
-                                                    th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
-                                        </select>
-                                    </div>
-                                </form>
+                                        <div class="mb-3">
+                                            <label for="updateAssignmentBatchId" class="form-label">Select
+                                                Batch:</label>
+                                            <select id="updateAssignmentBatchId" name="assignmentBatchId"
+                                                    class="form-select" required>
+                                                <option value="" selected disabled>-- Select Batch --</option>
+                                                <option th:each="batch : ${batches}" th:value="${batch.batchId}"
+                                                        th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
+                                            </select>
+                                        </div>
+                                    </form>
                                     <div id="updatepdf" style="display:none;">
                                         <h3>Existing Assignments</h3>
                                         <table class="table table-bordered" id="updatetable">
@@ -507,7 +580,8 @@
                                     <form>
                                         <div class="mb-3">
                                             <label for="assignmentBatchId" class="form-label">Select Batch:</label>
-                                            <select id="assignmentBatchId" name="assignmentBatchId" class="form-select" required>
+                                            <select id="assignmentBatchId" name="assignmentBatchId"
+                                                    class="form-select" required>
                                                 <option value="" selected disabled>-- Select Batch --</option>
                                                 <option th:each="batch : ${batches}" th:value="${batch.batchId}"
                                                         th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
@@ -515,19 +589,19 @@
                                         </div>
                                     </form>
                                     <div id="showdeletepdf" style="display:none;">
-                                    <h3>Existing Assignments</h3>
-                                    <table class="table table-bordered" id="assignmenttable">
-                                        <thead class="table-light">
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Assignments</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
+                                        <h3>Existing Assignments</h3>
+                                        <table class="table table-bordered" id="assignmenttable">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Assignments</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
 
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="allassignments" role="tabpanel">
@@ -552,7 +626,7 @@
 
             <!-- Attendance -->
             <div id="attendance" class="dashboard-section">
-                <h3 class="text-center mt-3">--Assignment Management--</h3>
+                <h3 class="text-center mt-3">--Attendance Management--</h3>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3">
@@ -569,28 +643,36 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="showattendance-tab" data-bs-toggle="tab"
-                                            data-bs-target="#showstudentattendance" type="button">Show Attendance</button>
+                                            data-bs-target="#showstudentattendance" type="button">Show
+                                        Attendance</button>
                                 </li>
                             </ul>
 
                             <!-- Tab Content -->
                             <div class="tab-content p-3">
                                 <div class="tab-pane fade show active" id="addnewattendance" role="tabpanel">
-                                    <h3 class="mb-4 text-center " style="color : rgb(224, 224, 60);">Mark Attendance</h3>
-                                    <form th:action="@{/MarkedAttendance}" method="post" onsubmit="validateDate(event)">
+                                    <h3 class="mb-4 text-center ">Mark Attendance</h3>
+                                    <form th:action="@{/MarkedAttendance}" method="post"
+                                          onsubmit="validateDate(event)">
                                         <div class="mb-3">
                                             <label for="batchSelect" class="form-label">Select Course</label>
-                                            <select id="batchSelect" name="batchSelect" class="form-select shadow-sm" required>
-                                                <option value="" selected disabled>--Select a batch--</option>
-                                                <option th:if="${batches == null || batches.isEmpty()}"  disabled selected>Yet Course Assigned To You</option>
-                                                <option th:unless="${batches == null || batches.isEmpty()}"  disabled selected>Select Option</option>
-                                                <option th:each="batch : ${batches}"  th:value="${batch.batchId}" th:text="${batch.name}"  th:selected="${batch.batchId} == ${selectedBatchId}"></option>
+                                            <select id="batchSelect" name="batchSelect"
+                                                    class="form-select shadow-sm" required>
+                                                <option value="" disabled selected>--Select a batch--</option>
+                                                <option th:if="${batches == null || batches.isEmpty()}" value=""
+                                                        disabled selected>Yet Course Assigned To You</option>
+                                                <!--                                                <option th:unless="${batches == null || batches.isEmpty()}"  disabled selected>Select Option</option>-->
+                                                <option th:each="batch : ${batches}" th:value="${batch.batchId}"
+                                                        th:text="${batch.name}"
+                                                        th:selected="${batch.batchId} == ${selectedBatchId}"></option>
                                             </select>
                                         </div>
 
+
                                         <div class="mb-3">
                                             <label for="attendanceDate" class="form-label">Select Date</label>
-                                            <input type="date" id="attendanceDate" name="attendance" th:value="${selectedDate}" class="form-control shadow-sm" required>
+                                            <input type="date" id="attendanceDate" name="attendance"
+                                                   th:value="${selectedDate}" class="form-control shadow-sm" required>
                                             <p id="dateError" class="text-danger mt-1" style="display: none;"></p>
                                         </div>
 
@@ -598,25 +680,27 @@
                                         <div class="mb-3 ">
                                             <label class="form-label fw-bold ">Students</label>
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="selectAll">
-                                                <label class="form-check-label" for="selectAll" >Marked All</label>
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                       id="selectAll">
+                                                <label class="form-check-label" for="selectAll">Marked All</label>
                                             </div>
-                                            <div id="studentList" class="mt-2 ps-3" >
-<!--                                                <div class="form-check form-switch">-->
-<!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
-<!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
-<!--                                                </div>-->
+                                            <div id="studentList" class="mt-2 ps-3">
+                                                <!--                                                <div class="form-check form-switch">-->
+                                                <!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
+                                                <!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
+                                                <!--                                                </div>-->
                                             </div>
-<!--                                            <div id="studentList" class="mt-2 ps-3" th:each="names : ${Studentname}">-->
-<!--                                                <div class="form-check form-switch">-->
-<!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
-<!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
+                                            <!--                                            <div id="studentList" class="mt-2 ps-3" th:each="names : ${Studentname}">-->
+                                            <!--                                                <div class="form-check form-switch">-->
+                                            <!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
+                                            <!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
+                                            <!--                                                </div>-->
+                                            <!--                                            </div>-->
                                         </div>
 
                                         <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary px-4">Save Attendance</button>
+                                            <button type="submit" class="btn btn-primary px-4">Save
+                                                Attendance</button>
                                         </div>
                                     </form>
 
@@ -629,13 +713,20 @@
                                             <div class="col-md-12"> <!-- Adjust width (col-md-4, col-md-3, etc.) -->
                                                 <div class="input-group mb-3">
                                                     <span for="Getdate" class="input-group-text">Select Date</span>
-                                                    <input type="date" id="Getdate" name="attendanceDate" class="form-control" >
+                                                    <input type="date" id="Getdate" name="attendanceDate"
+                                                           class="form-control">
 
                                                     <span class="input-group-text">Select Batch</span>
-                                                    <select id="GetBatch" name="Batchid" class="form-select shadow-sm" required>
-                                                        <option th:if="${batches == null || batches.isEmpty()}"  disabled selected>Batch Not Assigned To You</option>
-                                                        <option th:unless="${batches == null || batches.isEmpty()}" value="" disabled selected>Select Option</option>
-                                                        <option th:each="batch : ${batches}"  th:value="${batch.batchId}" th:text="${batch.name}"  th:selected="${batch.batchId} == ${SelectedBatchId}"></option>
+                                                    <select id="GetBatch" name="Batchid"
+                                                            class="form-select shadow-sm" required>
+                                                        <option th:if="${batches == null || batches.isEmpty()}"
+                                                                disabled selected>Batch Not Assigned To You</option>
+                                                        <option th:unless="${batches == null || batches.isEmpty()}"
+                                                                value="" disabled selected>Select Option</option>
+                                                        <option th:each="batch : ${batches}"
+                                                                th:value="${batch.batchId}" th:text="${batch.name}"
+                                                                th:selected="${batch.batchId} == ${SelectedBatchId}">
+                                                        </option>
                                                     </select>
 
                                                     <a id="SearchDate" class="btn btn-success">Search</a>
@@ -646,7 +737,8 @@
 
 
                                         <div>
-                                            <table   class="table-responsive table table-bordered table-striped text-center">
+                                            <table
+                                                    class="table-responsive table table-bordered table-striped text-center">
                                                 <thead class="table-dark">
                                                 <tr>
                                                     <td>Admission ID</td>
@@ -655,24 +747,26 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody id="studentattendancetable">
-<!--                                                <tr>-->
-<!--                                                    <td  th:text="${student.admission.admissionId}">20251103</td>-->
-<!--                                                    <td  th:text="${student.admission.userMaster.fullName}">Alice</td>-->
-<!--                                                    <td>-->
-<!--                                                        <select class="form-select" name="status" th:value="${student.status}">-->
-<!--                                                            <option th:selected="${student.status=='Present'}" id="Present" value="Present">Present</option>-->
-<!--                                                            <option th:selected="${student.status=='Absent'}" id="Absent" value="Absent">Absent</option>-->
-<!--                                                        </select>-->
-<!--                                                        <input type="hidden" name="attendanceId" th:value="${student.attendanceId}"/>-->
-<!--                                                        <input type="hidden" name="attendanceDate" th:value="${student.attendanceDate}"/>-->
-<!--                                                    </td>-->
-<!--                                                </tr>-->
+                                                <!--                                                <tr>-->
+                                                <!--                                                    <td  th:text="${student.admission.admissionId}">20251103</td>-->
+                                                <!--                                                    <td  th:text="${student.admission.userMaster.fullName}">Alice</td>-->
+                                                <!--                                                    <td>-->
+                                                <!--                                                        <select class="form-select" name="status" th:value="${student.status}">-->
+                                                <!--                                                            <option th:selected="${student.status=='Present'}" id="Present" value="Present">Present</option>-->
+                                                <!--                                                            <option th:selected="${student.status=='Absent'}" id="Absent" value="Absent">Absent</option>-->
+                                                <!--                                                        </select>-->
+                                                <!--                                                        <input type="hidden" name="attendanceId" th:value="${student.attendanceId}"/>-->
+                                                <!--                                                        <input type="hidden" name="attendanceDate" th:value="${student.attendanceDate}"/>-->
+                                                <!--                                                    </td>-->
+                                                <!--                                                </tr>-->
                                                 </tbody>
 
                                                 <tfoot>
                                                 <tr>
                                                     <td colspan="3" class="text-center">
-                                                        <button type="submit" class="btn btn-primary mt-2 mb-2">Update Attendance</button>
+                                                        <button type="submit"
+                                                                class="btn btn-primary mt-2 mb-2">Update
+                                                            Attendance</button>
                                                     </td>
                                                 </tr>
                                                 </tfoot>
@@ -705,10 +799,10 @@
             </div>
 
             <!-- Messages -->
-            <div id="messages" class="dashboard-section">
-                <h3>Messages</h3>
-                <p>💬 Communicate with students and admin.</p>
-            </div>
+<!--            <div id="messages" class="dashboard-section">-->
+<!--                <h3>Messages</h3>-->
+<!--                <p>💬 Communicate with students and admin.</p>-->
+<!--            </div>-->
         </main>
     </div>
 </div>
@@ -718,237 +812,294 @@
 
 <!-- Custom JS for section navigation -->
 <script>
-  /*  document.addEventListener('DOMContentLoaded', function () {
-        const navLinks = document.querySelectorAll('.sidebar .nav-link');
+    /*  document.addEventListener('DOMContentLoaded', function () {
+          const navLinks = document.querySelectorAll('.sidebar .nav-link');
+          const sections = document.querySelectorAll('.dashboard-section');
+
+          navLinks.forEach(link => {
+              link.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  navLinks.forEach(l => l.classList.remove('active'));
+                  this.classList.add('active');
+
+                  sections.forEach(section => section.classList.remove('active'));
+                  const targetId = this.getAttribute('href').substring(1);
+                  document.getElementById(targetId).classList.add('active');
+              });
+          });
+      }); */
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
         const sections = document.querySelectorAll('.dashboard-section');
+        const sidebar = document.getElementById('sidebarMenu');
 
         navLinks.forEach(link => {
             link.addEventListener('click', function (e) {
-                e.preventDefault();
+                e.preventDefault(); // Prevent page jump
+
+                // Remove active from all links and sections
                 navLinks.forEach(l => l.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+
+                // Add active to clicked link
                 this.classList.add('active');
 
-                sections.forEach(section => section.classList.remove('active'));
+                // Show the corresponding section
                 const targetId = this.getAttribute('href').substring(1);
-                document.getElementById(targetId).classList.add('active');
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                // Collapse sidebar if on small screens
+                if (window.innerWidth < 992 && sidebar) {
+                    const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                    collapseInstance.hide();
+                }
             });
         });
-    }); */
-
-     document.addEventListener('DOMContentLoaded', function () {
-            const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-            const sections = document.querySelectorAll('.dashboard-section');
-            const sidebar = document.getElementById('sidebarMenu');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault(); // Prevent page jump
-
-                    // Remove active from all links and sections
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    sections.forEach(section => section.classList.remove('active'));
-
-                    // Add active to clicked link
-                    this.classList.add('active');
-
-                    // Show the corresponding section
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
-                    if (targetSection) {
-                        targetSection.classList.add('active');
-                    }
-
-                    // Collapse sidebar if on small screens
-                    if (window.innerWidth < 992 && sidebar) {
-                        const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                        collapseInstance.hide();
-                    }
-                });
-            });
-        });
+    });
 
 </script>
 
 <!--Get Student For Update-->
 <script>
-    document.getElementById('SearchDate').addEventListener('click',function() {
-  console.log('Click ho Gya');
-  let selectedDate=document.getElementById('Getdate').value;
-  let selectedBatchId=document.getElementById('GetBatch').value;
-        if(selectedDate && selectedBatchId) {
-        console.log("Entered inside the if");
-        fetch('/getstudentupdate/'+selectedDate+ '/' +selectedBatchId)   // Call Spring Boot GET endpoint
-          .then(response => response.json()) // Either JSON OR TEXT.
-          .then(data => {
-            let tbody = document.getElementById("studentattendancetable");
-               tbody.innerHTML = "";
+    document.getElementById('SearchDate').addEventListener('click', function () {
+        console.log('Click ho Gya');
+        let selectedDate = document.getElementById('Getdate').value;
+        let selectedBatchId = document.getElementById('GetBatch').value;
+        if (selectedDate && selectedBatchId) {
+            console.log("Entered inside the if");
+            fetch('/getstudentupdate/' + selectedDate + '/' + selectedBatchId)   // Call Spring Boot GET endpoint
+                .then(response => response.json()) // Either JSON OR TEXT.
+                .then(data => {
+                    let tbody = document.getElementById("studentattendancetable");
+                    tbody.innerHTML = "";
 
-            if(data.length === 0) {
-              tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Student found</td></tr>";
-              return;
-            }
+                    if (data.length === 0) {
+                        tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Student found</td></tr>";
+                        return;
+                    }
 
-        data.forEach(student => {
-          let row = `
-              <tr>
-                <td>${student.admission_id}</td>
-                <td>${student.name}</td>
-                <td>
-                  <select class="form-select" name="status">
-                    <option value="Present" ${student.status === 'Present' ? 'selected' : ''}>Present</option>
-                    <option value="Absent" ${student.status === 'Absent' ? 'selected' : ''}>Absent</option>
-                  </select>
-                  <input type="hidden" name="attendanceId" value="${student.attendanceId}"/>
-                </td>
-              </tr>
-            `;
+                    data.forEach(student => {
+                        let row = `
+          <tr>
+            <td>${student.admission_id}</td>
+            <td>${student.name}</td>
+            <td>
+              <select class="form-select" name="status">
+                <option value="Present" ${student.status === 'Present' ? 'selected' : ''}>Present</option>
+                <option value="Absent" ${student.status === 'Absent' ? 'selected' : ''}>Absent</option>
+              </select>
+              <input type="hidden" name="attendanceId" value="${student.attendanceId}"/>
+            </td>
+          </tr>
+        `;
 
-          tbody.innerHTML += row;
-        });
-          })
-          .catch(error => console.error('Error:', error));
-      } else {
-        //document.getElementById("fees").value = '0.0';
-      }
-      });
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            //document.getElementById("fees").value = '0.0';
+        }
+    });
 </script>
 
 <!--Get Student For Attendance-->
 <script>
-    document.getElementById("batchSelect").addEventListener("change", function() {
-       var batchId = this.value;
-        console.log("Batch id "+batchId);
-     //   document.getElementById("showdeletepdf").style.display="block";
-       if(batchId) {
-         fetch('/getstudentsforattendance/' + batchId)   // Call Spring Boot GET endpoint
-           .then(response => response.json()) // Either JSON OR TEXT.
-           .then(data => {
-             let studentListDiv = document.getElementById("studentList");
+    document.getElementById("batchSelect").addEventListener("change", function () {
+        var batchId = this.value;
+        console.log("Batch id " + batchId);
+        //   document.getElementById("showdeletepdf").style.display="block";
+        if (batchId) {
+            fetch('/getstudentsforattendance/' + batchId)   // Call Spring Boot GET endpoint
+                .then(response => response.json()) // Either JSON OR TEXT.
+                .then(data => {
+                    let studentListDiv = document.getElementById("studentList");
 
-            studentListDiv.innerHTML="";
+                    studentListDiv.innerHTML = "";
 
-             if(data.length === 0) {
-               studentListDiv.innerHTML = "<h4  class='text-center text-muted'>No Student found</h4>";
-               return;
-             }
+                    if (data.length === 0) {
+                        studentListDiv.innerHTML = "<h4  class='text-center text-muted'>No Student found</h4>";
+                        return;
+                    }
 
-         data.forEach(student => {
-           let row = `
+                    data.forEach(student => {
+                        let row = `
 
-           <div class="form-check form-switch">
-                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" id="'student-' + ${student.admission_id} " value="${student.admission_id}">
-                    <label class="form-check-label" for="'student-' + ${student.admission_id}" >${student.fullName}</label>
-           </div>
-           `;
-           studentListDiv.innerHTML += row;
-         });
-           })
-           .catch(error => console.error('Error:', error));
-       } else {
-         //document.getElementById("fees").value = '0.0';
-       }
-     });
+       <div class="form-check form-switch">
+                <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" id="'student-' + ${student.admissionId} " value="${student.admissionId}">
+                <label class="form-check-label" for="'student-' + ${student.admissionId}" >  <strong>${student.studentName} </strong> (AID ${student.admissionId})</label>
+       </div>
+       `;
+                        studentListDiv.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            //document.getElementById("fees").value = '0.0';
+        }
+    });
 
     // Select All functionality
- document.getElementById('selectAll').addEventListener('change', function() {
+    document.getElementById('selectAll').addEventListener('change', function () {
 
-   // let checked=this.checked;
+        // let checked=this.checked;
 
-   document.querySelectorAll('.student-checkbox').forEach(cb => {
-       cb.checked = this.checked;
-   });
- });
+        document.querySelectorAll('.student-checkbox').forEach(cb => {
+            cb.checked = this.checked;
+        });
+    });
 </script>
 
 
 <!--Delete Assignments-->
 <script>
-    document.getElementById("assignmentBatchId").addEventListener("change", function() {
-       var assignmentBatchId = this.value;
-        console.log("Course id "+assignmentBatchId);
-        document.getElementById("showdeletepdf").style.display="block";
-       if(assignmentBatchId) {
-         fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint
-           .then(response => response.json()) // Either JSON OR TEXT.
-           .then(data => {
-             let tbody = document.querySelector("#assignmenttable tbody");
-                tbody.innerHTML = "";
+    document.getElementById("assignmentBatchId").addEventListener("change", function () {
+        var assignmentBatchId = this.value;
+        console.log("Course id " + assignmentBatchId);
+        document.getElementById("showdeletepdf").style.display = "block";
+        if (assignmentBatchId) {
+            fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint
+                .then(response => response.json()) // Either JSON OR TEXT.
+                .then(data => {
+                    let tbody = document.querySelector("#assignmenttable tbody");
+                    tbody.innerHTML = "";
 
-             if(data.length === 0) {
-               tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";
-               return;
-             }
-
-         data.forEach(assignment => {
-           let row = `
-             <tr>
-               <td>${assignment.title}</td>
-                         <td>
-                ${assignment.pdfName} ${assignment.pdfDate}
-                <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
-            </td>
-
-               <td>
-                   <form action="/delete_assignment/${assignment.assignmentId}" method="post"
-                          onsubmit="return confirm('Delete this assignment?');">
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
+                    if (data.length === 0) {
+                        tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";
+                        return;
+                    }
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
 
-               </td>
-             </tr>
-           `;
-           tbody.innerHTML += row;
-         });
-           })
-           .catch(error => console.error('Error:', error));
-       } else {
-         //document.getElementById("fees").value = '0.0';
-       }
-     });
+                    data.forEach(assignment => {
+                        let row = `
+         <tr>
+           <td>${assignment.title}</td>
+                     <td>
+            ${assignment.pdfName} ${assignment.pdfDate}
+            <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
+        </td>
+
+           <td>
+               <form action="/delete_assignment/${assignment.assignmentId}" method="post"
+                  onsubmit="return confirm('Delete this assignment?');">
+              <input type="hidden" name="_csrf" value="${csrfToken}">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+
+
+
+           </td>
+         </tr>
+       `;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            //document.getElementById("fees").value = '0.0';
+        }
+    });
+</script>
+
+<!--Date Validation for attendance-->
+<script>
+    document.getElementById('attendanceDate').addEventListener('change', function () {
+        let date1 = document.getElementById('attendanceDate').value;
+        let selectedFullDate = new Date(date1);
+        let selectedDate = selectedFullDate.getDate();
+        let selectedMonth = selectedFullDate.getMonth() + 1;
+        let selectedDay = selectedFullDate.getDay();
+        console.log("Day is" + selectedDay);
+        console.log("Selected Month" + selectedMonth);
+
+
+        let date = new Date();
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let fullDate = year + "-" + month + "-" + day;
+        console.log("Current Month" + month);
+
+        console.log(date1);
+        console.log(fullDate);
+        console.log("Selected Date" + selectedDate);
+        console.log("CurrentDate " + day);
+        if (!selectedDay) {
+            alert('You cannot mark attendance on Sunday.');
+            this.value = fullDate;
+            return;
+        }
+
+        if (selectedMonth > month) {
+            alert("You can't select a future date");
+            // don't clear the value -> keep showing selected date
+            this.value = fullDate;
+            return;
+        }
+
+        if (selectedDate > day && selectedMonth == month) {
+            alert("You can't select a future date");
+            // don't clear the value -> keep showing selected date
+            this.value = fullDate;
+            return;
+        }
+
+    });
+
 </script>
 
 <!--Update Assignments-->
 <script>
-    document.getElementById("updateAssignmentBatchId").addEventListener("change", function() {
-      var assignmentBatchId = this.value;
-       console.log("Course id "+assignmentBatchId);
-       document.getElementById("updatepdf").style.display="block";
-      if(assignmentBatchId) {
-        fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint
-          .then(response => response.json()) // Either JSON OR TEXT.
-          .then(data => {
-            let tbody = document.querySelector("#updatetable tbody");
-               tbody.innerHTML = "";
+    document.getElementById("updateAssignmentBatchId").addEventListener("change", function () {
+        var assignmentBatchId = this.value;
+        console.log("Course id " + assignmentBatchId);
+        document.getElementById("updatepdf").style.display = "block";
+        if (assignmentBatchId) {
+            fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint
+                .then(response => response.json()) // Either JSON OR TEXT.
+                .then(data => {
+                    let tbody = document.querySelector("#updatetable tbody");
+                    tbody.innerHTML = "";
 
-            if(data.length === 0) {
-              tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";
-              return;
-            }
+                    if (data.length === 0) {
+                        tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";
+                        return;
+                    }
 
-        data.forEach(assignment => {
-          let row = `
-            <tr>
-              <td>${assignment.title}</td>
-              <td>${assignment.pdfName} ${assignment.pdfDate}
-               <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
-                </td>
-           <td>
-            <form id="updateAssignmentForm" action="/update_assignment/${assignment.assignmentId}" onsubmit="return checkUpdateForm(event)" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="_method" value="put"/>
-                        <input type="file" name="file" class="mb-3" accept="application/pdf" required>
-                       <button type="submit" class="btn btn-sm btn-warning" id="assignmentUpdateButton">Update</button>
-                   </form>
-               </td>
-            </tr>
-          `;
-          tbody.innerHTML += row;
-        });
-          })
-          .catch(error => console.error('Error:', error));
-      } else {
-        //document.getElementById("fees").value = '0.0';
-      }
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    data.forEach(assignment => {
+                        let row = `
+        <tr>
+          <td>${assignment.title}</td>
+          <td>${assignment.pdfName} ${assignment.pdfDate}
+           <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
+            </td>
+       <td>
+        <form id="updateAssignmentForm" action="/updateassignment/${assignment.assignmentId}"
+                onsubmit="return checkUpdateForm(event)" method="post" enctype="multipart/form-data">
+                 <input type="hidden" name="_csrf" value="${csrfToken}">
+                    <input type="hidden" name="_method" value="put"/>
+                    <input type="file" name="file" class="mb-3" accept="application/pdf" required>
+                   <button type="submit" class="btn btn-sm btn-warning" id="assignmentUpdateButton">Update</button>
+               </form>
+           </td>
+        </tr>
+      `;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            //document.getElementById("fees").value = '0.0';
+        }
     });
 </script>
 
@@ -962,27 +1113,27 @@
     </div>
 </div>
 
-    <script>
- function checkUpdateForm(event) {
-    event.preventDefault(); // Prevent default form submission
+<script>
+    function checkUpdateForm(event) {
+        event.preventDefault(); // Prevent default form submission
         console.log("Inside On Submit Method");
 
-      let userAns = confirm("Do you want to update?");
-      if(!userAns)
+        let userAns = confirm("Do you want to update?");
+        if (!userAns)
             return false;
-    // Disable the button to prevent multiple clicks
-    let btn = document.getElementById("assignmentUpdateButton");
-    btn.disabled = true;
-    btn.innerText = "⏳ Updating...";
+        // Disable the button to prevent multiple clicks
+        let btn = document.getElementById("assignmentUpdateButton");
+        btn.disabled = true;
+        btn.innerText = "⏳ Updating...";
 
-    // Show the popup
-    document.getElementById("updatePopup").style.display = "flex";
+        // Show the popup
+        document.getElementById("updatePopup").style.display = "flex";
 
-    // Submit the form after a short delay to allow popup to render
-    setTimeout(() => {
-        event.target.submit();
-    }, 4000); // 1s delay
-}
+        // Submit the form after a short delay to allow popup to render
+        setTimeout(() => {
+            event.target.submit();
+        }, 4000); // 1s delay
+    }
 </script>
 
 </body>

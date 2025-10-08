@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin/batch")
+@RequestMapping("/admin")
 public class BatchController {
     @Autowired
     BatchMasterRepository batchMasterRepository;
@@ -49,7 +49,7 @@ public class BatchController {
     batchMasterRepository.save(newbatch);
     redirectAttributes.addAttribute("newBatchAdded",true);
 
-    return "redirect:/admin/dashboard";
+    return "redirect:/admin/dashboard#batch-part";
     }
 
     @GetMapping("/show")
@@ -62,7 +62,7 @@ public class BatchController {
         return "show_batch";
     }
 
-    @GetMapping("/batchdetail/{id}")
+    @GetMapping("/batch/batchdetail/{id}")
     @ResponseBody
     public BatchDTO getBatchDetailInJson(@PathVariable("id")Long id){
 
@@ -80,7 +80,7 @@ public class BatchController {
         return batchDTO;
     }
 
-    @PostMapping("/update")
+    @PostMapping("/batch/update")
     public String getUpdateBatch(@RequestParam("batchId")Long batchId,
                                  @RequestParam("courseId")Long courseId,
                                  @RequestParam("userId")Long userId,
@@ -107,7 +107,7 @@ public class BatchController {
 
     // Faculties Batches
 
-    @GetMapping("/faculties/{facultyId}/batches")
+    @GetMapping("/batch/faculty/{facultyId}/batches")
     @ResponseBody
     public List<BatchDTO>getFacultyBatches(@PathVariable("facultyId")Long facultyId){
 

@@ -178,7 +178,7 @@ public class UserController {
         model.addAttribute("coursedata" , new CourseMaster());  //  For New Course Object.
         model.addAttribute("allcourses",  courseRepository.findAll()); // All Courses List.
         model.addAttribute("allstudents",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.STUDENT)); // All Student In ComboBox for Admission.
-        model.addAttribute("allcourses",courseRepository.findAll());  // All Courses List.
+        model.addAttribute("allcourses", courseRepository.findAll(Sort.by(Sort.Direction.ASC, "courseId")));// All Courses List.
         model.addAttribute("newbatch",new BatchMaster());// For add new Batch
         model.addAttribute("allfaculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));  // All Faculties for new batch creation.
         model.addAttribute("allbatches",batchMasterRepository.findAll()); // All Batches List.

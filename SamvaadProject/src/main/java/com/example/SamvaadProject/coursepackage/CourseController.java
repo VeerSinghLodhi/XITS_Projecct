@@ -11,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class CourseController {
@@ -22,11 +24,11 @@ public class CourseController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/addcourse")
-    public String getPage(Model model){
-        model.addAttribute("coursedata" , new CourseMaster());
-        return "coursemaster/addnewcourse";
-    }
+//    @GetMapping("/addcourse")
+//    public String getPage(Model model){
+//        model.addAttribute("coursedata" , new CourseMaster());
+//        return "coursemaster/addnewcourse";
+//    }
 
         @PostMapping("/addcourse")
     public String addCourse(@Valid @ModelAttribute("coursedata") CourseMaster courseMaster,
@@ -111,16 +113,54 @@ public class CourseController {
 
     @GetMapping("/coursefees/{cid}")
     @ResponseBody
-    String getCourseFees(@PathVariable("cid")Long cid){
-        return courseRepository.getCourseFees(cid);
+    public CourseDTO getCourseFees(@PathVariable("cid")Long cid){
+            CourseMaster master=courseRepository.findById(cid).orElse(null);
+            CourseDTO dto=new CourseDTO();
+            dto.setCourseFee(master.getFeesOfCourse());
+            dto.setRegistrationFee(master.getRegistrationFees());
+            dto.setNumberOfInstallments(master.getNumberOfInstallments());
+            dto.setInstallmentAmount(master.getInstallment());
+            dto.setLumpsum(master.getLumpSum());
+        return dto;
     }
 
 
-    //Data in json
-//    @GetMapping("/debug")
-//    @ResponseBody
-//    public List<CourseMaster> debugCourses() {
-//        return courseRepository.findAll();
-//    }
+    @GetMapping("/admin/courseupdatedetail/{courseId}")
+    @ResponseBody
+    public CourseDTO getDetailForUpdateCourse(@PathVariable("courseId")Long courseId){
+        CourseMaster courseMaster=courseRepository.findById(courseId).orElse(null);
+        CourseDTO dto=new CourseDTO();
+        dto.setCourseId(courseMaster.getCourseId());
+        dto.setCourseName(courseMaster.getCourseName());
+        dto.setDuration(courseMaster.getDuration());
+        dto.setLumpsum(courseMaster.getLumpSum());
+        dto.setInstallmentAmount(courseMaster.getInstallment());
+        dto.setCourseFee(courseMaster.getFeesOfCourse());
+        dto.setRegistrationFee(courseMaster.getRegistrationFees());
+        dto.setNumberOfInstallments(courseMaster.getNumberOfInstallments());
+
+        return dto;
+    }
+
+    @PostMapping("/admin/updatecourse")
+    @ResponseBody
+    public Map<String,String>getUpdateCourse(@ModelAttribute CourseMaster courseMaster){
+        CourseMaster master=courseRepository.findById(courseMaster.getCourseId()).orElse(null);
+
+        master.setCourseName(courseMaster.getCourseName());
+        master.setDuration(courseMaster.getDuration());
+        master.setFeesOfCourse(courseMaster.getFeesOfCourse());
+        master.setLumpSum(courseMaster.getLumpSum());
+        master.setInstallment(courseMaster.getInstallment());
+        System.out.println(courseMaster.getInstallment());
+        master.setNumberOfInstallments(courseMaster.getNumberOfInstallments());
+        master.setRegistrationFees(courseMaster.getRegistrationFees());
+        courseRepository.save(master);
+
+        Map<String,String>response=new HashMap<>();
+        response.put("message","Course has been updated!");
+        return response;
+    }
+
 
 }

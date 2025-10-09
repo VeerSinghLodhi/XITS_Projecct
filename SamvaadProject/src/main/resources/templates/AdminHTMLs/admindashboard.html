@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <title>Admin || Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -1215,24 +1218,72 @@ footer a:hover {
                           </select>
                         </div>
 
+                        <div class="mb-3">
+                          <label class="form-label ">Fee Category</label>
+
+                          <div class="form-check form-check-inline ms-5">
+                            <input class="form-check-input" type="radio" name="feeCategory" id="feeLumpsum" value="Lumpsum" >
+                            <label class="form-check-label" for="feeLumpsum">Lumpsum</label>
+                          </div>
+
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="feeCategory" id="feeInstallments" value="Installments">
+                            <label class="form-check-label" for="feeInstallments">Installments</label>
+                          </div>
+                        </div>
+
+                        <div id="lumpsumFeeCategory" class="mb-3" style="display:none;">
+                          <hr class="border border-success">
+                          <div class="my-3">  <span>Lumpsum Fee: <span class="fw-bolder" id="lumpsumFeeFromDatabase"></span></span></div>
+                          <hr class="border border-success">
+                        </div>
+
+                        <div id="installmentsFeeCategory" class="mb-3" style="display:none;">
+                          <hr class="border border-success">
+                          <div class="row mb-3">
+                            <div class="col">
+                              Course Fee: <span id="courseFees3" class="fw-bolder"></span>
+                            </div>
+                            <div class="col">
+                              Registration Fee: <span id="registrationFees3" class="fw-bolder"></span>
+                            </div>
+                            <div class="col">
+                              Rest amount: <span id="restFees3" class="fw-bolder">2000</span>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+
+                            <div class="col d-flex flex-row">
+                              <span>Make Installment:</span> <input id="makeInstallment3" value="1" type="number" class="form-control" >
+                            </div>
+                            <div class="col">
+                              Per Installment: <span id="perInstallment3" class="fw-bolder"></span>
+                            </div>
+                          </div>
+                          <hr class="border border-success">
+                        </div>
+
+
+
+
                         <!-- Fees -->
-                        <div class="mb-3">
-                          <label for="fees" class="form-label">Fees</label>
-                          <input type="number" th:field="*{fees}" step="0.01" class="form-control" id="fees" name="fees" readonly required>
-                        </div>
+<!--                        <div class="mb-3">-->
+<!--                          <label for="fees" class="form-label">Fees</label>-->
+<!--                          <input type="number" th:field="*{fees}" step="0.01" class="form-control" id="fees" name="fees" readonly required>-->
+<!--                        </div>-->
 
 
-                        <!-- Discount -->
-                        <div class="mb-3">
-                          <label for="discount" class="form-label">Discount</label>
-                          <input type="number" th:field="*{discount}" value="0.0" step="0.01" class="form-control" id="discount" name="discount" onkeyup="calculateNet()" required>
-                        </div>
+<!--                        &lt;!&ndash; Discount &ndash;&gt;-->
+<!--                        <div class="mb-3">-->
+<!--                          <label for="discount" class="form-label">Discount</label>-->
+<!--                          <input type="number" th:field="*{discount}" value="0.0" step="0.01" class="form-control" id="discount" name="discount" onkeyup="calculateNet()" required>-->
+<!--                        </div>-->
 
-                        <!-- Discount -->
-                        <div class="mb-3">
-                          <label for="balance" class="form-label">Balance</label>
-                          <input type="number" th:field="*{balance}" value="0.0" step="0.01" class="form-control" id="balance" name="balance" readonly required>
-                        </div>
+<!--                        &lt;!&ndash; Discount &ndash;&gt;-->
+<!--                        <div class="mb-3">-->
+<!--                          <label for="balance" class="form-label">Balance</label>-->
+<!--                          <input type="number" th:field="*{balance}" value="0.0" step="0.01" class="form-control" id="balance" name="balance" readonly required>-->
+<!--                        </div>-->
 
 
                         <!-- Buttons -->
@@ -1281,7 +1332,7 @@ footer a:hover {
 
                       <!-- Discount -->
                       <div class="mb-3">
-                        <label for="balance" class="form-label">Balance</label>
+                        <label for="balance1" class="form-label">Balance</label>
                         <input type="number"  value="0.0" step="0.01" class="form-control" id="balance1" name="balance1" readonly required>
                       </div>
 
@@ -1582,22 +1633,16 @@ footer a:hover {
                     <button class="nav-link" id="fee-tab" data-bs-toggle="tab" data-bs-target="#all_courses"
                             type="button">All Courses</button>
                   </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#batches"
-                            type="button">Course Information</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="notifications-tab" data-bs-toggle="tab"
-                            data-bs-target="#notifications" type="button">Notifications</button>
-                  </li>
+                  
+<!--                  <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link" id="notifications-tab" data-bs-toggle="tab"-->
+<!--                            data-bs-target="#notifications" type="button">Notifications</button>-->
+<!--                  </li>-->
                 </ul>
 
                 <!-- Tab Content -->
                 <div class="tab-content p-3">
-                  <div class="tab-pane fade " id="batches" role="tabpanel">
-                    <h5>User Profile</h5>
-                    <p>This is the Profile section.</p>
-                  </div>
+
                   <div class="tab-pane fade show active" id="addbatch" role="tabpanel">
                     <!--                <div class="form-container p-4">-->
                     <h4>Add New Course</h4>
@@ -1619,17 +1664,18 @@ footer a:hover {
 <!--                        <input type="text" name="duration" id="duration" th:field="*{duration}" class="form-control"-->
 <!--                               placeholder="Enter course duration(in months)">-->
                         <select id="duration" name="duration" th:field="*{duration}" class="form-select" required>
-                          <option value=""  disabled selected>--Select Duration--</option>
-                          <option value="1 Month" >1 Month</option>
-                          <option value="2 Month" >2 Months</option>
-                          <option value="3 Month" >3 Months</option>
-                          <option value="4 Month" >4 Months</option>
-                          <option value="5 Month" >5 Months</option>
-                          <option value="6 Month" >6 Months</option>
-                          <option value="7 Month" >7 Months</option>
-                          <option value="8 Month" >8 Months</option>
-                          <option value="9 Month" >9 Months</option>
-                          <option value="10 Month" >10 Months</option>
+                          <option value=""   selected disabled>--Select Duration--</option>
+                          <option value="10 Hours" >10 Hours</option>
+                          <option value="20 Hours" >20 Hours</option>
+                          <option value="30 Hours" >30 Hours</option>
+                          <option value="40 Hours" >40 Hours</option>
+                          <option value="50 Hours" >50 Hours</option>
+                          <option value="60 Hours" >60 Hours</option>
+                          <option value="70 Hours" >70 Hours</option>
+                          <option value="80 Hours" >80 Hours</option>
+                          <option value="90 Hours" >90 Hours</option>
+                          <option value="100 Hours" >100 Hours</option>
+                          <option value="120 Hours" >120 Hours</option>
                         </select>
                         <p th:each="err : ${#fields.errors('duration')}" th:text="${err}"
                            style="color: red; font-size: 14px; margin-top: 5px;"></p>
@@ -1645,28 +1691,28 @@ footer a:hover {
                         <label for="lumpSum" class="form-label"><b>Lumpsum
                           Amount</b></label>
                         <input type="number" name="lumpSum" id="lumpSum" th:field="*{lumpSum}" class="form-control"
-                               placeholder="Enter Lumpsum amount" onkeyup="calculateInstallment();" required>
+                               placeholder="Enter Lumpsum amount" onkeyup="calculateInstallment();" min="0" value="0" required>
                         <p th:each="err : ${#fields.errors('lumpSum')}" th:text="${err}"
                            style="color: red; font-size: 14px; margin-top: 5px;"></p>
                       </div>
 
                       <div class="form-group mb-3">
                         <label for="registrationFee" class="form-label"><b>Registration Fee</b></label>
-                        <input type="number" name="registrationFees" value="0" id="registrationFee" th:field="*{registrationFees}" class="form-control"
+                        <input type="number" name="registrationFees" min="0" value="0" id="registrationFee" th:field="*{registrationFees}" class="form-control"
                                placeholder="Enter registration fee" onkeyup="calculateInstallment();" required>
                       </div>
-
+                      <div id="showcourseupdatediv" style="display:none;">
                       <hr class="border border-success mb-3">
 
                       <div class="row mb-3">
                           <div class="col">
-                            Course Fee: <span id="courseFees" class="fw-bolder">4600</span>
+                            Course Fee: <span id="courseFees" class="fw-bolder"></span>
                           </div>
                         <div class="col">
-                            Registration Fee: <span id="registrationFees" class="fw-bolder">2000</span>
+                            Registration Fee: <span id="registrationFees" class="fw-bolder"></span>
                         </div>
                         <div class="col">
-                          Rest amount: <span id="restFees" class="fw-bolder">2600</span>
+                          Rest amount: <span id="restFees" class="fw-bolder"></span>
                         </div>
                       </div>
                       <div class="row mb-3">
@@ -1675,22 +1721,19 @@ footer a:hover {
                           <span>Make Installment:</span> <input id="makeInstallment" value="1" type="number" class="form-control" onkeyup="calculateInstallment();">
                         </div>
                         <div class="col">
-                          Per Installment: <span id="perInstallment" class="fw-bolder">1234</span>
+                          Per Installment: <span id="perInstallment" class="fw-bolder"></span>
                         </div>
                       </div>
-                      <hr class="border border-success mb-3">
+                        <hr class="border border-success mb-3">
+                      </div>
+
+                      <input type="hidden" name="installment" id="installment" th:field="*{installment}">
+                      <input type="hidden" name="numberOfInstallments" id="numberOfInstallments" th:field="*{numberOfInstallments}">
+<!--                      <input type="hidden" name="perInstallment" id="perInstallmentValue" th:field="*{perInstallment}">-->
 
 
 
 
-<!--                      <div class="form-group mb-3">-->
-<!--                        <label for="installment" class="form-label"><b>Installment-->
-<!--                          Amount</b></label>-->
-<!--                        <input type="number" name="installment" id="installment" th:field="*{installment}"-->
-<!--                               class="form-control" placeholder="Enter installment amount" required>-->
-<!--                        <p th:each="err : ${#fields.errors('installment')}" th:text="${err}"-->
-<!--                           style="color: red; font-size: 14px; margin-top: 5px;"></p>-->
-<!--                      </div>-->
                       <!--     Submit Button    -->
                       <div class="button">
                         <input type="reset" value="Reset">
@@ -1702,39 +1745,146 @@ footer a:hover {
                   <div class="tab-pane fade" id="all_courses" role="tabpanel">
                     <h4>Available Courses</h4>
 
-                    <div class="row master-div" th:each="course : ${allcourses}">
-                      <div class="col-lg-12 col-md-12 col mb-3 mini-master">
-                        <h3 th:text="${course.courseName}"></h3>
-                        <hr>
-                        <p><strong>Duration: </strong><span th:text="${course.duration}"></span>
-                        </p>
-                        <p><strong>Lump sum amount: </strong> ₹<span th:text="${course.lumpSum}"></span>
-                        </p>
-                        <p><strong>Installment Amount: </strong> ₹<span th:text="${course.installment}"></span></p>
+                    <div class="card mb-4 shadow-sm" th:each="course : ${allcourses}">
+
+                      <div class="card-header bg-light d-flex justify-content-between">
+                        <div><h5 class="card-title" th:text="${course.courseName}"></h5></div>
+                        <div>
+<!--                          <button type="button" class="btn btn-sm btn-primary" th:onclick="showCourseDataForUpdate(${course.courseId});" data-bs-toggle="modal" data-bs-target="#updateCourseModal"><i class="bi bi-pencil-square me-1"></i>Edit</button>-->
+                          <button type="button"
+                                  class="btn btn-sm btn-primary"
+                                  th:attr="onclick='showCourseDataForUpdate(' + ${course.courseId} + ');'"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#updateCourseModal">
+                            <i class="bi bi-pencil-square me-1"></i>Edit
+                          </button>
+
+                        </div>
                       </div>
-                      <div class="row">
-                        <div class="col d-flex justify-content-center">
-                        <button class="btn btn-warning">More</button>
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                          <p class="card-text mb-3"><strong>Course Fee: </strong> <span th:text="${course.feesOfCourse}"></span></p>
+                          <p class="card-text mb-3"><strong>Registration Fee: </strong> <span th:text="${course.registrationFees}"></span></p>
                         </div>
-                        <div class="col d-flex justify-content-center">
-                        <form method="post" th:action="@{/updatecourse}">
-                          <input type="hidden" name="courseId" th:value="${course.courseId}">
-                          <button class="btn btn-warning">Edit</button>
-                        </form>
+                        <div class="d-flex justify-content-between">
+                          <p class="card-text mb-3"><strong>Lumpsum :</strong> <span th:text="${course.lumpSum}"></span></p>
+                          <p class="card-text mb-3"><strong>Duration:</strong> <span th:text="${course.duration}"></span></p>
                         </div>
-                        <div class="col d-flex justify-content-center">
-                        <form method="post" th:action="@{/deletecourse}" onsubmit="return showDeletePopup()">
-                          <input type="hidden" name="courseId" th:value="${course.courseId}">
-                          <button class="btn btn-warning" onclick="return confirm('Do you want to delete this course?');">Delete</button>
-                        </form>
+                        <div class="d-flex justify-content-between">
+                          <p class="card-text mb-3"><strong>Number of installment :</strong> <span th:text="${course.numberOfInstallments}"></span></p>
+                          <p class="card-text mb-3"><strong>Per Installment:</strong> <span th:text="${course.installment}"></span></p>
+                        </div>
+<!--                        <div class="mt-3 d-flex justify-content-end">-->
+<!--                          -->
+<!--                        </div>-->
+                      </div>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="updateCourseModal" tabindex="-1" aria-labelledby="updateCourseModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title text-center" id="updateCourseModalLabel">Update Course</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+
+                          <!-- Modal Body -->
+                          <div class="modal-body">
+                            <form id="updateCourseForm" class="form-div p-3" method="post"   onsubmit="return confirm('Do you want to update?');">
+
+<!--                              <meta name="_csrf" th:content="${_csrf.token}" />-->
+<!--                              <meta name="_csrf_header" th:content="${_csrf.headerName}" />-->
+
+                              <input type="hidden" name="courseId" id="courseIdUpdate" >
+
+                              <div class="form-group mb-3">
+                                <label for="courseName" class="form-label"><b>Course Name</b></label>
+                                <input type="text" name="courseName" id="courseNameUpdate"
+                                       class="form-control" placeholder="Enter course name">
+                              </div>
+
+                              <div class="form-group mb-3">
+                                <label for="duration" class="form-label"><b>Course Duration</b></label>
+                                <select id="durationUpdate" name="duration"  class="form-select" required>
+                                  <option value=""   selected disabled>--Select Duration--</option>
+                                  <option value="10 Hours" >10 Hours</option>
+                                  <option value="20 Hours" >20 Hours</option>
+                                  <option value="30 Hours" >30 Hours</option>
+                                  <option value="40 Hours" >40 Hours</option>
+                                  <option value="50 Hours" >50 Hours</option>
+                                  <option value="60 Hours" >60 Hours</option>
+                                  <option value="70 Hours" >70 Hours</option>
+                                  <option value="80 Hours" >80 Hours</option>
+                                  <option value="90 Hours" >90 Hours</option>
+                                  <option value="100 Hours" >100 Hours</option>
+                                  <option value="120 Hours" >120 Hours</option>
+                                </select>
+                              </div>
+
+                              <div class="form-group mb-3">
+                                <label for="courseFeeUpdate" class="form-label"><b>Course Fee</b></label>
+                                <input type="number" name="feesOfCourse" id="courseFeeUpdate"
+                                       class="form-control" onkeyup="calculateInstallment2();"  placeholder="Enter course fee">
+                              </div>
+
+                              <div class="form-group mb-3">
+                                <label for="lumpsumUpdate" class="form-label"><b>Lumpsum Amount</b></label>
+                                <input type="number" name="lumpSum" id="lumpsumUpdate"
+                                       class="form-control" placeholder="Enter lumpsum amount">
+                              </div>
+
+                              <div class="form-group mb-3">
+                                <label for="registrationFeeUpdate" class="form-label"><b>Registration Fee</b></label>
+                                <input type="number" name="registrationFees" min="0" value="0" id="registrationFeeUpdate"  class="form-control"
+                                       placeholder="Enter registration fee" onkeyup="calculateInstallment2();" required>
+                              </div>
+
+                              <div id="showcourseupdatedivUpdate" >
+                                <hr class="border border-success mb-3">
+
+                                <div class="row mb-3">
+                                  <div class="col">
+                                    Course Fee: <span id="courseFeesUpdate" class="fw-bolder">4600</span>
+                                  </div>
+                                  <div class="col">
+                                    Registration Fee: <span id="registrationFeesUpdate" class="fw-bolder">2000</span>
+                                  </div>
+                                  <div class="col">
+                                    Rest amount: <span id="restFeesUpdate" class="fw-bolder">2600</span>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+
+                                  <div class="col d-flex flex-row">
+                                    <span>Make Installment:</span> <input id="makeInstallmentUpdate" value="1" type="number" class="form-control" onkeyup="calculateInstallment2();">
+                                  </div>
+                                  <div class="col">
+                                    Per Installment: <span id="perInstallmentUpdate" class="fw-bolder">1234</span>
+                                  </div>
+                                </div>
+                                <hr class="border border-success mb-3">
+                              </div>
+
+<!--                                <label for="installment" class="form-label"><b>Installment Amount</b></label>-->
+                                <input type="hidden" name="installment" id="installmentUpdate">
+                               <input type="hidden" name="numberOfInstallments" id="numberOfInstallmentsUpdate">
+
+                              <div class="text-end">
+                                <!-- Cancel Button -->
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <!-- Submit Button -->
+                                <input type="submit" class="btn btn-success" value="Update Course">
+                              </div>
+                            </form>
+                          </div>
+
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="tab-pane fade" id="notifications" role="tabpanel">
-                    <h5>Notifications</h5>
-                    <p>Notifications list goes here.</p>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -2528,6 +2678,32 @@ footer a:hover {
 
 </script>
 
+<!--JS for fee category div-->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const lumpsumRadio = document.getElementById("feeLumpsum");
+    const installmentsRadio = document.getElementById("feeInstallments");
+    const lumpsumDiv = document.getElementById("lumpsumFeeCategory");
+    const installmentsDiv = document.getElementById("installmentsFeeCategory");
+
+    // Listen for change on both radios
+    lumpsumRadio.addEventListener("change", function () {
+      if (this.checked) {
+        lumpsumDiv.style.display = "block";
+        installmentsDiv.style.display = "none";
+      }
+    });
+
+    installmentsRadio.addEventListener("change", function () {
+      if (this.checked) {
+        installmentsDiv.style.display = "block";
+        lumpsumDiv.style.display = "none";
+      }
+    });
+  });
+</script>
+
+
 
 <!--Show all batches-->
 <script>
@@ -2582,10 +2758,16 @@ footer a:hover {
       console.log("Course id "+courseId);
      if(courseId) {
        fetch('/coursefees/' + courseId)   // Call Spring Boot GET endpoint
-         .then(response => response.text()) // Either JSON OR TEXT.
+         .then(response => response.json()) // Either JSON OR TEXT.
          .then(data => {
            // Display data in a Input field
-           document.getElementById("fees").value = data;
+          // document.getElementById("fees").value = data;
+          document.getElementById('courseFees3').innerHTML = data.courseFee;
+          document.getElementById('registrationFees3').innerHTML = data.registrationFee;
+          document.getElementById('makeInstallment3').value = data.numberOfInstallments;
+          document.getElementById('perInstallment3').innerHTML = data.installmentAmount;
+
+           document.getElementById('lumpsumFeeFromDatabase').innerHTML = data.lumpsum;
          })
          .catch(error => console.error('Error:', error));
      } else {
@@ -2766,6 +2948,37 @@ footer a:hover {
         .catch(error => console.error("Error fetching admissions:", error));
     }
   });
+</script>
+
+<!--Update Course JS-->
+<script>
+  document.getElementById("updateCourseForm").addEventListener("submit", function(e) {
+  // console.log("Inside updateCourseForm");
+
+   const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+
+  e.preventDefault();
+  let formData = new FormData(this);
+
+  fetch("/admin/updatecourse", {
+      method: "POST",
+      headers: {
+            [csrfHeader]: csrfToken
+        },
+      body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+      alert(data.message); // confirmation
+      const modal = bootstrap.Modal.getInstance(document.getElementById("updateCourseModal"));
+        modal.hide();
+      this.reset(); // clear form
+      location.reload();
+  });
+});
+
 </script>
 
 
@@ -2961,8 +3174,9 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 
 <!--JS for calculate installment-->
 <script>
+
   function calculateInstallment() {
-      console.log("OK");
+      document.getElementById('showcourseupdatediv').style.display="block";
       let courseFee = document.getElementById('feesofcourse').value;
       let registrationFee = document.getElementById('registrationFee').value;
       let lumpSum = document.getElementById('lumpSum').value;
@@ -2972,69 +3186,78 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 
       document.getElementById('courseFees').innerHTML = courseFee;
       document.getElementById('registrationFees').innerHTML = registrationFee;
-
-      if (courseFee < registrationFee) {
-            registrationFee=courseFee;
-          document.getElementById('registrationFee').value = courseFee;
-      }
-      if (courseFee <= lumpSum) {
-            lumpSum=courseFee;
-          document.getElementById('lumpSum').value = courseFee;
-      }
+      document.getElementById('registrationFee').max = courseFee;
+      document.getElementById('lumpSum').max = courseFee;
 
       let restAmount = courseFee - registrationFee;
       varRest.innerHTML = restAmount;
 
       if (makeInstallment > 0) {
           installments.innerHTML = (restAmount / makeInstallment).toFixed(2);
+          document.getElementById('installment').value= (restAmount / makeInstallment).toFixed(2);
       } else {
           installments.innerHTML = "0";
+          document.getElementById('installment').value= 0;
       }
+
+      document.getElementById('numberOfInstallments').value =  makeInstallment;
+     // document.getElementById('perInstallmentValue').value = (restAmount / makeInstallment).toFixed(2);
   }
-</script>
-<script>
 
-  function calculateInstallment2() {
-      console.log("OK");
+   function calculateInstallment2() {
+   console.log("OK");
+      // document.getElementById('showcourseupdatedivUpdate').style.display="block";
+      let courseFee = document.getElementById('courseFeeUpdate').value;
+      let registrationFee = document.getElementById('registrationFeeUpdate').value;
+      let lumpSum = document.getElementById('lumpsumUpdate').value;
+      let varRest = document.getElementById('restFeesUpdate');
+      let installments = document.getElementById('perInstallmentUpdate');
+      let makeInstallment = document.getElementById('makeInstallmentUpdate').value;
 
-      // Get values and convert to numbers
-      let courseFee = document.getElementById('feesofcourse').value;
-      let registrationFee = document.getElementById('registrationFee').value;
-      let lumpSum = Number(document.getElementById('lumpSum').value);
-      let makeInstallment = document.getElementById('makeInstallment').value;
+      document.getElementById('courseFeesUpdate').innerHTML = courseFee;
+      document.getElementById('registrationFeesUpdate').innerHTML = registrationFee;
+      document.getElementById('registrationFeeUpdate').max = courseFee;
+      document.getElementById('lumpsumUpdate').max = courseFee;
 
-      // Elements to display results
-      let varRest = document.getElementById('restFees');
-      let installments = document.getElementById('perInstallment');
-
-      // Display fees
-      document.getElementById('courseFees').innerHTML = courseFee;
-      document.getElementById('registrationFees').innerHTML = registrationFee;
-
-      // Validations
-      if (registrationFee > courseFee) {
-          registrationFee = courseFee;
-          document.getElementById('registrationFee').value = courseFee;
-      }
-
-      if (lumpSum > courseFee) {
-          lumpSum = courseFee;
-          document.getElementById('lumpSum').value = courseFee;
-      }
-
-      // Calculate remaining amount
       let restAmount = courseFee - registrationFee;
       varRest.innerHTML = restAmount;
 
-      // Calculate installment per month (avoid divide by zero)
       if (makeInstallment > 0) {
           installments.innerHTML = (restAmount / makeInstallment).toFixed(2);
+          document.getElementById('installmentUpdate').value= (restAmount / makeInstallment).toFixed(2);
       } else {
           installments.innerHTML = "0";
+          document.getElementById('installmentUpdate').value= 0;
+      }
+
+      document.getElementById('numberOfInstallmentsUpdate').value =  makeInstallment;
+     // document.getElementById('perInstallmentValue').value = (restAmount / makeInstallment).toFixed(2);
+  }
+
+  async function showCourseDataForUpdate(courseId) {
+      try {
+          // Fetch course data from backend (JSON response)
+          const response = await fetch(`/admin/courseupdatedetail/${courseId}`);
+          const course = await response.json();
+
+          // Fill modal form fields
+          document.getElementById('courseIdUpdate').value = course.courseId;
+          document.getElementById('courseNameUpdate').value = course.courseName;
+          document.getElementById('courseFeeUpdate').value= course.courseFee;
+          document.getElementById('durationUpdate').value = course.duration;
+          document.getElementById('lumpsumUpdate').value = course.lumpsum;
+          document.getElementById('perInstallmentUpdate').value = course.installmentAmount;
+          document.getElementById('registrationFeeUpdate').value = course.registrationFee;
+          document.getElementById('makeInstallmentUpdate').value = course.numberOfInstallments;
+
+          calculateInstallment2();
+      } catch (error) {
+          console.error("Error loading course data:", error);
       }
   }
-</script>
 
+
+</script>
 
 <script>
 

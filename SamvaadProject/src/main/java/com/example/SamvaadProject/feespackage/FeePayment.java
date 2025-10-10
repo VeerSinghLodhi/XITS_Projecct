@@ -1,64 +1,145 @@
 package com.example.SamvaadProject.feespackage;
 
 import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
-import jakarta.persistence.*;
+import com.example.SamvaadProject.admissionpackage.AdmissionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
+import java.util.List;
 
-@Entity
-@Table(name = "fees")
-public class FeePayment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long feeId;
+@Controller
+@RequestMapping("/fees")
+public class FeePaymentController {
 
-    @ManyToOne
-    @JoinColumn(name = "admissionId")
-    private AdmissionMaster admission;
+    @Autowired
+    private FeeRepository feePaymentRepository;
 
-    private Double amount;
-    private Date paymentDate;
-    private String paymentMode; // Cash, Online, Cheque, Card
+    @Autowired
+    private AdmissionRepository admissionRepository;
 
-    // Getters & Setters
-
-    public Long getFeeId() {
-        return feeId;
+    @GetMapping("/feenew")
+    public String showFeeForm(Model model) {
+        model.addAttribute("feePayment", new FeePayment());
+        model.addAttribute("admissions", admissionRepository.findAll());
+        return "fee-form";
     }
 
-    public void setFeeId(Long feeId) {
-        this.feeId = feeId;
+    @PostMapping("/save")
+    public String saveFee(@RequestParam("admissionId") String admissionId,
+                          @ModelAttribute("feePayment") FeePayment feePayment,
+                          @RequestParam("feeCategoryForFeeTable") String feeCategoryForFeeTable,
+                          RedirectAttributes redirectAttributes) {
+
+        AdmissionMaster admission = admissionRepository.findById(admissionId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Admission ID: " + admissionId));
+
+        if(feeCategoryForFeeTable.equals("Lumpsum")){
+            feePayment.setBalanceAfterPayment(0d);
+            feePayment.setInstallmentNo(1);
+            admission.setRegistrationFeesPaid(true);
+        }else{
+
+
+        }
+        feePayment.setAdmission(admission);
+        feePayment.setPaymentDate(new Date());
+
+//        Double balance=admission.getNetFees();
+//        System.out.println("Balance "+balance);
+//
+//        Double amount=feePayment.getAmount();
+//        admission.setNetFees(balance-amount);
+//
+//        feePayment.setAdmission(admission);
+//        feePayment.setPaymentDate(new Date());
+        admissionRepository.save(admission);// Updated Balance
+        feePaymentRepository.save(feePayment);
+
+        redirectAttributes.addAttribute("feeSubmitted",true);
+
+        return "redirect:/admin/dashboard";
     }
 
-    public AdmissionMaster getAdmission() {
-        return admission;
+    @GetMapping("/feelist/admission/{admissionId}")
+    @ResponseBody
+    public List<FeeDTO> listFees(@PathVariable("admissionId")String admissionId, Model model) {
+//        model.addAttribute("fees", feePaymentRepository.findAllByOrderByFeeIdDesc()); //decending order list
+        return feePaymentRepository.findByAdmission_AdmissionId(admissionId)
+                .stream()
+                .map(fee -> new FeeDTO(fee.getFeeId(),
+                        fee.getAdmission().getAdmissionId(),
+                        fee.getAmount(),
+                        fee.getPaymentDate().toString(),
+                        fee.getPaymentMode(),
+                        fee.getAdmission().getCourse().getCourseName()))
+                .toList();
+//        return feePayment;
     }
 
-    public void setAdmission(AdmissionMaster admission) {
-        this.admission = admission;
+    @GetMapping("/edit/{id}")
+    public String editFee(@PathVariable("id") Long id, Model model) {
+        FeePayment feePayment = feePaymentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Fee ID: " + id));
+
+
+        model.addAttribute("feePayment", feePayment);
+        model.addAttribute("admissions", admissionRepository.findAll());
+
+        return "fee-form";
     }
 
-    public Double getAmount() {
-        return amount;
+    @GetMapping("/delete/{id}")
+    public String deleteFee(@PathVariable("id") Long id) {
+        FeePayment feePayment = feePaymentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Fee ID: " + id));
+
+        feePaymentRepository.delete(feePayment);
+        return "redirect:/fees/list";
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+
+
+
+    // ==============================================Second Controller Codes===================================
+
+    @GetMapping("/myfees")
+    public String showSearchPage() {
+        return "student-fee-search";
     }
 
-    public Date getPaymentDate() {
-        return paymentDate;
-    }
+    @PostMapping("/myfees")
+    public String getMyFees(@RequestParam("admissionId") String admissionId, Model model) {
+        AdmissionMaster admission = admissionRepository.findById(admissionId).orElse(null);
 
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
-    }
+        if (admission == null) {
+            model.addAttribute("error", "Invalid Admission ID!");
+            return "student-fee-search";
+        }
 
-    public String getPaymentMode() {
-        return paymentMode;
-    }
+        List<FeePayment> myFees = feePaymentRepository.findByAdmission_AdmissionId(admissionId);
 
-    public void setPaymentMode(String paymentMode) {
-        this.paymentMode = paymentMode;
+        double totalPaid = myFees.stream().mapToDouble(FeePayment::getAmount).sum();
+        double remaining = admission.getCourseFee() - totalPaid - admission.getDiscount();
+
+
+        model.addAttribute("admission", admission);
+        model.addAttribute("fees", myFees);
+        model.addAttribute("totalPaid", totalPaid);
+        model.addAttribute("remaining", remaining);
+
+        return "student-fee-list";
     }
 }
+
+
+
+
+
+
+
+
+

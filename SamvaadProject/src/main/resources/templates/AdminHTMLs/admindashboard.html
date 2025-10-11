@@ -1215,8 +1215,11 @@ footer a:hover {
                       </div>
 
                       <div id="feeAmountDiv" style="display:none;">
+                        <div class="mb-3" id="payRegistrationFee" style="display:none;">
+                          <span style="color:red;" class="fw-bolder">Pay Registration Fee</span>
+                        </div>
                       <div class="mb-3">
-                        <label class="form-label">Enter Amount</label>
+                        <label class="form-label">Amount to be paid</label>
                         <input type="number" id="amount" th:field="*{amount}"  class="form-control" name="amount" required readonly>
                       </div>
 
@@ -1238,17 +1241,6 @@ footer a:hover {
                             <label class="form-check-label" for="cheque">Cheque</label>
                           </div>
                         </div>
-
-<!--                      <div class="mb-3">-->
-<!--                        <label for="paymentMode" class="form-label">Payment Mode</label>-->
-<!--                        <select id="paymentMode" th:field="*{paymentMode}" name="paymentMode" class="form-control">-->
-<!--                          <option value="" selected disabled>&#45;&#45;Select a payment mode</option>-->
-<!--                          <option value="Cash">Cash</option>-->
-<!--                          <option value="Online">Online</option>-->
-<!--                          <option value="Cheque">Cheque</option>-->
-<!--                          <option value="Card">Card</option>-->
-<!--                        </select>-->
-<!--                      </div>-->
 
                       </div>
                       <input type="hidden" id="feeCategoryForFeeTable" name="feeCategoryForFeeTable" >
@@ -1725,7 +1717,7 @@ footer a:hover {
                     <button class="nav-link" id="fee-tab" data-bs-toggle="tab" data-bs-target="#all_courses"
                             type="button">All Courses</button>
                   </li>
-                  
+
 <!--                  <li class="nav-item" role="presentation">-->
 <!--                    <button class="nav-link" id="notifications-tab" data-bs-toggle="tab"-->
 <!--                            data-bs-target="#notifications" type="button">Notifications</button>-->
@@ -3469,8 +3461,8 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
             document.getElementById('amount').value =  selectedOption.getAttribute("data-lumpsumfee");
             let feeStatus =  selectedOption.getAttribute("data-isregistrationfee") === "true";
             console.log("Registration Fee Status "+feeStatus);
-          //  document.getElementById("feestatus").innerHTML = feeStatus ? "Completed" : "Pending";
-          let feeBtn =document.getElementById("feesubmitbutton");
+            //  document.getElementById("feestatus").innerHTML = feeStatus ? "Completed" : "Pending";
+            let feeBtn =document.getElementById("feesubmitbutton");
 
             if(feeStatus){
                 document.getElementById('feeAmountDiv').style.display = "none";
@@ -3498,7 +3490,7 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 
           document.getElementById('feecourseName1').innerHTML = selectedOption.getAttribute("data-coursename");
           document.getElementById('feeCategory1').innerHTML = feeCategory ;
-          document.getElementById('registrationFee1').innerHTML = selectedOption.getAttribute("data-registrationfee");
+        //  document.getElementById('registrationFee1').innerHTML = selectedOption.getAttribute("data-registrationfee");
 
           document.getElementById('courseFee1').innerHTML = selectedOption.getAttribute("data-coursefee");
           document.getElementById('courseDiscount').innerHTML =  selectedOption.getAttribute("data-discount");
@@ -3508,7 +3500,22 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
           document.getElementById('perInstallmentAmount').innerHTML = selectedOption.getAttribute("data-installment");
           document.getElementById('remainingInstallments').innerHTML =  "0";
 
-          
+
+          let feeStatus =  selectedOption.getAttribute("data-isregistrationfee") === "true";
+
+          if(feeStatus){
+            document.getElementById('registrationFee1').innerHTML = selectedOption.getAttribute("data-registrationfee") + '<span class="badge bg-success">Completed</span>';
+            document.getElementById('payRegistrationFee').style.display = "none";
+            document.getElementById('feeAmountDiv').style.display = "block";
+            document.getElementById('amount').value = selectedOption.getAttribute("data-installment");
+          }else{
+            document.getElementById('registrationFee1').innerHTML = selectedOption.getAttribute("data-registrationfee") + '<span class="badge bg-warning">Pending</span>';
+            document.getElementById('payRegistrationFee').style.display = "block";
+            document.getElementById('feeAmountDiv').style.display = "block";
+            document.getElementById('amount').value =  selectedOption.getAttribute("data-registrationfee");
+
+          }
+
 
 
 

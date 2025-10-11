@@ -31,19 +31,40 @@ public class FeePaymentController {
     @PostMapping("/save")
     public String saveFee(@RequestParam("admissionId") String admissionId,
                           @ModelAttribute("feePayment") FeePayment feePayment,
+                          @RequestParam("feeCategoryForFeeTable") String feeCategoryForFeeTable,
                           RedirectAttributes redirectAttributes) {
 
         AdmissionMaster admission = admissionRepository.findById(admissionId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Admission ID: " + admissionId));
 
-        Double balance=admission.getBalance();
-        System.out.println("Balance "+balance);
+        if(feeCategoryForFeeTable.equals("Lumpsum")){
+            feePayment.setBalanceAfterPayment(0d);
+            feePayment.setInstallmentNo(1);
+            admission.setRegistrationFeesPaid(true);
+        }else{
+            List<FeePayment> checkPayment=feePaymentRepository.findByAdmission_AdmissionId(admissionId);
 
-        Double amount=feePayment.getAmount();
-        admission.setBalance(balance-amount);
+            int totalFeePayments;
+            if(checkPayment!=null){
+                totalFeePayments=checkPayment.size();
+            }else{
+                totalFeePayments=0;
+            }
+            System.out.println("Total installments of this admission id "+totalFeePayments);
 
+
+        }
         feePayment.setAdmission(admission);
         feePayment.setPaymentDate(new Date());
+
+//        Double balance=admission.getNetFees();
+//        System.out.println("Balance "+balance);
+//
+//        Double amount=feePayment.getAmount();
+//        admission.setNetFees(balance-amount);
+//
+//        feePayment.setAdmission(admission);
+//        feePayment.setPaymentDate(new Date());
         admissionRepository.save(admission);// Updated Balance
         feePaymentRepository.save(feePayment);
 
@@ -111,7 +132,7 @@ public class FeePaymentController {
         List<FeePayment> myFees = feePaymentRepository.findByAdmission_AdmissionId(admissionId);
 
         double totalPaid = myFees.stream().mapToDouble(FeePayment::getAmount).sum();
-        double remaining = admission.getFees() - totalPaid - admission.getDiscount();
+        double remaining = admission.getCourseFee() - totalPaid - admission.getDiscount();
 
 
         model.addAttribute("admission", admission);
@@ -122,3 +143,12 @@ public class FeePaymentController {
         return "student-fee-list";
     }
 }
+
+
+
+
+
+
+
+
+

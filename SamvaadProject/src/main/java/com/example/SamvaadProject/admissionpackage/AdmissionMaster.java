@@ -27,12 +27,18 @@ public class AdmissionMaster {
     @JoinColumn(name = "userId")
     private UserMaster userMaster;
 
-    private Double fees;
-    private Double discount;
-    private Date joinDate;
 
-//    private Double netfees;
-    private Double balance;
+    private Date joinDate;
+    private String feeCategory;
+    private Boolean registrationFeesPaid;
+    private Integer noOfInstallments;
+    private Double perInstallment;
+    private Double registrationFee;
+
+
+    private Double courseFee;
+    private Double discount=0d;
+    private Double netFees;
 
     @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL)
     private List<StudentBatchMap> studentBatchMappings;
@@ -41,7 +47,7 @@ public class AdmissionMaster {
     private List<SubmitAssignment> submittedAssignments;
 
     @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL)
-    private List<FeePayment> feePayments;
+        private List<FeePayment> feePayments;
 
     @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL)
     private List<AttendanceMaster> attendances;
@@ -60,6 +66,22 @@ public class AdmissionMaster {
         this.admissionId = admissionId;
     }
 
+    public Integer getNoOfInstallments() {
+        return noOfInstallments;
+    }
+
+    public void setNoOfInstallments(Integer noOfInstallments) {
+        this.noOfInstallments = noOfInstallments;
+    }
+
+    public Double getPerInstallment() {
+        return perInstallment;
+    }
+
+    public void setPerInstallment(Double perInstallment) {
+        this.perInstallment = perInstallment;
+    }
+
     public CourseMaster getCourse() {
         return course;
     }
@@ -76,13 +98,7 @@ public class AdmissionMaster {
         this.userMaster = userMaster;
     }
 
-    public Double getFees() {
-        return fees;
-    }
 
-    public void setFees(Double fees) {
-        this.fees = fees;
-    }
 
     public Double getDiscount() {
         return discount;
@@ -140,11 +156,44 @@ public class AdmissionMaster {
 //        this.netfees = netfees;
 //    }
 
-    public Double getBalance() {
-        return balance;
+
+    public Double getCourseFee() {
+        return courseFee;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
+    public void setCourseFee(Double courseFee) {
+        this.courseFee = courseFee;
+    }
+
+    public Double getNetFees() {
+        return netFees;
+    }
+
+    public void setNetFees(Double netFees) {
+        this.netFees = netFees;
+    }
+
+    public String getFeeCategory() {
+        return feeCategory;
+    }
+
+    public void setFeeCategory(String feeCategory) {
+        this.feeCategory = feeCategory;
+    }
+
+    public Boolean getRegistrationFeesPaid() {
+        return registrationFeesPaid;
+    }
+
+    public void setRegistrationFeesPaid(Boolean registrationFeesPaid) {
+        this.registrationFeesPaid = registrationFeesPaid;
+    }
+
+    public Double getRegistrationFee() {
+        return registrationFee;
+    }
+
+    public void setRegistrationFee(Double registrationFee) {
+        this.registrationFee = registrationFee;
     }
 }

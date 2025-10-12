@@ -2,6 +2,8 @@ package com.example.SamvaadProject.admissionpackage;
 
 import com.example.SamvaadProject.coursepackage.CourseMaster;
 import com.example.SamvaadProject.coursepackage.CourseRepository;
+import com.example.SamvaadProject.feespackage.FeePayment;
+import com.example.SamvaadProject.feespackage.FeeRepository;
 import com.example.SamvaadProject.studentbatchpackage.StudentBatchMap;
 import com.example.SamvaadProject.studentbatchpackage.StudentBatchRepository;
 import com.example.SamvaadProject.usermasterpackage.UserMaster;
@@ -32,14 +34,30 @@ public class AdmissionController {
     @Autowired
     StudentBatchRepository studentBatchRepository;
 
+    @Autowired
+    FeeRepository feeRepository;
+
     @PostMapping("/admin/admission")
     public String addStudent(@ModelAttribute("newadmission")AdmissionMaster newAdmission,
                              @RequestParam("user_id")Long userId,
                              @RequestParam("course_id")Long courseId,
+                             @RequestParam("feeCategory")String feeCategory,
+                             @RequestParam("lumpsumFeeForNetFee")Double lumpsumFeeForNetFee,
+                             @RequestParam("paymentMode")String paymentMode,
                              RedirectAttributes redirectAttributes){
 
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
         CourseMaster courseMaster=courseRepository.findById(courseId).orElse(null);
+
+        if(feeCategory.equals("Lumpsum")){
+            newAdmission.setNetFees(lumpsumFeeForNetFee);
+            newAdmission.setNoOfInstallments(null);
+            newAdmission.setPerInstallment(null);
+            newAdmission.setRegistrationFee(null);
+        }else{
+            newAdmission.setNetFees(newAdmission.getCourseFee()-newAdmission.getDiscount());
+        }
+
 
         newAdmission.setAdmissionId(getAdmissionPrimaryKey());
         newAdmission.setUserMaster(userMaster);
@@ -47,6 +65,25 @@ public class AdmissionController {
         newAdmission.setJoinDate(new Date());
 
         admissionRepository.save(newAdmission);
+
+        if(newAdmission.getRegistrationFeesPaid()){
+            FeePayment payment=new FeePayment();
+            payment.setInstallmentNo(1);
+            payment.setAdmission(admissionRepository.findById(newAdmission.getAdmissionId()).orElse(null));
+            payment.setPaymentDate(new Date());
+            if(feeCategory.equals("Lumpsum")) {
+                payment.setAmount(lumpsumFeeForNetFee);
+                payment.setBalanceAfterPayment(0d);
+            }else{
+                payment.setAmount(newAdmission.getRegistrationFee());
+                payment.setBalanceAfterPayment(
+                        newAdmission.getNetFees()-newAdmission.getRegistrationFee()
+                );
+            }
+            payment.setPaymentMode(paymentMode);
+            feeRepository.save(payment);
+
+        }
         redirectAttributes.addAttribute("newAdmissionAdded",true);
 
         return "redirect:/admin/dashboard#admission";
@@ -61,11 +98,11 @@ public class AdmissionController {
 
         AdmissionDTO dto = new AdmissionDTO();
         dto.setAdmissionId(admission.getAdmissionId());
-        dto.setFees(admission.getFees());
+        dto.setFees(admission.getCourseFee());
         dto.setDiscount(admission.getDiscount());
         dto.setCourseId(admission.getCourse().getCourseId());
         dto.setCourseName(admission.getCourse().getCourseName());
-        dto.setBalance(admission.getBalance());
+        dto.setBalance(admission.getNetFees());
 
         return dto;
     }
@@ -80,7 +117,7 @@ public class AdmissionController {
         System.out.println("Admission Id "+admissionID);
         AdmissionMaster admissionMaster=admissionRepository.findById(admissionID).orElse(null);
         admissionMaster.setCourse(courseRepository.findById(courseId).orElse(null));
-        admissionMaster.setFees(fees);
+        admissionMaster.setCourseFee(fees);
         admissionMaster.setDiscount(discount);
 
         admissionRepository.save(admissionMaster);  // Record Updated.

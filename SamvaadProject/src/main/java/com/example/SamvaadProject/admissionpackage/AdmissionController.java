@@ -43,7 +43,7 @@ public class AdmissionController {
                              @RequestParam("course_id")Long courseId,
                              @RequestParam("feeCategory")String feeCategory,
                              @RequestParam("lumpsumFeeForNetFee")Double lumpsumFeeForNetFee,
-                             @RequestParam("paymentMode")String paymentMode,
+                             @RequestParam(value = "paymentMode",required = false)String paymentMode,
                              RedirectAttributes redirectAttributes){
 
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
@@ -68,7 +68,10 @@ public class AdmissionController {
 
         if(newAdmission.getRegistrationFeesPaid()){
             FeePayment payment=new FeePayment();
-            payment.setInstallmentNo(1);
+            if(feeCategory.equals("Lumpsum"))
+                payment.setInstallmentNo(1);
+            else
+                payment.setInstallmentNo(0);
             payment.setAdmission(admissionRepository.findById(newAdmission.getAdmissionId()).orElse(null));
             payment.setPaymentDate(new Date());
             if(feeCategory.equals("Lumpsum")) {

@@ -44,33 +44,33 @@ public class FeePaymentController {
         }else{
             List<FeePayment> checkPayment=feePaymentRepository.findByAdmission_AdmissionId(admissionId);
 
-            int totalFeePayments;
-            if(checkPayment!=null){
-                totalFeePayments=checkPayment.size();
+            if(!checkPayment.isEmpty()){
+                if(admission.getNoOfInstallments()!=checkPayment.get(checkPayment.size()-1).getInstallmentNo()+1)
+                    feePayment.setBalanceAfterPayment(checkPayment.get(checkPayment.size()-1).getBalanceAfterPayment()-feePayment.getAmount());
+                else{
+                    feePayment.setBalanceAfterPayment(0d);
+                }
+                feePayment.setInstallmentNo(checkPayment.size());
             }else{
-                totalFeePayments=0;
+                feePayment.setBalanceAfterPayment(admission.getNetFees()-feePayment.getAmount());
+                feePayment.setInstallmentNo(0);
+                admission.setRegistrationFeesPaid(true);
             }
-            System.out.println("Total installments of this admission id "+totalFeePayments);
+
+//            System.out.println("Total installments of this admission id "+totalFeePayments);
 
 
         }
         feePayment.setAdmission(admission);
         feePayment.setPaymentDate(new Date());
 
-//        Double balance=admission.getNetFees();
-//        System.out.println("Balance "+balance);
-//
-//        Double amount=feePayment.getAmount();
-//        admission.setNetFees(balance-amount);
-//
-//        feePayment.setAdmission(admission);
-//        feePayment.setPaymentDate(new Date());
+
         admissionRepository.save(admission);// Updated Balance
         feePaymentRepository.save(feePayment);
 
         redirectAttributes.addAttribute("feeSubmitted",true);
 
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard#admission";
     }
 
     @GetMapping("/feelist/admission/{admissionId}")

@@ -1090,11 +1090,6 @@ footer a:hover {
                                   th:value="${userStudent.userId}"
                                   th:text="|${userStudent.fullName} (UID - ${userStudent.userId})|">
                           </option>
-
-                          <!-- Dynamic options from backend -->
-<!--                          <option value="1">User 1</option>-->
-<!--                          <option value="2">User 2</option>-->
-<!--                          <option value="3">User 3</option>-->
                         </select>
                       </div>
                     </form>
@@ -1127,8 +1122,8 @@ footer a:hover {
 
                       <div class="mb-3">
                         <label for="userSelect" class="form-label">Select User</label>
-                        <select id="userSelect" name="admissionId" class="form-control" onchange="fillAdmissionDetails()">
-                          <option disabled selected>---select an admission---</option>
+                        <select id="userSelect" name="admissionId" class="form-control" onchange="fillAdmissionDetails()" required >
+                          <option value="" disabled selected >---select an admission---</option>
                           <option th:each="adm : ${alladmissions}"
                                   th:value="${adm.admissionId}"
                                   th:data-admissionid="${adm.admissionId}"
@@ -1137,11 +1132,13 @@ footer a:hover {
                                   th:data-balance="${adm.netFees}"
                                   th:data-coursefee="${adm.courseFee}"
                                   th:data-lumpsumfee="${adm.course.lumpSum}"
-                                  th:data-installment="${adm.course.installment}"
+                                  th:data-installment="${adm.perInstallment}"
                                   th:data-isregistrationfee="${adm.registrationFeesPaid}"
                                   th:data-registrationfee="${adm.registrationFee}"
                                   th:data-numberofinstallments="${adm.noOfInstallments}"
                                   th:data-discount="${adm.discount}"
+                                  th:data-balanceafterpayment="${adm.lastBalanceAfterPayment}"
+                                  th:data-pendinginstallments="${adm.pendingInstallments}"
                                   th:text="${adm.userMaster.fullName}+'(AID - '+${adm.admissionId}+')'" >
 <!--                                  th:selected="${feePayment.admission != null and adm.admissionId == feePayment.admission.admissionId}"> &lt;!&ndash;edit par click kare to feeform me data apane se fill ho jaye&ndash;&gt;-->
                           </option>
@@ -1206,9 +1203,17 @@ footer a:hover {
                             <span>Per Installment: <span class="fw-bold " id="perInstallmentAmount"></span></span>
                           </div>
                           <div class="col">
-                            <span>Remaining Installments: <span class="fw-bold " id="remainingInstallments"></span></span>
+                            <span>Pending Installments: <span class="fw-bold " id="pendingInstallments"></span></span>
                           </div>
                         </div>
+
+
+                        <div class="row mb-3">
+                          <div class="col">
+                            <span>Pending Amount: <span class="fw-bold" id="remainingAmount" ></span></span>
+                          </div>
+                        </div>
+
 
 
                         <hr class="border border-success">
@@ -1227,17 +1232,17 @@ footer a:hover {
                           <label class="form-label ">Payment Mode</label>
 
                           <div class="form-check form-check-inline ms-5">
-                            <input class="form-check-input" type="radio" name="paymentMode"  id="cashFee" value="Cash" required >
+                            <input class="form-check-input" type="radio" name="paymentMode"  id="cashFee" value="Cash"  >
                             <label class="form-check-label" for="cashFee">Cash</label>
                           </div>
 
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="paymentMode"  id="onlineFee" value="Online" required>
+                            <input class="form-check-input" type="radio" name="paymentMode"  id="onlineFee" value="Online" >
                             <label class="form-check-label" for="onlineFee">Online</label>
                           </div>
 
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="paymentMode"  id="cheque" value="Online" required>
+                            <input class="form-check-input" type="radio" name="paymentMode"  id="cheque" value="Cheque" >
                             <label class="form-check-label" for="cheque">Cheque</label>
                           </div>
                         </div>
@@ -1284,12 +1289,12 @@ footer a:hover {
                           <label class="form-label ">Fee Category</label>
 
                           <div class="form-check form-check-inline ms-5">
-                            <input class="form-check-input" type="radio" name="feeCategory"  id="feeLumpsum" value="Lumpsum" required>
+                            <input class="form-check-input" type="radio" name="feeCategory"  id="feeLumpsum" value="Lumpsum" >
                             <label class="form-check-label" for="feeLumpsum">Lumpsum</label>
                           </div>
 
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="feeCategory"  id="feeInstallments" value="Installments" required>
+                            <input class="form-check-input" type="radio" name="feeCategory"  id="feeInstallments" value="Installments" >
                             <label class="form-check-label" for="feeInstallments">Installments</label>
                           </div>
                         </div>
@@ -1338,12 +1343,12 @@ footer a:hover {
                           <label class="form-label ">Registration Fee</label>
 
                           <div class="form-check form-check-inline ms-5">
-                            <input class="form-check-input" type="radio" name="registrationFeesPaid"  id="paid" value="true" required >
+                            <input class="form-check-input" type="radio" name="registrationFeesPaid"  id="paid" value="true"  >
                             <label class="form-check-label" for="paid">Paid</label>
                           </div>
 
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="registrationFeesPaid"  id="notpaid" value="false" required>
+                            <input class="form-check-input" type="radio" name="registrationFeesPaid"  id="notpaid" value="false" >
                             <label class="form-check-label" for="notpaid">Not paid</label>
                           </div>
                         </div>
@@ -1352,12 +1357,12 @@ footer a:hover {
                             <label class="form-label ">Payment Mode</label>
 
                             <div class="form-check form-check-inline ms-5">
-                              <input class="form-check-input" type="radio" name="paymentMode"  id="cash" value="Cash" required >
+                              <input class="form-check-input" type="radio" name="paymentMode"  id="cash" value="Cash"  >
                               <label class="form-check-label" for="cash">Cash</label>
                             </div>
 
                             <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="paymentMode"  id="online" value="Online" required>
+                              <input class="form-check-input" type="radio" name="paymentMode"  id="online" value="Online" >
                               <label class="form-check-label" for="online">Online</label>
                             </div>
                           </div>
@@ -2792,17 +2797,24 @@ footer a:hover {
     const paid = document.getElementById("paid");
     const notpaid = document.getElementById("notpaid");
     const paymentModeDiv = document.getElementById("paymentModeDiv");
+    const cashRadio = document.getElementById('cash');
+    const onlineRadio = document.getElementById('online');
+
 
     // Listen for change on both radios
     paid.addEventListener("change", function () {
       if (this.checked) {
         paymentModeDiv.style.display = "block";
+        cashRadio.required = true;
+        onlineRadio.required = true;
       }
     });
 
     notpaid.addEventListener("change", function () {
       if (this.checked) {
         paymentModeDiv.style.display = "none";
+         cashRadio.required = false;
+          onlineRadio.required = false;
       }
     });
   });
@@ -2861,8 +2873,16 @@ footer a:hover {
   document.getElementById("course_id").addEventListener("change", function() {
      var courseId = this.value;
     //  console.log("Course id "+courseId);
+    const feeLumpsum =  document.getElementById('feeLumpsum');
+    const feeInstallments = document.getElementById('feeInstallments');
+    const paid = document.getElementById('paid');
+    const notPaid = document.getElementById('notpaid');
      if(courseId) {
      document.getElementById('feeCategoryDiv').style.display="block";
+     feeLumpsum.required = true;
+     feeInstallments.required = true;
+     paid.required = true;
+     notPaid.required = true;
        fetch('/coursefees/' + courseId)   // Call Spring Boot GET endpoint
          .then(response => response.json()) // Either JSON OR TEXT.
          .then(data => {
@@ -3441,12 +3461,17 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
         let select = document.getElementById("userSelect");
         let selectedOption = select.options[select.selectedIndex];
        // document.getElementById('feeDetails').style.display="block";
+       const cashRadio = document.getElementById('cashFee');
+        const onlineRadio = document.getElementById('onlineFee');
+        const chequeRadio = document.getElementById('cheque');
+
 
 
 
         let feeCategory = selectedOption.getAttribute("data-category");
 
         document.getElementById('feeCategoryForFeeTable').value = feeCategory;
+        let feeBtn =document.getElementById("feesubmitbutton");
 
         if(feeCategory=="Lumpsum"){
             console.log("Inside LumpSum div");
@@ -3462,7 +3487,7 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
             let feeStatus =  selectedOption.getAttribute("data-isregistrationfee") === "true";
             console.log("Registration Fee Status "+feeStatus);
             //  document.getElementById("feestatus").innerHTML = feeStatus ? "Completed" : "Pending";
-            let feeBtn =document.getElementById("feesubmitbutton");
+
 
             if(feeStatus){
                 document.getElementById('feeAmountDiv').style.display = "none";
@@ -3471,6 +3496,10 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
                 feeBtn.style.backgroundColor = "green";
                 feeBtn.style.color = "white";
                 feeBtn.value = "Paid";
+                cashRadio.required = false;
+                onlineRadio.required = false;
+                chequeRadio.required = false;
+
             }
             else{
               document.getElementById('feeAmountDiv').style.display = "block";
@@ -3479,6 +3508,9 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
               feeBtn.style.backgroundColor = "rgb(40, 40, 64)";
               feeBtn.style.color = "white";
               feeBtn.value = "Pay Fee"; // optional
+              cashRadio.required = true;
+                onlineRadio.required = true;
+                chequeRadio.required = true;
             }
 
 
@@ -3486,6 +3518,9 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
           console.log("Inside the Installments");
           document.getElementById('lumpsumFeeDiv').style.display="none";
           document.getElementById('installmentsFeeDiv').style.display="block";
+          cashRadio.required = true;
+          onlineRadio.required = true;
+          chequeRadio.required = true;
 
 
           document.getElementById('feecourseName1').innerHTML = selectedOption.getAttribute("data-coursename");
@@ -3498,56 +3533,65 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 
           document.getElementById('totalInstallment').innerHTML = selectedOption.getAttribute("data-numberofinstallments");
           document.getElementById('perInstallmentAmount').innerHTML = selectedOption.getAttribute("data-installment");
-          document.getElementById('remainingInstallments').innerHTML =  "0";
+          document.getElementById('pendingInstallments').innerHTML =  selectedOption.getAttribute('data-pendinginstallments');
+          console.log("Pending Installments "+  selectedOption.getAttribute('data-data-pendinginstallments'));
 
+          let balanceAfterPayment = selectedOption.getAttribute('data-balanceafterpayment');
+          document.getElementById('remainingAmount').innerHTML =  balanceAfterPayment;
+
+         // console.log("Per Installment Amount "+selectedOption.getAttribute("data-installment"));
 
           let feeStatus =  selectedOption.getAttribute("data-isregistrationfee") === "true";
 
+
           if(feeStatus){
+          console.log("Registration Fee is completed");
             document.getElementById('registrationFee1').innerHTML = selectedOption.getAttribute("data-registrationfee") + '<span class="badge bg-success">Completed</span>';
             document.getElementById('payRegistrationFee').style.display = "none";
             document.getElementById('feeAmountDiv').style.display = "block";
             document.getElementById('amount').value = selectedOption.getAttribute("data-installment");
+            console.log('Balance After Payment: ' + balanceAfterPayment);
+            balanceAfterPayment = parseFloat(balanceAfterPayment);
+               if (balanceAfterPayment === 0  || balanceAfterPayment < 0) {
+               document.getElementById('feeAmountDiv').style.display = "none";
+                  feeBtn.disabled = true;
+                  feeBtn.style.backgroundColor = "green";
+                  feeBtn.style.color = "white";
+                  feeBtn.value = "Paid";
+                  cashRadio.required = false;
+                  onlineRadio.required = false;
+                  chequeRadio.required = false;
+
+                }else{
+                  document.getElementById('feeAmountDiv').style.display = "block";
+                  document.getElementById("feestatus").innerHTML = '<span class="badge bg-warning">Pending</span>';
+                  feeBtn.disabled = false;
+                  feeBtn.style.backgroundColor = "rgb(40, 40, 64)";
+                  feeBtn.style.color = "white";
+                  feeBtn.value = "Pay Fee";
+            cashRadio.required = true;
+            onlineRadio.required = true;
+            chequeRadio.required = true;
+                }
           }else{
+          console.log("Registration Fee isn't completed");
             document.getElementById('registrationFee1').innerHTML = selectedOption.getAttribute("data-registrationfee") + '<span class="badge bg-warning">Pending</span>';
             document.getElementById('payRegistrationFee').style.display = "block";
             document.getElementById('feeAmountDiv').style.display = "block";
             document.getElementById('amount').value =  selectedOption.getAttribute("data-registrationfee");
+            console.log('Balance After Payment: ' + balanceAfterPayment);
+              cashRadio.required = true;
+            onlineRadio.required = true;
+            chequeRadio.required = true;
+            feeBtn.disabled = false;
+                  feeBtn.style.backgroundColor = "rgb(40, 40, 64)";
+                  feeBtn.style.color = "white";
+                  feeBtn.value = "Pay Fee";
+
 
           }
-
-
-
-
-
-        //  document.getElementById('totalInstallments');
-         // document.getElementById('perInstallmentAmount');
-
-
         }
 
-      /*  document.getElementById("admissionId").value = selectedOption.getAttribute("data-admissionid") || "";
-        document.getElementById("feecourseName").innerHTML = selectedOption.getAttribute("data-coursename") || "";
-        document.getElementById("courseFee").innerHTML = selectedOption.getAttribute("data-coursefee") || "";
-        document.getElementById("feesbalance").innerHTML = selectedOption.getAttribute("data-balance") || "";
-        document.getElementById("courseInstallment").innerHTML = selectedOption.getAttribute("data-installment") || "";
-
-       let balance = Number(selectedOption.getAttribute("data-balance"));
-
-
-        if (balance === 0) {
-          feeBtn.disabled = true;
-          feeBtn.style.backgroundColor = "green";
-          feeBtn.style.color = "white";
-          feeBtn.value = "Paid";
-        }  else {
-        // nothing paid yet
-        feeBtn.disabled = false;
-        feeBtn.style.backgroundColor = "rgb(40, 40, 64)";
-        feeBtn.style.color = "white";
-        feeBtn.value = "Pay Fee"; // optional
-      }
-      */
     }
 
   function calculateNet2(){

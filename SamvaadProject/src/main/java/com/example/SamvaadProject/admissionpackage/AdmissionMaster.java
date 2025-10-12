@@ -9,6 +9,7 @@ import com.example.SamvaadProject.studentbatchpackage.StudentBatchMap;
 import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,8 +47,8 @@ public class AdmissionMaster {
     @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL)
     private List<SubmitAssignment> submittedAssignments;
 
-    @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL)
-        private List<FeePayment> feePayments;
+    @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<FeePayment> feePayments =new ArrayList<>();
 
     @OneToMany(mappedBy = "admission", cascade = CascadeType.ALL)
     private List<AttendanceMaster> attendances;
@@ -196,4 +197,35 @@ public class AdmissionMaster {
     public void setRegistrationFee(Double registrationFee) {
         this.registrationFee = registrationFee;
     }
+
+    @Transient
+    public Double getLastBalanceAfterPayment() {
+
+
+        if (!feePayments.isEmpty()) {
+           // System.out.println("Ran for admission_id "+admissionId);
+            return feePayments.get(feePayments.size() - 1).getBalanceAfterPayment();
+        }
+       // System.out.println("Net Fees "+netFees);
+        return netFees;
+    }
+
+    @Transient
+    public Integer getPendingInstallments() {
+        if (noOfInstallments == null) return 0; // safe fallback
+        if (!feePayments.isEmpty()) {
+            return noOfInstallments - feePayments.get(feePayments.size() - 1).getInstallmentNo();
+        }
+        return noOfInstallments;
+    }
+
+//    @Transient
+//    public Double getPendingAmount(){
+//        if (!feePayments.isEmpty()) {
+//            return noOfInstallments - feePayments.get(feePayments.size() - 1).getBalanceAfterPayment();
+//        }
+//        return netFees;
+//    }
+
+
 }

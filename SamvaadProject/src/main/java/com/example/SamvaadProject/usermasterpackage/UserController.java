@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -135,14 +136,12 @@ public class UserController {
             model.addAttribute("error","Session expired!");
             return "login";
         }
-        String redirect;
+
         if (Boolean.TRUE.equals(isNewCourseAdded)) {
             model.addAttribute("newCourseAdded",true);
-            redirect="";
         }
         if (Boolean.TRUE.equals(isNewUserAdded)) {
             model.addAttribute("newUserAdded", true);
-            redirect="";
         }
         if (Boolean.TRUE.equals(isNewBatchAdded)) {
             model.addAttribute("newBatchAdded", true);
@@ -182,6 +181,7 @@ public class UserController {
         model.addAttribute("newbatch",new BatchMaster());// For add new Batch
         model.addAttribute("allfaculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));  // All Faculties for new batch creation.
         model.addAttribute("allbatches",batchMasterRepository.findAll()); // All Batches List.
+        model.addAttribute("allactivebatches",batchMasterRepository.findAllBatchByStatus("ACTIVE"));
         model.addAttribute("newadmission",new AdmissionMaster());  // Object for new Admission.
         model.addAttribute("alladmissions",admissionRepository.findAll(Sort.by(Sort.Direction.ASC,"admissionId"))); // All Admissions for Updating
         model.addAttribute("feePayment", new FeePayment()); // For new Fees
@@ -446,7 +446,65 @@ public ResponseEntity<byte[]> getResume(@PathVariable("pdfId")Long pdfId) {
             .contentType(MediaType.APPLICATION_PDF) // or whatever format you accept
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+pdfMaster.getDocumentName()+"\"")
             .body(pdfMaster.getDocumentPath());
-}
+    }
+
+    @PostMapping("/faculty/updateFaculty")
+    @ResponseBody
+    public Map<String,String>getUpdateFaculty(@ModelAttribute UserMaster userMaster){
+        UserMaster master=userRepository.findById(userMaster.getUserId()).orElse(null);
+
+        master.setFullName(userMaster.getFullName().trim());
+        master.setAddress(userMaster.getAddress().trim());
+        master.setContactNo(userMaster.getContactNo().trim());
+        master.setEmail(userMaster.getEmail().trim());
+        master.setDob(userMaster.getDob());
+        userRepository.save(master);
+
+        Map<String,String>response=new HashMap<>();
+        response.put("message","Details have been updated!");
+        return response;
+    }
+
+    @PostMapping("/student/updateStudent")
+    @ResponseBody
+    public Map<String,String>getUpdateStudent(@ModelAttribute UserMaster userMaster){
+        UserMaster master=userRepository.findById(userMaster.getUserId()).orElse(null);
+
+        master.setFullName(userMaster.getFullName().trim());
+        master.setAddress(userMaster.getAddress().trim());
+        master.setContactNo(userMaster.getContactNo().trim());
+        master.setEmail(userMaster.getEmail().trim());
+        master.setDob(userMaster.getDob());
+        userRepository.save(master);
+
+        Map<String,String>response=new HashMap<>();
+        response.put("message","Details have been updated!");
+        return response;
+    }
+
+    @PostMapping("/faculty/update-password")
+    @ResponseBody
+    public Map<String,Boolean> updatePassword(@RequestParam String currentPassword,
+                                                 @RequestParam String newPassword,
+                                                 Principal principal) {
+//        System.out.println("Principal Name "+principal.getName());
+//        System.out.println("Inside the Update Password Faculty Method");
+        String res=userService.updatePassword(principal.getName(), currentPassword, newPassword);
+        Map<String,Boolean>response=new HashMap<>();
+        response.put("incorrect",false);
+        response.put("samePassword",false);
+        response.put("updated",false);
+        if(res.equals("currentFalse"))
+            response.replace("incorrect",false,true);
+        if(res.equals("currentSame"))
+            response.replace("samePassword",false,true);
+        if(res.equals("updated"))
+            response.replace("updated",false,true);
+
+        System.out.println("Inside the Update Password Faculty Method Completed");
+        return response;
+    }
+
 
 
 }

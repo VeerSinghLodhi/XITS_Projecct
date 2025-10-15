@@ -43,7 +43,7 @@ public class SecurityConfig {
         // Configuration
         // urls ko configure kiya hai ki kon se public rahenge or kon se private rahenge.
         httpSecurity.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/login", "/css/**", "/js/**","/request-password-update","/verify-otp-and-update-password").permitAll()
                 .requestMatchers("/student/**").hasAnyRole("STUDENT","ADMIN")
                 .requestMatchers("/faculty/**").hasAnyRole("FACULTY", "ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -78,6 +78,10 @@ public class SecurityConfig {
             formLogin.passwordParameter("password");
 
         });
+
+//        httpSecurity.csrf(csrf -> csrf
+//                .ignoringRequestMatchers("/request-password-update", "/verify-otp-and-update-password")
+//        );
 
         httpSecurity.logout(logout -> logout.permitAll());
 

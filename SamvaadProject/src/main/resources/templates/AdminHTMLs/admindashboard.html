@@ -514,7 +514,7 @@ footer a:hover {
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
-          <li><a class="dropdown-item" href="/admin/html-to-pdf"><i class="bi bi-person-circle me-2"></i>PDF Generator</a></li>
+          <li><a class="dropdown-item" href="/download/invoiceId"><i class="bi bi-person-circle me-2"></i>PDF Generator</a></li>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -767,10 +767,7 @@ footer a:hover {
                       <button class="nav-link" id="showcoursematerial-tab" data-bs-toggle="tab" data-bs-target="#showcoursematerial"
                               type="button">Show</button>
                     </li>
-<!--                    <li class="nav-item" role="presentation">-->
-<!--                      <button class="nav-link" id="updatecoursematerial-tab" data-bs-toggle="tab" data-bs-target="#updatecoursematerial"-->
-<!--                              type="button">Update</button>-->
-<!--                    </li>-->
+
                   </ul>
 
                   <!-- Tab Content -->
@@ -1117,7 +1114,7 @@ footer a:hover {
 
                   <div class="tab-pane fade " id="addfees" role="tabpanel">
                     <h4>Add New Fee</h4>
-                    <form th:action="@{/fees/save}" th:object="${feePayment}" method="post" class="mt-3">
+                    <form th:action="@{/fees/save}" th:object="${feePayment}" onsubmit="document.getElementById('feesubmitbutton').disabled = true;" method="post" class="mt-3">
 
 <!--                      <input type="hidden" th:field="*{feeId}" />-->
 
@@ -2020,10 +2017,10 @@ footer a:hover {
                     <button class="nav-link" id="assigned-student" data-bs-toggle="tab" data-bs-target="#assigned_students"
                             type="button">Assigned Students</button>
                   </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="batchnotifications-tab" data-bs-toggle="tab"
-                            data-bs-target="#batch_notifications" type="button">Notifications</button>
-                  </li>
+<!--                  <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link" id="batchnotifications-tab" data-bs-toggle="tab"-->
+<!--                            data-bs-target="#batch_notifications" type="button">Notifications</button>-->
+<!--                  </li>-->
 
                 </ul>
 
@@ -2195,6 +2192,7 @@ footer a:hover {
                       <tr>
                         <th>Admission ID</th>
                         <th>Student Name</th>
+                        <th>Remove Student</th>
                       </tr>
                       </thead>
                       <tbody id="studentTableBody">
@@ -2203,10 +2201,10 @@ footer a:hover {
                     </table>
                   </div>
                   </div>
-                  <div class="tab-pane fade" id="batch_notifications" role="tabpanel">
-                    <h5>User Notifications</h5>
-                    <p>User Notifications list goes here.</p>
-                  </div>
+<!--                  <div class="tab-pane fade" id="batch_notifications" role="tabpanel">-->
+<!--                    <h5>User Notifications</h5>-->
+<!--                    <p>User Notifications list goes here.</p>-->
+<!--                  </div>-->
                 </div>
               </div>
             <!-- Right Section (Shortcuts) -->
@@ -2238,19 +2236,19 @@ footer a:hover {
                     <button class="nav-link" id="showfee-tab" data-bs-toggle="tab" data-bs-target="#showfee"
                             type="button">Show Fee</button>
                   </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link " id="updatefee-tab" data-bs-toggle="tab" data-bs-target="#updatefee"
-                            type="button">Update Fee</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="deletefee-tab" data-bs-toggle="tab" data-bs-target="#deletefee"
-                            type="button">Assign Batches</button>
-                  </li>
+<!--                  <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link " id="updatefee-tab" data-bs-toggle="tab" data-bs-target="#updatefee"-->
+<!--                            type="button">Update Fee</button>-->
+<!--                  </li>-->
+<!--                  <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link" id="deletefee-tab" data-bs-toggle="tab" data-bs-target="#deletefee"-->
+<!--                            type="button">Assign Batches</button>-->
+<!--                  </li>-->
 
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="feenotifications-tab" data-bs-toggle="tab"
-                            data-bs-target="#fee_notifications" type="button">Notifications</button>
-                  </li>
+<!--                  <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link" id="feenotifications-tab" data-bs-toggle="tab"-->
+<!--                            data-bs-target="#fee_notifications" type="button">Notifications</button>-->
+<!--                  </li>-->
 
                 </ul>
 
@@ -2290,16 +2288,16 @@ footer a:hover {
                       </tbody>
                     </table>
                   </div>
-                  <div class="tab-pane fade" id="updatefee" role="tabpanel">
-                    <h4 class="text-center">Update Fee</h4>
-                  </div>
-                  <div class="tab-pane fade" role="tabpanel" id="deletefee">
-                    <h4 class="text-center mb-4">Delete Fee</h4>
-                  </div>
-                  <div class="tab-pane fade" id="fee_notifications" role="tabpanel">
-                    <h5>User Notifications</h5>
-                    <p>User Notifications list goes here.</p>
-                  </div>
+<!--                  <div class="tab-pane fade" id="updatefee" role="tabpanel">-->
+<!--                    <h4 class="text-center">Update Fee</h4>-->
+<!--                  </div>-->
+<!--                  <div class="tab-pane fade" role="tabpanel" id="deletefee">-->
+<!--                    <h4 class="text-center mb-4">Delete Fee</h4>-->
+<!--                  </div>-->
+<!--                  <div class="tab-pane fade" id="fee_notifications" role="tabpanel">-->
+<!--                    <h5>User Notifications</h5>-->
+<!--                    <p>User Notifications list goes here.</p>-->
+<!--                  </div>-->
                 </div>
               </div>
             </div>
@@ -2536,6 +2534,209 @@ footer a:hover {
 
 <!--Nav link JS-->
 <script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+    const sections = document.querySelectorAll('.dashboard-section');
+
+    // Function to activate a section and optionally a tab within it
+    function activateSection(sectionId, tabId = null) {
+        // Remove active from all main links and sections
+        navLinks.forEach(l => l.classList.remove('active'));
+        sections.forEach(section => {
+            section.classList.remove('active');
+            section.classList.remove('show');
+        });
+
+        // Find and activate the main section
+        const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${sectionId}']`);
+        const targetSection = document.getElementById(sectionId);
+
+        if (targetLink && targetSection) {
+            targetLink.classList.add('active');
+            targetSection.classList.add('active');
+            targetSection.classList.add('show');
+
+            // If there's a tab ID, activate that tab within the section
+            if (tabId) {
+                const tabButton = targetSection.querySelector(`button[data-bs-target='#${tabId}']`);
+                const tabPane = targetSection.querySelector(`#${tabId}`);
+
+                if (tabButton && tabPane) {
+                    // Remove active from all tabs in this section
+                    const allTabButtons = targetSection.querySelectorAll('.nav-link');
+                    const allTabPanes = targetSection.querySelectorAll('.tab-pane');
+
+                    allTabButtons.forEach(btn => btn.classList.remove('active'));
+                    allTabPanes.forEach(pane => {
+                        pane.classList.remove('active');
+                        pane.classList.remove('show');
+                    });
+
+                    // Activate the target tab
+                    tabButton.classList.add('active');
+                    tabPane.classList.add('active');
+                    tabPane.classList.add('show');
+                }
+            }
+        }
+    }
+
+    // Handle sidebar clicks
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const sectionId = this.getAttribute('href').substring(1);
+            activateSection(sectionId);
+
+            // Update the URL hash
+            history.replaceState(null, null, `#${sectionId}`);
+        });
+    });
+
+    // Handle tab clicks within sections (for nested tabs)
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('[data-bs-toggle="tab"]')) {
+            const tabId = e.target.getAttribute('data-bs-target').substring(1);
+            const currentSection = e.target.closest('.dashboard-section');
+
+            if (currentSection) {
+                const sectionId = currentSection.id;
+                // Update URL to show section#tab
+                history.replaceState(null, null, `#${sectionId}#${tabId}`);
+            }
+        }
+    });
+
+    // Parse hash on page load (supports #section or #section#tab)
+    function parseAndActivateHash() {
+        const hash = window.location.hash.substring(1); // Remove #
+
+        if (hash) {
+            const parts = hash.split('#');
+            const sectionId = parts[0];
+            const tabId = parts[1] || null;
+
+            activateSection(sectionId, tabId);
+        } else {
+            activateSection('home');
+        }
+    }
+
+    // Initial load
+    parseAndActivateHash();
+
+    // Handle browser back/forward
+    window.addEventListener('hashchange', parseAndActivateHash);
+});
+
+  /*
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+    const sections = document.querySelectorAll('.dashboard-section');
+    const sidebar = document.getElementById('sidebarMenu');
+
+    // Function to activate a section
+    function activateSection(targetId) {
+        // Remove active from all links and sections
+        navLinks.forEach(l => l.classList.remove('active'));
+        sections.forEach(section => {
+            section.classList.remove('active');
+            section.classList.remove('show');
+        });
+
+        // Find the target link and section
+        const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
+        const targetSection = document.getElementById(targetId);
+
+        if (targetLink && targetSection) {
+            targetLink.classList.add('active');
+            targetSection.classList.add('active');
+            targetSection.classList.add('show');
+        }
+    }
+
+    // Handle sidebar clicks
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default scroll
+            const targetId = this.getAttribute('href').substring(1);
+            activateSection(targetId);
+
+            // Collapse sidebar on small screens (if using Bootstrap)
+            if (window.innerWidth < 992 && sidebar && typeof bootstrap !== 'undefined') {
+                const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                collapseInstance.hide();
+            }
+
+            // Update the URL hash (so refresh/redirect keeps state)
+            history.replaceState(null, null, `#${targetId}`);
+        });
+    });
+
+    // Handle case: page loaded or redirected with hash (like #admission)
+    const currentHash = window.location.hash;
+    if (currentHash) {
+        const targetId = currentHash.substring(1);
+        activateSection(targetId);
+    } else {
+        // Activate default section (like home)
+        activateSection('home');
+    }
+});
+
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+    const sections = document.querySelectorAll('.dashboard-section');
+    const pageTitle = document.getElementById('pageTitle');
+
+    // Function to activate a section
+    function activateSection(targetId) {
+        // Remove active from all links and sections
+        navLinks.forEach(l => l.classList.remove('active'));
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Find the target link and section
+        const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
+        const targetSection = document.getElementById(targetId);
+
+        if (targetLink && targetSection) {
+            targetLink.classList.add('active');
+            targetSection.classList.add('active');
+
+            // Update page title (optional)
+            if (pageTitle) {
+                pageTitle.textContent = targetLink.textContent.trim();
+            }
+        }
+    }
+
+    // Handle sidebar clicks
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            activateSection(targetId);
+
+            // Update URL hash
+            history.replaceState(null, null, `#${targetId}`);
+        });
+    });
+
+    // Handle page load with hash
+    const currentHash = window.location.hash;
+    if (currentHash) {
+        const targetId = currentHash.substring(1);
+        activateSection(targetId);
+    } else {
+        activateSection('home');
+    }
+});
+
+
   document.addEventListener('DOMContentLoaded', function () {
       const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
       const sections = document.querySelectorAll('.dashboard-section');
@@ -2587,7 +2788,7 @@ footer a:hover {
   });
 
 
-   /* document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
            const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
            const sections = document.querySelectorAll('.dashboard-section');
            const sidebar = document.getElementById('sidebarMenu');
@@ -3279,36 +3480,156 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 
 
 <script>
-  document.getElementById("batchSelect").addEventListener("change", function() {
-   let batchId = this.value;
-   let tbody = document.getElementById("studentTableBody");
-   tbody.innerHTML = "";
+  document.getElementById("batchSelect").addEventListener("change", function () {
+    let batchId = this.value;
+    let tbody = document.getElementById("studentTableBody");
+    tbody.innerHTML = "";
 
-   if (batchId) {
-     fetch("/students/" + batchId)
-       .then(res => res.json())
-       .then(data => {
-         if (data.length === 0) {
-           tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>No students found</td></tr>";
-         } else {
-           data.forEach(student => {
-             let row = `<tr>
-               <td>${student.admissionId}</td>
-               <td>${student.studentName}</td>
-             </tr>`;
-             tbody.innerHTML += row;
-           });
-         }
-       });
-   }
- });
+    if (!batchId) return;
+
+    fetch("/students/" + batchId)
+      .then(res => res.json())
+      .then(data => {
+        if (data.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='3' class='text-center text-muted'>No students found</td></tr>";
+        } else {
+          let rows = data.map(student => `
+            <tr>
+              <td>${student.admissionId}</td>
+              <td>${student.studentName}</td>
+              <td>
+                <form class="deleteStudentMap" method="post">
+                  <input type="hidden" name="admissionId" value="${student.admissionId}">
+                  <input type="hidden" name="batchId" value="${student.batchId}">
+                  <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+              </td>
+            </tr>
+          `).join("");
+
+          tbody.innerHTML = rows;
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching students:", err);
+        tbody.innerHTML = "<tr><td colspan='3' class='text-center text-danger'>Error loading students</td></tr>";
+      });
+  });
+
+  // 🧩 Event Delegation for dynamically created forms
+  document.addEventListener("submit", function (e) {
+    if (e.target.classList.contains("deleteStudentMap")) {
+      e.preventDefault();
+
+      let form = e.target;
+
+      const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+      const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+      if (!confirm("Are you sure you want to remove this student?")) return;
+
+      let formData = new FormData(form);
+
+      fetch("/admin/delete/student/map", {
+        method: "POST",
+        headers: {
+          [csrfHeader]: csrfToken
+        },
+        body: formData
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("403 Forbidden");
+          return res.json();
+        })
+        .then(data => {
+          if (data.mapDeleted) {
+            alert("✅ Student removed successfully!");
+            form.closest("tr").remove(); // Remove the row instantly
+          } else {
+            alert("❌ Something went wrong!");
+          }
+        })
+        .catch(err => {
+          console.error("Error:", err);
+          alert("⚠️ You are not authorized or session expired (403). Please refresh and try again.");
+        });
+    }
+  });
 </script>
 
-<script th:inline="javascript">
-  /*<![CDATA[*/
-  let allAdmissions = [[${alladmissions2}]];
-  /*]]>*/
-</script>
+<!--<script>-->
+<!--  document.getElementById("batchSelect").addEventListener("change", function () {-->
+<!--    let batchId = this.value;-->
+<!--    let tbody = document.getElementById("studentTableBody");-->
+<!--    tbody.innerHTML = "";-->
+
+<!--    if (!batchId) return;-->
+
+<!--    fetch("/students/" + batchId)-->
+<!--      .then(res => res.json())-->
+<!--      .then(data => {-->
+<!--        if (data.length === 0) {-->
+<!--          tbody.innerHTML = "<tr><td colspan='3' class='text-center text-muted'>No students found</td></tr>";-->
+<!--        } else {-->
+<!--          // Build all rows first (faster than += inside loop)-->
+<!--          let rows = data.map(student => `-->
+<!--            <tr>-->
+<!--              <td>${student.admissionId}</td>-->
+<!--              <td>${student.studentName}</td>-->
+<!--              <td>-->
+<!--                <form id="deleteStudentMap"  method="post" >-->
+<!--                  <input type="hidden" name="admissionId" value="${student.admissionId}">-->
+<!--                  <input type="hidden" name="batchId" value="${student.batchId}">-->
+<!--                  <button type="submit" class="btn btn-danger btn-sm">Remove</button>-->
+<!--                </form>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          `).join("");-->
+
+<!--          tbody.innerHTML = rows;-->
+<!--        }-->
+<!--      })-->
+<!--      .catch(err => {-->
+<!--        console.error("Error fetching students:", err);-->
+<!--        tbody.innerHTML = "<tr><td colspan='3' class='text-center text-danger'>Error loading students</td></tr>";-->
+<!--      });-->
+<!--  });-->
+
+<!--  document.getElementById('deleteStudentMap').addEventListener("submit",function(e){-->
+<!--      console.log("insdie delete student map");-->
+<!--  const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");-->
+<!--  const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");-->
+
+<!--   e.preventDefault();-->
+
+<!--   let ans=confirm('Are you sure you want to remove this student?')-->
+<!--   if(!ans) return;-->
+
+<!--  let formData = new FormData(this);-->
+
+<!--  fetch("/admin/delete/student/map", {-->
+<!--      method: "POST",-->
+<!--      headers: {-->
+<!--            [csrfHeader]: csrfToken-->
+<!--        },-->
+<!--      body: formData-->
+<!--  })-->
+<!--  .then(res => res.json())-->
+<!--  .then(data => {-->
+<!--      if(data.mapDeleted){-->
+<!--          alert('The Student has been removed from the batch!');-->
+<!--      }else{-->
+<!--        alert('Something went wrong!');-->
+<!--      }-->
+
+
+<!--  //    this.reset(); // clear form-->
+<!--    //  location.reload();-->
+<!--  });-->
+
+<!--  });-->
+<!--</script>-->
+
 
 <!--JS for calculate installment-->
 <script>
@@ -3420,37 +3741,44 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
 
 </script>
 
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  let allAdmissions = [[${alladmissions2}]];
+  /*]]>*/
+</script>
+
 <script>
-
   document.getElementById("batchId").addEventListener("change", function () {
-  let batchId = this.value;
-  let courseId = this.options[this.selectedIndex].getAttribute("data-courseid");
-  let admissionSelect = document.getElementById("admissionIds");
-  admissionSelect.innerHTML = ""; // clear previous
+    let batchId = this.value;
+    let courseId = this.options[this.selectedIndex].getAttribute("data-courseid");
+    let admissionSelect = document.getElementById("admissionIds");
+    admissionSelect.innerHTML = ""; // Clear previous options
 
-  if (!batchId) return;
+    if (!batchId) return;
 
-  fetch("/studentbatch/students/" + batchId)
-    .then(res => res.json())
-    .then(assignedIds => {
-      allAdmissions.forEach(admission => {
-        if (admission.courseId == courseId) {   // filter by course
+    fetch("/studentbatch/students/" + batchId)
+      .then(res => res.json())
+      .then(assignedIds => {
+        // Filter by course and exclude already assigned students
+        let filteredAdmissions = allAdmissions.filter(admission =>
+          admission.courseId == courseId && !assignedIds.includes(admission.admissionId)
+        );
+
+        // Sort alphabetically by student name
+        filteredAdmissions.sort((a, b) => a.studentName.localeCompare(b.studentName));
+
+        // Add options to select
+        filteredAdmissions.forEach(admission => {
           let option = document.createElement("option");
           option.value = admission.admissionId;
-          option.text = admission.studentName + " (AID - " + admission.admissionId + ")";
-
-          if (assignedIds.includes(admission.admissionId)) {
-            option.disabled = true;
-            option.text += " (Already Assigned)";
-          }
-
+          option.text = `${admission.studentName} (AID - ${admission.admissionId})`;
           admissionSelect.appendChild(option);
-        }
+        });
       });
-    });
-});
-
+  });
 </script>
+
 
 <script>
   function calculateNet(){

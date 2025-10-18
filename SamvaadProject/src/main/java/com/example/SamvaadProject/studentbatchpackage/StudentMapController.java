@@ -1,6 +1,6 @@
 package com.example.SamvaadProject.studentbatchpackage;
 
-import com.example.SamvaadProject.admissionpackage.AdmissionDTO;
+//import com.example.SamvaadProject.admissionpackage.AdmissionDTO;
 import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
 import com.example.SamvaadProject.admissionpackage.AdmissionRepository;
 import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
@@ -25,7 +25,7 @@ public class StudentMapController {
     @Autowired
     AdmissionRepository admissionRepository;
 
-    @PostMapping("/studentbatch/save")
+    @PostMapping("/admin/studentbatch/save")
     public String saveStudentBatch(
             @RequestParam("batchId") Long batchId,
             @RequestParam("admissionIds") List<String> admissionIds,
@@ -46,7 +46,7 @@ public class StudentMapController {
         redirectAttributes.addAttribute("studentsMapped",true);
 
 
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard#batch-part#assignbatch";
     }
 
     @GetMapping("/students/{batchId}")//students/4
@@ -60,51 +60,11 @@ public class StudentMapController {
             Map<String, Object> obj = new HashMap<>();
             obj.put("admissionId", map.getAdmission().getAdmissionId());
             obj.put("studentName", map.getAdmission().getUserMaster().getFullName());
+            obj.put("batchId",map.getBatch().getBatchId());
             students.add(obj);
         }
         return students;
     }
-
-
-//    @GetMapping("/studentbatch/students/{batchId}")
-//    @ResponseBody
-//    public Map<String, Object> getStudentAccordingToBatch(@PathVariable("batchId") Long batchId) {
-//        // Step 1: Get mappings for this batch
-//        List<StudentBatchMap> mappings = studentBatchRepository.findByBatch_BatchId(batchId);
-//        System.out.println("Student Batch Map Size"+mappings.size());
-//        System.out.println("==============Before Empty checking=================");
-////        if (mappings.isEmpty()) {
-////            return Map.of("admissions", Collections.emptyList(),
-////                    "assignedIds", Collections.emptyList()
-////            );
-////        }
-//
-//        // Step 2: Get courseId from batch
-//        Long courseId = mappings.get(0).getBatch().getCourse().getCourseId();
-//
-//        // Step 3: Get all admissions of this course
-//        List<AdmissionDTO> allAdmissions = admissionRepository.findByCourse_CourseId(courseId)
-//                .stream()
-//                .map(ad -> new AdmissionDTO(ad.getAdmissionId(), ad.getUserMaster().getFullName()))
-//                .toList();
-//
-//        // Step 4: Collect IDs of admissions already assigned
-//        Set<String> assignedAdmissionIds = mappings.stream()
-//                .map(m -> m.getAdmission().getAdmissionId())
-//                .collect(Collectors.toSet());
-//
-//        System.out.println("==============OK=================");
-//        // Step 5: Return both lists
-//        return Map.of(
-//                "admissions", allAdmissions,
-//                "assignedIds", assignedAdmissionIds
-//        );
-//    }
-
-
-
-
-
 
     @GetMapping("/studentbatch/students/{batchId}")
     @ResponseBody
@@ -114,30 +74,19 @@ public class StudentMapController {
                 .map(map -> map.getAdmission().getAdmissionId())
                 .toList();
     }
-//        // Step 1: Get all StudentBatchMap entries for this batch
-//        List<StudentBatchMap> mappings = studentBatchRepository.findByBatch_BatchId(batchId);
-//
-//        // Step 2: Create a list to store admission IDs
-//        List<String> admissionIds = new ArrayList<>();
-//
-//        // Step 3: Loop through each mapping and extract admissionId
-//        for (StudentBatchMap map : mappings) {
-//            String admissionId = map.getAdmission().getAdmissionId();
-//            admissionIds.add(admissionId);
-//        }
-//        List<String>finalAdmissions=new ArrayList<>();
-//        for(String aid : admissionIds ) {
-//            if(mappings.get(0).getBatch().getCourse().getCourseId()==
-//                    admissionRepository.findById(aid).orElse(null).getCourse().getCourseId()){
-//                finalAdmissions.add(aid);
-//            }
-//        }
-//        System.out.println(admissionIds);
-//        System.out.println(finalAdmissions);
-//
-//        // Step 4: Return the list of admission IDs
-//        return finalAdmissions;
 
+    // Delete Student Map
+    @PostMapping("/admin/delete/student/map")
+    @ResponseBody
+    public Map<String,Boolean>getStudentMapDelete(@RequestParam("batchId")Long batchId,
+                                                  @RequestParam("admissionId")String admissionId){
+        Map<String,Boolean>response=new HashMap<>();
 
+        System.out.println("Inside the student map delete method");
+        StudentBatchMap studentBatchMap=studentBatchRepository.findByAdmission_AdmissionId(admissionId);
+        studentBatchRepository.deleteById(studentBatchMap.getStudentBatchId());
+        response.put("mapDeleted",true);
+        return response;
+    }
 
 }

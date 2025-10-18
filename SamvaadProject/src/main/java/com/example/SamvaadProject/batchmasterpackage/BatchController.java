@@ -52,15 +52,15 @@ public class BatchController {
     return "redirect:/admin/dashboard#batch-part";
     }
 
-    @GetMapping("/show")
-    public String showBatches(Model model){
-
-        model.addAttribute("courses",courseRepository.findAll());
-        model.addAttribute("faculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));
-        model.addAttribute("batches",batchMasterRepository.findAll());
-        model.addAttribute("");
-        return "show_batch";
-    }
+//    @GetMapping("/show")
+//    public String showBatches(Model model){
+//
+//        model.addAttribute("courses",courseRepository.findAll());
+//        model.addAttribute("faculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));
+//        model.addAttribute("batches",batchMasterRepository.findAll());
+//        model.addAttribute("");
+//        return "show_batch";
+//    }
 
     @GetMapping("/batch/batchdetail/{id}")
     @ResponseBody
@@ -101,7 +101,7 @@ public class BatchController {
 
         redirectAttributes.addAttribute("batchUpdated",true);
 
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard#batch-part#update_batch";
     }
 
 

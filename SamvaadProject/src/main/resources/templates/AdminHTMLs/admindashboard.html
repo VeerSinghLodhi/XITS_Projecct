@@ -344,6 +344,460 @@ footer a:hover {
       font-size: 7rem;
       color: white;
     }
+
+ #adminAdministrator   .card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  width: 100%;
+ /* max-width: 380px;  */
+  margin: auto;
+}
+
+#adminAdministrator .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+}
+
+/* Admin profile section */
+ .admin-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-avatar {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+ /* background-color:white; */
+  border-radius: 50%;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+.admin-info h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.admin-info .role {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Contact info section */
+ .contact-info {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+ .contact-item {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+ .contact-item-icon {
+  width: 38px;
+  height: 38px;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: #4f46e5;
+  transition: background 0.3s ease;
+}
+
+#adminAdministrator .contact-item-icon:hover {
+  background-color: #eef2ff;
+}
+
+.icon-sm {
+  width: 20px;
+  height: 20px;
+}
+
+.contact-label {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.contact-value {
+  font-size: 15px;
+  color: #1f2937;
+  font-weight: 500;
+  margin: 0;
+}
+
+    /* Card Container */
+#quickStatsDiv .card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: all 0.3s ease;
+/*  max-width: 380px; */
+  margin: 20px auto;
+}
+
+#quickStatsDiv .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Header */
+#quickStatsDiv .card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#quickStatsDiv .card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+#quickStatsDiv .icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* Title */
+#quickStatsDiv .card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Quick Stats Section */
+#quickStatsDiv .quick-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Individual Stat Item */
+#quickStatsDiv .quick-stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9fafb;
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+#quickStatsDiv .quick-stat-item:hover {
+  background-color: #f1f5f9;
+}
+
+/* Left Part (icon + text) */
+#quickStatsDiv .quick-stat-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+ #quickStatsDiv .icon-sm {
+  width: 20px;
+  height: 20px;
+}
+
+#quickStatsDiv .quick-stat-left span {
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+/* Value */
+ #quickStatsDiv .quick-stat-value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  #quickStatsDiv.card {
+    padding: 16px;
+  }
+  #quickStatsDiv.card-title {
+    font-size: 1.1rem;
+  }
+  #quickStatsDiv.quick-stat-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+    /* Stats Grid Layout */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Individual Stat Card */
+.stat-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Inner Layout */
+.stat-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Title */
+.stat-title {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+/* Value */
+.stat-value {
+  font-size: 1.8rem;
+  color: #1e293b;
+  font-weight: 700;
+  margin: 2px 0;
+}
+
+/* Trend */
+.stat-trend {
+  font-size: 0.85rem;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+/* Icon Container */
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.icon {
+  width: 26px;
+  height: 26px;
+  color: #3b82f6;
+}
+
+/* Color Variants */
+.stat-card.success .stat-icon {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.stat-card.success .icon {
+  color: #22c55e;
+}
+
+.stat-card.warning .stat-icon {
+  background-color: rgba(251, 191, 36, 0.1);
+}
+
+.stat-card.warning .icon {
+  color: #f59e0b;
+}
+
+.stat-card.danger .stat-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.stat-card.danger .icon {
+  color: #ef4444;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-card-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+}
+
+
+    /* === Rewards Card === */
+.card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* === Card Header === */
+ #referralPoints .card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+#referralPoints .card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#referralPoints .card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* === Rewards List === */
+.rewards-items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.reward-item:last-child {
+  border-bottom: none;
+}
+
+.reward-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  font-weight: 500;
+}
+
+#referralPoints .icon-sm {
+  width: 20px;
+  height: 20px;
+}
+
+/* === Reward Amounts === */
+.reward-amount {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.reward-amount.success {
+  color: #16a34a;
+}
+
+.reward-amount.warning {
+  color: #f59e0b;
+}
+
+/* === Reward Total Section === */
+.reward-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 2px solid #e2e8f0;
+}
+
+#referralPoints .total-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+#referralPoints .total-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* === Icons === */
+#referralPoints .icon {
+  width: 26px;
+  height: 26px;
+  color: inherit;
+}
+
+/* === Responsive Adjustments === */
+@media (max-width: 480px) {
+  #referralPoints.card {
+    padding: 16px;
+  }
+
+  #referralPoints.card-header {
+    gap: 10px;
+  }
+
+  #referralPoints.reward-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  #referralPoints.total-value {
+    font-size: 1.2rem;
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -574,30 +1028,98 @@ footer a:hover {
         <!-- Home Page-->
         <div id="home" class="dashboard-section active">
 <!--          <h4 class="mt-3">Xansa IT Solutions Dashboard</h4>-->
-          <marquee behavior="scroll" direction="left" scrollamount="6" class="mt-3" style="font-weight:bold; color:#FFBB33; font-size:25px;">
-            Xansa IT Solutions Dashboard
-          </marquee>
-          <hr>
+
           <div class="row mt-4">
 
 
             <!-- Left Section (Main Content) -->
             <div class="col-lg-8 col-md-8">
-              <div class="card shadow-sm mb-3">
-                <div class="card-body">
-<!--              <div class="dashboard-card profile-card mb-3">-->
-                <h2>Admin</h2>
-                <p><b>Email:</b> contact@xansa.net</p>
-                <p><b>Phone:</b> +91 8770480826</p>
-<!--                </div>-->
+            <div id="adminAdministrator" class="mb-3">
+              <div class="card">
+                <div class="admin-profile">
+                  <div class="admin-avatar">X</div>
+<!--                  <img src="../favicon.ico" class="admin-avatar">-->
+                  <div class="admin-info">
+                    <h2>Xansa It Solutions</h2>
+                    <p class="role">System Administrator</p>
+                  </div>
+                </div>
+                <div class="contact-info">
+                  <div class="contact-item">
+                    <div class="contact-item-icon">
+                      <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="contact-label">Email</p>
+                      <p class="contact-value">contact@xansa.net</p>
+                    </div>
+                  </div>
+                  <div class="contact-item">
+                    <div class="contact-item-icon">
+                      <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="contact-label">Phone</p>
+                      <p class="contact-value">+91 8770480826</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
+<!--              <div class="card shadow-sm mb-3">-->
+<!--                <div class="card-body">-->
+<!--&lt;!&ndash;              <div class="dashboard-card profile-card mb-3">&ndash;&gt;-->
+<!--                <h2>Admin</h2>-->
+<!--                <p><b>Email:</b> contact@xansa.net</p>-->
+<!--                <p><b>Phone:</b> +91 8770480826</p>-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                </div>-->
+<!--              </div>-->
 
-              <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                  <h4>Main Content</h4>
-                  <p>This area can show graphs, reports, or quick stats.</p>
+              <div id="quickStatsDiv" class="mb-3">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-icon" style="background-color: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                  </div>
+                  <h3 class="card-title">Quick Stats</h3>
                 </div>
+                <div class="quick-stats">
+                  <div class="quick-stat-item">
+                    <div class="quick-stat-left">
+                      <svg class="icon-sm" style="color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                      </svg>
+                      <span>Active Students</span>
+                    </div>
+                    <span class="quick-stat-value">142</span>
+                  </div>
+                  <div class="quick-stat-item">
+                    <div class="quick-stat-left">
+                      <svg class="icon-sm" style="color: #16a34a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                      </svg>
+                      <span>Ongoing Courses</span>
+                    </div>
+                    <span class="quick-stat-value">18</span>
+                  </div>
+                  <div class="quick-stat-item">
+                    <div class="quick-stat-left">
+                      <svg class="icon-sm" style="color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                      </svg>
+                      <span>Completion Rate</span>
+                    </div>
+                    <span class="quick-stat-value">87%</span>
+                  </div>
+                </div>
+              </div>
               </div>
 
 
@@ -607,20 +1129,51 @@ footer a:hover {
                     <p><b>No. of Hours:</b> 2</p>
               </div>
 
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                      <h5>Total Students</h5>
-                      <h3 th:text="${allstudents.size()}">0</h3>
+<!--              <div class="row">-->
+<!--                <div class="col-md-6 mb-3">-->
+<!--                  <div class="card text-center shadow-sm">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5>Total Students</h5>-->
+<!--                      <h3 th:text="${allstudents.size()}">0</h3>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-6 mb-3">-->
+<!--                  <div class="card text-center shadow-sm">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5>Total Courses</h5>-->
+<!--                      <h3 th:text="${allcourses.size()}">0</h3>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+              <div class="stats-grid mb-3">
+                <div class="stat-card">
+                  <div class="stat-card-content">
+                    <div>
+                      <p class="stat-title">Total Students</p>
+                      <p class="stat-value" th:text="${allstudents.size()}"></p>
+<!--                      <p class="stat-trend">↑ 12% from last month</p>-->
+                    </div>
+                    <div class="stat-icon primary">
+                      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                      </svg>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                      <h5>Total Courses</h5>
-                      <h3 th:text="${allcourses.size()}">0</h3>
+                <div class="stat-card success">
+                  <div class="stat-card-content">
+                    <div>
+                      <p class="stat-title">Total Courses</p>
+                      <p class="stat-value" th:text="${allcourses.size()}"></p>
+<!--                      <p class="stat-trend">↑ 3 new courses</p>-->
+                    </div>
+                    <div class="stat-icon success">
+                      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -635,15 +1188,51 @@ footer a:hover {
                   <div th:insert="~{fragments :: shortcut}"></div>
                 </div>
               </div>
-              <div class="card shadow-sm mb-3">
-                <div class="card-body">
-              <div class="rewards">
-                <h6 class="section-title">Rewards</h6>
-                <p>Assignments Credited <span class="reward-points">+ ₹250</span></p>
-                <p>Referrals Credited <span class="reward-points green">+ ₹280</span></p>
-              </div>
+              <div id="referralPoints" >
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-icon" style="background-color: rgba(22, 163, 74, 0.1); color: #16a34a;">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+                    </svg>
+                  </div>
+                  <h3 class="card-title">Rewards</h3>
+                </div>
+                <div class="rewards-items">
+                  <div class="reward-item">
+                    <div class="reward-left">
+                      <svg class="icon-sm" style="color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                      </svg>
+                      <span>Assignments Credited</span>
+                    </div>
+                    <span class="reward-amount warning">+ ₹250</span>
+                  </div>
+                  <div class="reward-item">
+                    <div class="reward-left">
+                      <svg class="icon-sm" style="color: #16a34a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                      </svg>
+                      <span>Referrals Credited</span>
+                    </div>
+                    <span class="reward-amount success">+ ₹280</span>
+                  </div>
+                </div>
+                <div class="reward-total">
+                  <span class="total-label">Total Earnings</span>
+                  <span class="total-value">₹530</span>
                 </div>
               </div>
+              </div>
+<!--              <div class="card shadow-sm mb-3">-->
+<!--                <div class="card-body">-->
+<!--              <div class="rewards">-->
+<!--                <h6 class="section-title">Rewards</h6>-->
+<!--                <p>Assignments Credited <span class="reward-points">+ ₹250</span></p>-->
+<!--                <p>Referrals Credited <span class="reward-points green">+ ₹280</span></p>-->
+<!--              </div>-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </div>
           <div th:insert="~{fragments :: footer}"></div>
@@ -2228,11 +2817,11 @@ footer a:hover {
               <div class="card p-3">
                 <!-- Tabs -->
                 <ul class="nav nav-tabs" id="myTab5" role="tablist">
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="submitfee-tab" data-bs-toggle="tab" data-bs-target="#submitfee"
-                            type="button">Submit Fee</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
+<!--                  <li class="nav-item" role="presentation">-->
+<!--                    <button class="nav-link " id="submitfee-tab" data-bs-toggle="tab" data-bs-target="#submitfee"-->
+<!--                            type="button">Submit Fee</button>-->
+<!--                  </li>-->
+                  <li class="nav-item active" role="presentation">
                     <button class="nav-link" id="showfee-tab" data-bs-toggle="tab" data-bs-target="#showfee"
                             type="button">Show Fee</button>
                   </li>
@@ -2254,11 +2843,11 @@ footer a:hover {
 
                 <!-- Tab Content -->
                 <div class="tab-content p-3">
-                  <div class="tab-pane fade show active" id="submitfee" role="tabpanel">
-                    <h4 class="text-center mb-4">Submit Fee</h4>
-                  </div>
+<!--                  <div class="tab-pane fade " id="submitfee" role="tabpanel">-->
+<!--                    <h4 class="text-center mb-4">Submit Fee</h4>-->
+<!--                  </div>-->
 
-                  <div class="tab-pane fade " id="showfee" role="tabpanel">
+                  <div class="tab-pane fade show active" id="showfee" role="tabpanel">
                     <h4 class="text-center">Show Fee</h4>
                     <form  class="card p-4 shadow rounded mb-4">
                       <div class="mb-3">
@@ -2630,263 +3219,7 @@ footer a:hover {
     window.addEventListener('hashchange', parseAndActivateHash);
 });
 
-  /*
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-    const sections = document.querySelectorAll('.dashboard-section');
-    const sidebar = document.getElementById('sidebarMenu');
-
-    // Function to activate a section
-    function activateSection(targetId) {
-        // Remove active from all links and sections
-        navLinks.forEach(l => l.classList.remove('active'));
-        sections.forEach(section => {
-            section.classList.remove('active');
-            section.classList.remove('show');
-        });
-
-        // Find the target link and section
-        const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
-        const targetSection = document.getElementById(targetId);
-
-        if (targetLink && targetSection) {
-            targetLink.classList.add('active');
-            targetSection.classList.add('active');
-            targetSection.classList.add('show');
-        }
-    }
-
-    // Handle sidebar clicks
-    navLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default scroll
-            const targetId = this.getAttribute('href').substring(1);
-            activateSection(targetId);
-
-            // Collapse sidebar on small screens (if using Bootstrap)
-            if (window.innerWidth < 992 && sidebar && typeof bootstrap !== 'undefined') {
-                const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                collapseInstance.hide();
-            }
-
-            // Update the URL hash (so refresh/redirect keeps state)
-            history.replaceState(null, null, `#${targetId}`);
-        });
-    });
-
-    // Handle case: page loaded or redirected with hash (like #admission)
-    const currentHash = window.location.hash;
-    if (currentHash) {
-        const targetId = currentHash.substring(1);
-        activateSection(targetId);
-    } else {
-        // Activate default section (like home)
-        activateSection('home');
-    }
-});
-
-
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-    const sections = document.querySelectorAll('.dashboard-section');
-    const pageTitle = document.getElementById('pageTitle');
-
-    // Function to activate a section
-    function activateSection(targetId) {
-        // Remove active from all links and sections
-        navLinks.forEach(l => l.classList.remove('active'));
-        sections.forEach(section => section.classList.remove('active'));
-
-        // Find the target link and section
-        const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
-        const targetSection = document.getElementById(targetId);
-
-        if (targetLink && targetSection) {
-            targetLink.classList.add('active');
-            targetSection.classList.add('active');
-
-            // Update page title (optional)
-            if (pageTitle) {
-                pageTitle.textContent = targetLink.textContent.trim();
-            }
-        }
-    }
-
-    // Handle sidebar clicks
-    navLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            activateSection(targetId);
-
-            // Update URL hash
-            history.replaceState(null, null, `#${targetId}`);
-        });
-    });
-
-    // Handle page load with hash
-    const currentHash = window.location.hash;
-    if (currentHash) {
-        const targetId = currentHash.substring(1);
-        activateSection(targetId);
-    } else {
-        activateSection('home');
-    }
-});
-
-
-  document.addEventListener('DOMContentLoaded', function () {
-      const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-      const sections = document.querySelectorAll('.dashboard-section');
-      const sidebar = document.getElementById('sidebarMenu');
-
-      // Function to activate a section
-      function activateSection(targetId) {
-          // Remove active from all links and sections
-          navLinks.forEach(l => l.classList.remove('active'));
-          sections.forEach(section => section.classList.remove('active'));
-
-          // Find the target link and section
-          const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
-          const targetSection = document.getElementById(targetId);
-
-          if (targetLink && targetSection) {
-              targetLink.classList.add('active');
-              targetSection.classList.add('active');
-          }
-      }
-
-      // Handle sidebar clicks
-      navLinks.forEach(link => {
-          link.addEventListener('click', function (e) {
-              e.preventDefault(); // Prevent default scroll
-              const targetId = this.getAttribute('href').substring(1);
-              activateSection(targetId);
-
-              // Collapse sidebar on small screens
-              if (window.innerWidth < 992 && sidebar) {
-                  const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                  collapseInstance.hide();
-              }
-
-              // Update the URL hash (so refresh/redirect keeps state)
-              history.replaceState(null, null, `#${targetId}`);
-          });
-      });
-
-      // ✅ Handle case: page loaded or redirected with hash (like #admission)
-      const currentHash = window.location.hash;
-      if (currentHash) {
-          const targetId = currentHash.substring(1);
-          activateSection(targetId);
-      } else {
-          // Optionally activate a default section (like home)
-          activateSection('home');
-      }
-  });
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-           const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-           const sections = document.querySelectorAll('.dashboard-section');
-           const sidebar = document.getElementById('sidebarMenu');
-
-           navLinks.forEach(link => {
-               link.addEventListener('click', function (e) {
-                   e.preventDefault(); // Prevent page jump
-
-                   // Remove active from all links and sections
-                   navLinks.forEach(l => l.classList.remove('active'));
-                   sections.forEach(section => section.classList.remove('active'));
-
-                   // Add active to clicked link
-                   this.classList.add('active');
-
-                   // Show the corresponding section
-                   const targetId = this.getAttribute('href').substring(1);
-                   const targetSection = document.getElementById(targetId);
-                   if (targetSection) {
-                       targetSection.classList.add('active');
-                   }
-
-                   // Collapse sidebar if on small screens
-                   if (window.innerWidth < 992 && sidebar) {
-                       const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                       collapseInstance.hide();
-                   }
-               });
-           });
-       });
-
-
-  document.addEventListener('DOMContentLoaded', function () {
-   const navLinks = document.querySelectorAll('.sidebar .nav-link');
-   const sections = document.querySelectorAll('.dashboard-section');
-
-   navLinks.forEach(link => {
-     link.addEventListener('click', function (e) {
-       e.preventDefault();
-       navLinks.forEach(l => l.classList.remove('active'));
-       this.classList.add('active');
-       sections.forEach(section => section.classList.remove('active'));
-       const targetId = this.getAttribute('href').substring(1);
-       document.getElementById(targetId).classList.add('active');
-     });
-   });
-  });
-
-  document.addEventListener('DOMContentLoaded', function () {
-           const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-           const sections = document.querySelectorAll('.dashboard-section');
-           navLinks.forEach(link => {
-               link.addEventListener('click', function (e) {
-               navLinks.forEach(l => l.classList.remove('active'));
-                   this.classList.add('active');
-                   sections.forEach(section => section.classList.remove('active'));
-                   const targetId = this.getAttribute('href').substring(1);
-                   document.getElementById(targetId).classList.add('active');
-                   if (window.innerWidth < 992) {
-                       const sidebar = document.getElementById('sidebarMenu');
-                       const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                       collapseInstance.hide();
-                   }
-               });
-           });
-       });
-
-  document.addEventListener('DOMContentLoaded', function () {
-   const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-   const sections = document.querySelectorAll('.dashboard-section');
-   const sidebar = document.getElementById('sidebarMenu');
-
-   navLinks.forEach(link => {
-       link.addEventListener('click', function (e) {
-           e.preventDefault(); // Prevent page jump
-
-           // Remove active from all links and sections
-           navLinks.forEach(l => l.classList.remove('active'));
-           sections.forEach(section => section.classList.remove('active'));
-
-           // Add active to clicked link
-           this.classList.add('active');
-
-           // Show the corresponding section
-           const targetId = this.getAttribute('href').substring(1);
-           const targetSection = document.getElementById(targetId);
-           if (targetSection) {
-               targetSection.classList.add('active');
-           }
-
-           // Collapse sidebar if on small screens
-           if (window.innerWidth < 992 && sidebar) {
-               const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-               collapseInstance.hide();
-           }
-       });
-   });
-  });*/
 </script>
 <script>
  /* document.addEventListener('DOMContentLoaded', function () {
@@ -3545,6 +3878,7 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
           if (data.mapDeleted) {
             alert("✅ Student removed successfully!");
             form.closest("tr").remove(); // Remove the row instantly
+           // location.reload();
           } else {
             alert("❌ Something went wrong!");
           }

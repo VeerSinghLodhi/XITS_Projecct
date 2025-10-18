@@ -13,6 +13,7 @@ import com.example.SamvaadProject.batchmasterpackage.BatchMasterRepository;
 import com.example.SamvaadProject.coursepackage.CourseMaster;
 import com.example.SamvaadProject.coursepackage.CourseRepository;
 import com.example.SamvaadProject.emailservicespackage.EmailService;
+import com.example.SamvaadProject.emailservicespackage.OtpService;
 import com.example.SamvaadProject.feespackage.FeePayment;
 import com.example.SamvaadProject.pdfpackage.PdfDTO;
 import com.example.SamvaadProject.pdfpackage.PdfMaster;
@@ -22,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.crypto.password.PasswordEncoder;
@@ -350,7 +352,7 @@ public class UserController {
 
 
     // For get Faculty as well as student Data
-    @GetMapping("/faculty/data/{facultyId}")
+    @GetMapping("/faculty/data/{facultyId}")  //7
     @ResponseBody
     public FacultyDTO getFacultyData(@PathVariable("facultyId")Long facultyId){
          UserMaster faculty= userRepository.findById(facultyId).orElse(null);
@@ -482,7 +484,7 @@ public ResponseEntity<byte[]> getResume(@PathVariable("pdfId")Long pdfId) {
         return response;
     }
 
-    @PostMapping("/faculty/update-password")
+    @PostMapping("/update-password")
     @ResponseBody
     public Map<String,Boolean> updatePassword(@RequestParam String currentPassword,
                                                  @RequestParam String newPassword,
@@ -504,6 +506,101 @@ public ResponseEntity<byte[]> getResume(@PathVariable("pdfId")Long pdfId) {
         System.out.println("Inside the Update Password Faculty Method Completed");
         return response;
     }
+
+
+
+//    ==========================  OTP Part   =======================
+
+    @Autowired
+    OtpService otpService;
+
+
+    // OTP Page
+    @GetMapping("/request-password-update")
+    public String getRequestPasswordUpdate(){
+        return "resetPasswordByOTP";
+    }
+
+
+
+    //  Send OTP for password set
+    @PostMapping("/request-password-update")
+    @ResponseBody
+    public Map<String,Boolean> requestPasswordUpdate(@RequestParam("username") String  username) {
+
+        Map<String,Boolean>response=new HashMap<>();
+        response.put("usernameNotFound",false);
+        response.put("optSent",false);
+
+        UserMaster master=userRepository.findByUsername(username.trim());
+
+        if(master!=null){
+            String otp = otpService.generateOtp(master.getEmail());
+            emailService.sendOtpEmail(master.getEmail(), otp);
+            response.replace("otpSent",false,true);
+        }else{
+            response.replace("usernameNotFound",false,true);
+        }
+
+        return response;
+    }
+
+    @PostMapping("/verify-otp-and-update-password2")
+    public ResponseEntity<String> verifyOtpAndUpdatePassword(@RequestParam() String otp,
+                                                             @RequestParam() String newPassword,
+                                                             Principal principal) {
+        String email = principal.getName();
+System.out.println("email");
+        if (!otpService.validateOtp(email, otp)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP");
+        }
+
+        // OTP valid → update password
+        UserMaster user = userRepository.findByUsername(email);
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        otpService.clearOtp(email);
+        return ResponseEntity.ok("Password updated successfully");
+    }
+
+
+@PostMapping("/verify-otp-and-update-password")
+@ResponseBody
+public Map<String, Boolean> verifyOtpAndUpdatePassword2(
+        @RequestParam("otp") String otp,
+        @RequestParam("newPassword") String newPassword,
+        @RequestParam("username") String username) {
+    System.out.println("Method Called");
+    Map<String, Boolean> response = new HashMap<>();
+    response.put("invalidOrExpired", false);
+    response.put("userNotFound", false);
+    response.put("passwordUpdated", false);
+
+    UserMaster user = userRepository.findByUsername(username);
+
+    if (user == null) {
+        response.replace("userNotFound", true);
+        return response;
+    }
+
+    boolean isValidOtp = otpService.validateOtp(user.getEmail(), otp);
+    if (!isValidOtp) {
+        response.replace("invalidOrExpired", true);
+        return response;
+    }
+
+    // ✅ OTP valid → update password
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+    otpService.clearOtp(user.getEmail());
+
+    response.replace("passwordUpdated", true);
+    return response;
+}
+
+
 
 
 

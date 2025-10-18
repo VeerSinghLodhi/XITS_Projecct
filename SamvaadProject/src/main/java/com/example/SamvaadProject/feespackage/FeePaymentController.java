@@ -2,6 +2,7 @@ package com.example.SamvaadProject.feespackage;
 
 import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
 import com.example.SamvaadProject.admissionpackage.AdmissionRepository;
+import com.example.SamvaadProject.emailservicespackage.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,9 @@ public class FeePaymentController {
 
     @Autowired
     private AdmissionRepository admissionRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("/feenew")
     public String showFeeForm(Model model) {
@@ -68,9 +72,12 @@ public class FeePaymentController {
         admissionRepository.save(admission);// Updated Balance
         feePaymentRepository.save(feePayment);
 
+
+       emailService.getSendInvoice(admission.getAdmissionId());
+
         redirectAttributes.addAttribute("feeSubmitted",true);
 
-        return "redirect:/admin/dashboard#admission";
+        return "redirect:/admin/dashboard#admission#addfees";
     }
 
     @GetMapping("/feelist/admission/{admissionId}")

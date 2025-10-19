@@ -51,17 +51,7 @@ public class BatchController {
 
     return "redirect:/admin/dashboard#batch-part";
     }
-
-//    @GetMapping("/show")
-//    public String showBatches(Model model){
-//
-//        model.addAttribute("courses",courseRepository.findAll());
-//        model.addAttribute("faculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));
-//        model.addAttribute("batches",batchMasterRepository.findAll());
-//        model.addAttribute("");
-//        return "show_batch";
-//    }
-
+    
     @GetMapping("/batch/batchdetail/{id}")
     @ResponseBody
     public BatchDTO getBatchDetailInJson(@PathVariable("id")Long id){
@@ -111,7 +101,7 @@ public class BatchController {
     @ResponseBody
     public List<BatchDTO>getFacultyBatches(@PathVariable("facultyId")Long facultyId){
 
-        return batchMasterRepository.getAllBatchesByFaculty(facultyId)
+        return batchMasterRepository.findByFacultyId(facultyId)
                 .stream()
                 .map(faculty ->new BatchDTO(faculty.getBatchId(),
                         faculty.getStartDate().toString(),

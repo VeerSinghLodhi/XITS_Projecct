@@ -241,7 +241,7 @@ public class UserController {
         }
 
 //        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));
-        model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId()));
+    model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId(),"ACTIVE")); //checking Status Too Active batch or archived
         model.addAttribute("user_master",userMaster);
 
 

@@ -44,16 +44,7 @@ public class AttendanceController {
     @Autowired
     UserRepository userRepository;
 
-//    @GetMapping("/facultyattendance")
-//    public  String Attendance(Model model, HttpSession session)
-//    {
-//        List<BatchMaster> batchlist=batchMasterRepository.findByFacultyId(2);
-//        model.addAttribute("Batches",batchlist);
-//        session.setAttribute("Batches",batchlist);
-//        LocalDate date=LocalDate.now();
-//        model.addAttribute("selectedDate",date);
-//        return "attendanceForm";
-//    }
+
 
 //    Get Student for attendance
     @GetMapping("/getstudentsforattendance/{batchId}")
@@ -115,7 +106,7 @@ public class AttendanceController {
             if (existingAttendance.isPresent()) {
                 // Attendance already marked; send message to view
                 redirectAttributes.addAttribute("attendanceAlreadyErrorMessage", true);//"Attendance is already marked.");
-                return "redirect:/faculty/dashboard";
+                return "redirect:/faculty/dashboard#attendance#addnewattendance";
             }
 
 
@@ -136,7 +127,7 @@ public class AttendanceController {
             attendanceRepository.save(attendanceMaster);
         }
         redirectAttributes.addAttribute("attendanceMarked",true);
-        return "redirect:/faculty/dashboard";
+        return "redirect:/faculty/dashboard#attendance#addnewattendance";
     }
 
 

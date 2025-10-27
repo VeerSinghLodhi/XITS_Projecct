@@ -1,270 +1,271 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>JobSeeker Login | CareerConnect</title>
+    <title>Xansa IT Solutions | Login</title>
+
+    <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --primary-color: #4e73df;
-            --secondary-color: #f8f9fc;
-            --accent-color: #2e59d9;
-            --text-color: #5a5c69;
+          --primary-color: #FFC451;
+          --primary-dark: #e0a93d;
+          --primary-light: #ffdc82;
+          --accent-color: #ffae00;
+          --success-color: #10b981;
+          --danger-color: #ef4444;
+          --text-primary: #1f2937;
+          --text-secondary: #6b7280;
+          --border-color: #e5e7eb;
+          --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         body {
-            background-color: #f5f7fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
+          background: #ffffff;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          padding: 1rem;
+          position: relative;
+          overflow-x: hidden;
+        }
+
+        body::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 300px;
+          background: linear-gradient(135deg, #FFC451 0%, #ffae00 50%, #ffe58a 100%);
+          opacity: 0.05;
+          z-index: 0;
+        }
+
+        .login-wrapper {
+          position: relative;
+          z-index: 1;
+          width: 100%;
+          max-width: 440px;
         }
 
         .login-container {
-            max-width: 450px;
-            margin: 0 auto;
-            padding: 2.5rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+          background: #ffffff;
+          border-radius: 20px;
+          box-shadow: var(--shadow-xl);
+          padding: 3rem 2.5rem;
+          width: 100%;
+          backdrop-filter: blur(10px);
+          transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-container {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 1rem;
+        }
+
+        .logo img {
+          width: 180px;
+          height: auto;
+          object-fit: contain;
         }
 
         .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
+          text-align: center;
+          margin-bottom: 2.5rem;
+        }
+          .login-header .welcome-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 0.25rem;
         }
 
-        .login-header h2 {
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .login-header h1 {
+          color: var(--text-primary);
+          font-weight: 700;
+          font-size: 1.875rem;
+          margin-bottom: 0.5rem;
         }
 
-        .login-header p {
-            color: #6c757d;
+        .login-header .company-name {
+          background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 600;
+          font-size: 1.1rem;
         }
 
-        .form-control {
-            padding: 0.75rem 1rem;
-            border-radius: 0.35rem;
-            margin-bottom: 1.25rem;
-            border: 1px solid #e0e0e0;
+        .form-group {
+          margin-bottom: 1.5rem;
         }
 
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-        }
-
-        .btn-login {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 0.75rem;
-            font-weight: 600;
-            width: 100%;
-            margin-top: 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .btn-login:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-1px);
+        .input-wrapper {
+          position: relative;
         }
 
         .input-icon {
-            position: relative;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          left: 1rem;
+          color: var(--text-secondary);
+          font-size: 1.125rem;
+          transition: all 0.3s ease;
+          z-index: 1;
         }
 
-        .input-icon i {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 15px;
-            color: #d1d3e2;
+        .form-control {
+          width: 100%;
+          padding: 0.875rem 1rem 0.875rem 3rem;
+          border-radius: 12px;
+          border: 2px solid var(--border-color);
+          font-size: 0.9375rem;
+          background: #fafafa;
+          color: var(--text-primary);
+          transition: all 0.3s ease;
         }
 
-        .input-icon input {
-            padding-left: 2.5rem;
+        .form-control:hover {
+          border-color: var(--primary-light);
+          background: #ffffff;
         }
 
-        .alert-danger {
-            border-radius: 0.35rem;
-            padding: 1rem;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-            margin-bottom: 1.5rem;
+        .form-control:focus {
+          outline: none;
+          border-color: var(--primary-color);
+          background: #ffffff;
+          box-shadow: 0 0 0 4px rgba(255, 196, 81, 0.2);
         }
 
-        .additional-options {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
+        .forgot-password-wrapper {
+          text-align: right;
+          margin-bottom: 1.75rem;
         }
 
-        .additional-options a {
-            color: var(--primary-color);
-            text-decoration: none;
+        .forgot-link {
+          color: var(--primary-color);
+          font-size: 0.875rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: all 0.3s ease;
         }
 
-        .additional-options a:hover {
-            text-decoration: underline;
+        .forgot-link:hover {
+          color: var(--primary-dark);
+          transform: translateX(2px);
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
+        .btn-login {
+          width: 100%;
+          background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+          color: white;
+          font-weight: 600;
+          font-size: 1rem;
+          border: none;
+          padding: 0.875rem 1.5rem;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          box-shadow: var(--shadow-md);
+          position: relative;
+          overflow: hidden;
         }
 
-        .divider::before, .divider::after {
-            content: "";
-            flex: 1;
-            border-bottom: 1px solid #e0e0e0;
+        .btn-login:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 24px -6px rgba(255, 196, 81, 0.4);
         }
 
-        .divider-text {
-            padding: 0 1rem;
-            color: #6c757d;
-            font-size: 0.8rem;
+        .alert-box {
+          border-radius: 12px;
+          padding: 1rem 1.25rem;
+          margin-bottom: 1.5rem;
+          animation: slideDown 0.4s ease;
+          background: #fff8e1;
+          color: #8b5e00;
+          border-left: 4px solid var(--primary-color);
         }
 
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+        @keyframes slideDown {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
         }
 
-        .social-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            transition: all 0.3s;
+        .visually-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          border-width: 0;
         }
-
-        .social-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .bg-google {
-            background-color: #db4437;
-        }
-
-        .bg-linkedin {
-            background-color: #0077b5;
-        }
-
-        .bg-facebook {
-            background-color: #4267b2;
-        }
-
-
     </style>
 </head>
 <body>
-<div class="container">
+<div class="login-wrapper">
     <div class="login-container">
-        <div class="login-header">
-            <a href="#" class="text-decoration-none text-warning"><h2 class="text-warning"><i class="fas fa-user-shield me-2 "></i>W E L C O M E</h2></a>
-            <p>To <b>Xansa IT Solutions</b></p>
+        <div class="logo-container">
+            <div class="logo">
+                <img src="../Images/xansaitsulutionsLogo.png" alt="Xansa IT Solutions Logo">
+            </div>
         </div>
 
-        <div th:if="${error}" class="alert alert-danger" role="alert">
+        <div class="login-header">
+            <p class="welcome-text">Welcome to</p>
+            <h1 class="company-name">Xansa IT Solutions</h1>
+            <p class="welcome-text" style="margin-top: 0.4rem; font-size: 0.7rem;">Enter a valid username assigned by the office.</p>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger alert-box" role="alert">
             <i class="fas fa-exclamation-circle me-2"></i>
-            <span th:text="${error}"></span>
+            <strong>Login Failed:</strong> Invalid username or password.
         </div>
 
         <form th:action="@{/login}" method="post">
-            <div class="input-icon mb-4">
-                <i class="bi bi-person-lines-fill"></i>
-                <input type="text" name="username" class="form-control" placeholder="Enter you username" required>
-            </div>
-
-            <div class="input-icon mb-4">
-                <i class="bi bi-lock"></i>
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
-            </div>
-
-            <div class="d-flex justify-content-between mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">Remember me</label>
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                    <i class="bi bi-person-fill input-icon"></i>
                 </div>
-                <a href="/forgot-password" class="text-decoration-none">Forgot password?</a>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-login">
-                <i class="fas fa-sign-in-alt me-2"></i> Login
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                    <i class="bi bi-lock-fill input-icon"></i>
+                </div>
+            </div>
+
+            <div class="forgot-password-wrapper">
+                <a href="/request-password-update" class="forgot-link">
+                    Forgot password? <i class="fas fa-arrow-right" style="font-size: 0.75rem;"></i>
+                </a>
+            </div>
+
+            <button type="submit" class="btn btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
             </button>
-
-            <div class="divider">
-                <span class="divider-text">OR CONTINUE WITH</span>
-            </div>
-
-            <div class="social-login">
-                <a href="#" class="social-btn bg-google text-decoration-none"><i class="fab fa-google"></i></a>
-                <a href="#" class="social-btn bg-linkedin text-decoration-none"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#" class="social-btn bg-facebook text-decoration-none"><i class="fab fa-facebook-f"></i></a>
-            </div>
-
-            <div class="additional-options">
-                <p>Don't have an account? <a href="#">Sign up</a></p>
-            </div>
         </form>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Simple client-side validation
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const email = document.querySelector('input[name="email"]');
-        const password = document.querySelector('input[name="password"]');
-
-        if (!email.value || !password.value) {
-            e.preventDefault();
-            alert('Please fill in all required fields');
-        }
-    });
-</script>
 </body>
 </html>
 
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title>Login</title>-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
-<!--</head>-->
-<!--<body class="bg-light">-->
-<!--<div class="container mt-5">-->
-<!--    <div class="row justify-content-center">-->
-<!--        <div class="col-md-4">-->
-<!--            <div class="card shadow-lg p-3">-->
-<!--                <h3 class="text-center">Login</h3>-->
-<!--                <form method="post" th:action="@{/login}">-->
-<!--                    <div class="mb-3">-->
-<!--                        <label>Username</label>-->
-<!--                        <input type="text" name="username" class="form-control" required/>-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">-->
-<!--                        <label>Password</label>-->
-<!--                        <input type="password" name="password" class="form-control" required/>-->
-<!--                    </div>-->
-<!--                    <button class="btn btn-primary w-100">Login</button>-->
-<!--                </form>-->
-<!--                <p th:if="${error}" class="text-danger text-center mt-2" th:text="${error}"></p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->

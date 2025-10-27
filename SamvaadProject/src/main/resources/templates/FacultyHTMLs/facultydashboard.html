@@ -70,11 +70,11 @@
 
         /*
 
-        .card {
+   /*     .card {
             border-radius: 12px;
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
         }
-
+*/
         .card.shadow-sm {
             border-radius: 15px;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -85,30 +85,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         } */
 
-        .dashboard-shortcut a {
-            display: inline-block;
-            text-align: center;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            /* smooth transition */
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .dashboard-shortcut a:hover i {
-            background-color: #FFBB33;
-            color: white;
-            transform: translateY(-4px);
-            /* slight lift effect */
-        }
-
-        .dashboard-shortcut a:hover {
-            background-color: #FFBB33;
-            color: white;
-            transform: translateY(-4px);
-            /* slight lift effect */
-        }
 
         /* Button Code  */
 
@@ -190,7 +166,7 @@
             }
         }
 
-        .card {
+   /*     .card {
             border: none;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -200,13 +176,13 @@
         .card:hover {
             transform: translateY(-5px);
         }
-
+*/
         .emoji {
             font-size: 2rem;
         }
 
 
- #adminAdministrator   .card {
+   .card {
   background: #ffffff;
   border-radius: 16px;
   padding: 24px;
@@ -217,7 +193,7 @@
   margin: auto;
 }
 
-#adminAdministrator .card:hover {
+ .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
 }
@@ -298,6 +274,30 @@
   font-weight: 500;
   margin: 0;
 }
+
+           #dashboard-short a {
+    color: #212529;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 0;
+    border-radius: 10px;
+  }
+
+ #dashboard-short a:hover {
+    transform: scale(1.05);
+    color: #FFBB33;
+    background-color: #f8f9fa;
+  }
+
+#dashboard-short i {
+    margin-bottom: 4px;
+  }
+
+#dashboard-short span {
+    font-size: 0.9rem;
+  }
 
     </style>
 </head>
@@ -402,7 +402,7 @@
                     <span class="text-dark" th:text="${user_master.fullName}"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="#profile"><i class="bi bi-person-circle me-2"></i>Profile</a></li>
                     <li><a class="dropdown-item" data-bs-target="#updateFacultyPasswordModel"  data-bs-toggle="modal"><i class="bi bi-lock-fill me-2"></i>Chance Password</a></li>
                     <li>
                         <hr class="dropdown-divider">
@@ -509,7 +509,9 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="dashboardContent">
             <!-- Home -->
             <div id="home" class="dashboard-section active">
-                <div id="adminAdministrator" class="my-3">
+                <div class="row ">
+                    <div class="col-lg-8 col-md-8">
+                        <div id="adminAdministrator" class="my-3">
                     <div class="card">
                         <div class="admin-profile">
                             <!--                            <div class="admin-avatar">X</div>-->
@@ -545,6 +547,16 @@
                                     <p class="contact-label">Phone</p>
                                     <p class="contact-value" th:text="${user_master.contactNo}">+91 8770480826</p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card my-3">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut-faculty}"></div>
                             </div>
                         </div>
                     </div>
@@ -666,7 +678,7 @@
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
-                                <div th:insert="~{fragments :: shortcut}"></div>
+                                <div th:insert="~{fragments :: shortcut-faculty}"></div>
                             </div>
                         </div>
                     </div>
@@ -864,7 +876,7 @@
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
-                                <div th:insert="~{fragments :: shortcut}"></div>
+                                <div th:insert="~{fragments :: shortcut-faculty}"></div>
                             </div>
                         </div>
                     </div>
@@ -1038,7 +1050,7 @@
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
-                                <div th:insert="~{fragments :: shortcut}"></div>
+                                <div th:insert="~{fragments :: shortcut-faculty}"></div>
                             </div>
                         </div>
                     </div>

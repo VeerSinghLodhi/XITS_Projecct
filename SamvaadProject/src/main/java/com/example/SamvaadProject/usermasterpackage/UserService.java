@@ -3,7 +3,13 @@ package com.example.SamvaadProject.usermasterpackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 @Service
@@ -39,4 +45,12 @@ public class UserService {
         userRepository.save(user);
         return "updated";
     }
+
+
+    public void updateUserPhoto(Long userId, MultipartFile photo) throws IOException {
+        UserMaster user = userRepository.findById(userId).orElseThrow();
+        user.setPhotoPath(photo.getBytes());
+        userRepository.save(user);
+    }
+
 }

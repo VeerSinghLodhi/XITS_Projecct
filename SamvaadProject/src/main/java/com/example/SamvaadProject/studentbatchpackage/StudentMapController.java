@@ -66,14 +66,34 @@ public class StudentMapController {
         return students;
     }
 
+//    @GetMapping("/studentbatch/students/{batchId}")
+//    @ResponseBody
+//    public List<String> getStudentAccordingToBatch(@PathVariable("batchId")Long batchId){
+//        return studentBatchRepository.findByBatch_BatchId(batchId)
+//                .stream()
+//                .map(map -> map.getAdmission().getAdmissionId())
+//                .toList();
+//    }
+
     @GetMapping("/studentbatch/students/{batchId}")
     @ResponseBody
-    public List<String> getStudentAccordingToBatch(@PathVariable("batchId")Long batchId){
-        return studentBatchRepository.findByBatch_BatchId(batchId)
+    public List<String> getStudentsAssignedToCourse(@PathVariable("batchId") Long batchId) {
+        // Step 1: Get the courseId for this batch
+        Long courseId = batchMasterRepository.findById(batchId)
+                .map(batch -> batch.getCourse().getCourseId())
+                .orElse(null);
+
+        if (courseId == null) {
+            return List.of();
+        }
+
+        // Step 2: Find all students assigned to ANY batch of this course
+        return studentBatchRepository.findByBatch_Course_CourseId(courseId)
                 .stream()
                 .map(map -> map.getAdmission().getAdmissionId())
                 .toList();
     }
+
 
     // Delete Student Map
     @PostMapping("/admin/delete/student/map")

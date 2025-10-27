@@ -65,12 +65,12 @@
         .nav-tabs .nav-link.active {
             color: #f39c12 !important;
         }
-
+    /*
         .card {
             border-radius: 12px;
             box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
         }
-
+*/
          .card.shadow-sm {
             border-radius: 15px;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -109,7 +109,7 @@
         }
 
 
- #adminAdministrator   .card {
+  .card {
   background: #ffffff;
   border-radius: 16px;
   padding: 24px;
@@ -120,7 +120,7 @@
   margin: auto;
 }
 
-#adminAdministrator .card:hover {
+ .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
 }
@@ -381,11 +381,10 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <!-- Home -->
             <div id="home" class="dashboard-section active">
-<!--                <div class="alert alert-primary shadow-sm mt-3" role="alert">-->
-<!--                    👋 Welcome back <strong th:text="${user_master.fullName}"></strong>!-->
-<!--                    Here’s your dashboard overview.-->
-<!--                </div>-->
-                <div id="adminAdministrator" class="my-3">
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div id="adminAdministrator" class="my-3">
                     <div class="card">
                         <div class="admin-profile">
 <!--                            <div class="admin-avatar">X</div>-->
@@ -425,9 +424,19 @@
                         </div>
                     </div>
                 </div>
-
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut-student}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Quick Stats -->
-                <div class="row g-3 text-center mb-4">                    <div class="col-md-3 mb-2">
+                <div class="row g-3 text-center mb-4">
+                    <div class="col-md-3 mb-2">
                         <div class="card text-center p-3 bg-primary text-white">
                             <div class="emoji mb-2">🎓</div>
                             <h5>My Total Batches</h5>

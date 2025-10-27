@@ -298,6 +298,20 @@
 #dashboard-short span {
     font-size: 0.9rem;
   }
+.profileImage {
+  object-fit: cover;
+  border: 3px solid #fff;
+}
+
+label[for="photoInput"] {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: 0.2s;
+}
+
+label[for="photoInput"]:hover {
+  background-color: #0d6efd;
+  transform: translate(20%, 20%) scale(1.1);
+}
 
     </style>
 </head>
@@ -612,26 +626,58 @@
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3 mb-5 bg-white rounded">
                             <div class="card-body text-center">
-                                <!-- Profile Photo -->
-                                <img th:if="${user_master.photoPath != null}"
-                                     th:src="@{/userphoto/{id}(id=${user_master.userId})}" class="rounded-circle me-2 shadow-sm"
-                                     width="150" height="150">
-                                <img th:unless="${user_master.photoPath != null}"
-                                     src="../Images/noprofilepic.png" class="rounded-circle me-2 shadow-sm "
-                                     width="150" height="150">
 
-                                <!-- Name -->
-                                <h3 th:text="${user_master.fullName}"></h3>
+                                <!-- Profile Photo Wrapper -->
+                                <div class="position-relative d-inline-block">
+                                    <!-- Profile Image -->
+                                    <img th:if="${user_master.photoPath != null}"
+                                         th:src="@{/userphoto/{id}(id=${user_master.userId})}"
+                                         class="rounded-circle shadow-sm profileImage"
+                                         width="150" height="150">
+                                    <img th:unless="${user_master.photoPath != null}"
+                                         src="../Images/noprofilepic.png"
+                                         class="rounded-circle shadow-sm profileImage"
+                                         width="150" height="150">
+
+                                    <!-- Hidden File Input -->
+                                    <form th:action="@{/faculty/updatePhoto}" method="post" enctype="multipart/form-data" id="photoForm">
+                                        <input type="hidden" name="userId" th:value="${user_master.userId}" />
+                                        <input type="file" name="photo" accept="image/*" id="photoInput" class="d-none" onchange="document.getElementById('photoForm').submit();">
+                                    </form>
+
+                                    <div th:if="${profileUpdated}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-check-circle me-2"></i>
+                                        <span th:text="${profileUpdated}"></span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                    <div th:if="${profileUpdatedError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <span th:text="${profileUpdatedError}"></span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+
+                                    <!-- Camera Icon -->
+                                    <label for="photoInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2"
+                                           style="cursor:pointer; transform: translate(20%, 20%);">
+                                        <i class="bi bi-camera-fill"></i>
+                                    </label>
+                                </div>
+
+                                <!-- Name & Info -->
+                                <h3 th:text="${user_master.fullName}" class="mt-3"></h3>
                                 <p class="text-muted">FACULTY</p>
+
                                 <div class="text-center">
-                                    <button
-                                            class="btn btn-sm btn-primary"
+                                    <button class="btn btn-sm btn-primary"
                                             data-bs-toggle="modal"
                                             data-bs-target="#updateFacultyModel">
                                         <i class="bi bi-pencil-square me-1"></i>Edit
                                     </button>
                                 </div>
+
                                 <hr>
+
                                 <!-- Profile Details -->
                                 <table class="table table-bordered text-start">
                                     <tbody>
@@ -649,9 +695,10 @@
                                     </tr>
                                     <tr>
                                         <th>Address</th>
-                                        <td><textarea th:text="${user_master.address}"
-                                                      style="border:none;outline:none;width:100%;"
-                                                      readonly> Bhopal, Madhya Pradesh</textarea></td>
+                                        <td>
+            <textarea th:text="${user_master.address}"
+                      style="border:none;outline:none;width:100%;" readonly></textarea>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Date of Birth</th>
@@ -668,10 +715,71 @@
                                     </tbody>
                                 </table>
 
-                                <!-- Edit Profile Button -->
-                                <!--                                <a href="#" class="btn btn-primary mt-3">Update Profile</a>-->
                             </div>
                         </div>
+
+                        <!--                        <div class="card p-3 mb-5 bg-white rounded">-->
+<!--                            <div class="card-body text-center">-->
+<!--                                &lt;!&ndash; Profile Photo &ndash;&gt;-->
+<!--                                <img th:if="${user_master.photoPath != null}"-->
+<!--                                     th:src="@{/userphoto/{id}(id=${user_master.userId})}" class="rounded-circle me-2 shadow-sm"-->
+<!--                                     width="150" height="150">-->
+<!--                                <img th:unless="${user_master.photoPath != null}"-->
+<!--                                     src="../Images/noprofilepic.png" class="rounded-circle me-2 shadow-sm "-->
+<!--                                     width="150" height="150">-->
+
+<!--                                &lt;!&ndash; Name &ndash;&gt;-->
+<!--                                <h3 th:text="${user_master.fullName}"></h3>-->
+<!--                                <p class="text-muted">FACULTY</p>-->
+<!--                                <div class="text-center">-->
+<!--                                    <button-->
+<!--                                            class="btn btn-sm btn-primary"-->
+<!--                                            data-bs-toggle="modal"-->
+<!--                                            data-bs-target="#updateFacultyModel">-->
+<!--                                        <i class="bi bi-pencil-square me-1"></i>Edit-->
+<!--                                    </button>-->
+<!--                                </div>-->
+<!--                                <hr>-->
+<!--                                &lt;!&ndash; Profile Details &ndash;&gt;-->
+<!--                                <table class="table table-bordered text-start">-->
+<!--                                    <tbody>-->
+<!--                                    <tr>-->
+<!--                                        <th>Email</th>-->
+<!--                                        <td th:text="${user_master.email}"></td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <th>Username</th>-->
+<!--                                        <td th:text="${user_master.username}"></td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <th>Contact No</th>-->
+<!--                                        <td th:text="${user_master.contactNo}"></td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <th>Address</th>-->
+<!--                                        <td><textarea th:text="${user_master.address}"-->
+<!--                                                      style="border:none;outline:none;width:100%;"-->
+<!--                                                      readonly> Bhopal, Madhya Pradesh</textarea></td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <th>Date of Birth</th>-->
+<!--                                        <td th:text="${user_master.dob}"></td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <th>Registered On</th>-->
+<!--                                        <td th:text="${user_master.createdOn}"></td>-->
+<!--                                    </tr>-->
+<!--                                    <tr>-->
+<!--                                        <th>Status</th>-->
+<!--                                        <td><span class="badge bg-success">Active</span></td>-->
+<!--                                    </tr>-->
+<!--                                    </tbody>-->
+<!--                                </table>-->
+
+<!--                                &lt;!&ndash; Edit Profile Button &ndash;&gt;-->
+<!--                                &lt;!&ndash;                                <a href="#" class="btn btn-primary mt-3">Update Profile</a>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                     <!-- Right Section (Shortcuts) -->
                     <div class="col-lg-4 col-md-4">
@@ -771,7 +879,7 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="all-assignments-tab" data-bs-toggle="tab"
-                                            data-bs-target="#allassignments" type="button">All Assignments</button>
+                                            data-bs-target="#allassignments" type="button">Submitted Assignments</button>
                                 </li>
                             </ul>
 
@@ -1555,6 +1663,17 @@
         }
     });
 </script>
+
+<!--Update profile alert js-->
+<script>
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        const bsAlert = new bootstrap.Alert(alert);
+        bsAlert.close();
+      });
+    }, 6000); // hide after 6 seconds
+</script>
+
 
 <!--Date Validation for attendance-->
 <script>

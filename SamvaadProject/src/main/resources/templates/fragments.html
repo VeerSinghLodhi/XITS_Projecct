@@ -5,98 +5,36 @@
     <title>All || Fragments</title>
   <style>
       .dashboard-shortcut a {
-      color: #333;
+      color: #212529;
       text-decoration: none;
-      transition: all 0.2s ease-in-out;
+      transition: transform 0.2s ease, color 0.2s ease;
+      display: inline-block;
+      width: 100%;
+      padding: 8px 0;
+      border-radius: 10px;
     }
 
     .dashboard-shortcut a:hover {
-      color: #FFBB33;
       transform: scale(1.05);
+      color: #FFBB33;
+      background-color: #f8f9fa;
     }
 
     .dashboard-shortcut i {
-      display: block;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
-   footer {
-        background: #fff;
-        box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
-        padding: 10px 0;
-      }
+    .dashboard-shortcut span {
+      font-size: 0.9rem;
+    }
+     footer {
+          background: #fff;
+          box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+          padding: 10px 0;
+        }
   </style>
 </head>
 <body>
-<!--<div th:fragment="shortcut" class="dashboard-shortcut" id="dashboard-shortcut1">-->
-<!--    <div class="row ms-3">-->
-<!--      <div class="col">-->
-<!--          <a href="#student" class="nav-link"><i class="bi bi-people fw-bold"></i><br>Student</a>-->
-<!--      </div>-->
-<!--      <div class="col" >-->
-<!--        <a href="#course-part" class="nav-link" ><i class="bi bi-mortarboard fw-bold" ></i><br>Course</a>-->
-<!--      </div>-->
-<!--      <div class="col">-->
-<!--        <a href="#batch-part" class="nav-link"><i class="bi bi-book fw-bold"></i><br>Batches</a>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    <div class="row ms-3">-->
-<!--      <div class="col">-->
-<!--        <a href="" class="nav-link"><i class="bi bi-folder2-open "></i><br>Project</a>-->
-<!--      </div>-->
-<!--      <div class="col">-->
-<!--        <a href="" class="nav-link"><i class="bi bi-chat-dots "></i><br>Message</a>-->
-<!--      </div>-->
-<!--      <div class="col">-->
-<!--        <a href="" class="nav-link"><i class="bi bi-link-45deg"></i><br>Referrals</a>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--</div>-->
-
-<!-- dashboard_shortcut.html -->
-<!--<div th:fragment="shortcut" class="dashboard-shortcut" id="dashboard-shortcut1">-->
-
-<!--    <div class="row ms-3 text-center">-->
-<!--        <div class="col">-->
-<!--            <a href="#home" class="nav-link">-->
-<!--                <i class="bi bi-house-door-fill fs-3 fw-bold"></i><br><span>Home</span>-->
-<!--            </a>-->
-<!--        </div>-->
-<!--        <div class="col">-->
-<!--            <a href="#registration" class="nav-link">-->
-<!--                <i class="bi bi-person-plus-fill fs-3 fw-bold"></i><br>Registration-->
-<!--            </a>-->
-<!--        </div>-->
-<!--        <div class="col">-->
-<!--            <a href="#admission" class="nav-link">-->
-<!--                <i class="bi bi-person-badge-fill fs-3 fw-bold"></i><br>Admission-->
-<!--            </a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <br>-->
-
-<!--    <div class="row ms-3 text-center">-->
-<!--        <div class="col">-->
-<!--            <a href="#course" class="nav-link">-->
-<!--                <i class="bi bi-mortarboard-fill fs-3 fw-bold"></i><br>Course-->
-<!--            </a>-->
-<!--        </div>-->
-<!--        <div class="col">-->
-<!--            <a href="#batches" class="nav-link">-->
-<!--                <i class="bi bi-book-fill fs-3 fw-bold"></i><br>Batches-->
-<!--            </a>-->
-<!--        </div>-->
-<!--        <div class="col">-->
-<!--            <a href="#fee" class="nav-link">-->
-<!--                <i class="bi bi-cash-stack fs-3 fw-bold"></i><br>Fee-->
-<!--            </a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--</div>-->
 
 <div th:fragment="shortcut" class="dashboard-shortcut text-center">
 
@@ -108,7 +46,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="#registration" class="nav-link">
+            <a href="#student" class="nav-link">
                 <i class="bi bi-person-plus-fill fs-3 "></i><br>
                 <span class="fw-semibold">Registration</span>
             </a>
@@ -123,19 +61,19 @@
 
     <div class="row g-3 mt-2">
         <div class="col">
-            <a href="#course" class="nav-link">
+            <a href="#course-part" class="nav-link">
                 <i class="bi bi-mortarboard-fill fs-3 "></i><br>
                 <span class="fw-semibold">Course</span>
             </a>
         </div>
         <div class="col">
-            <a href="#batches" class="nav-link">
+            <a href="#batch-part" class="nav-link">
                 <i class="bi bi-book-fill fs-3 "></i><br>
                 <span class="fw-semibold">Batches</span>
             </a>
         </div>
         <div class="col">
-            <a href="#fee" class="nav-link">
+            <a href="#fee-part" class="nav-link">
                 <i class="bi bi-cash-stack fs-3 "></i><br>
                 <span class="fw-semibold">Fee</span>
             </a>
@@ -143,6 +81,50 @@
     </div>
 </div>
 
+<div th:fragment="shortcut-faculty" class="dashboard-shortcut text-center" id="dashboard-short">
+
+    <div class="row g-3">
+        <div class="col">
+            <a href="#home" class="nav-link">
+                <i class="bi bi-house-door-fill fs-3"></i><br>
+                <span class="fw-semibold">Home</span>
+            </a>
+        </div>
+        <div class="col">
+            <a href="#profile" class="nav-link">
+                <i class="bi bi-person-circle fs-3"></i><br>
+                <span class="fw-semibold">Profile</span>
+            </a>
+        </div>
+        <div class="col">
+            <a href="#assignments" class="nav-link">
+                <i class="bi bi-journal-text fs-3"></i><br>
+                <span class="fw-semibold">Assignments</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-2">
+        <div class="col">
+            <a href="#attendance" class="nav-link">
+                <i class="bi bi-calendar-check fs-3"></i><br>
+                <span class="fw-semibold">Attendance</span>
+            </a>
+        </div>
+        <div class="col">
+            <a href="#" class="nav-link">
+                <i class="bi bi-people-fill fs-3"></i><br>
+                <span class="fw-semibold">Batches</span>
+            </a>
+        </div>
+        <div class="col">
+            <a href="#" class="nav-link">
+                <i class="bi bi-wallet2 fs-3"></i><br>
+                <span class="fw-semibold">Fee</span>
+            </a>
+        </div>
+    </div>
+</div>
 
 
 

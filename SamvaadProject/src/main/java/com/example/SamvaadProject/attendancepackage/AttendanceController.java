@@ -182,7 +182,7 @@ public class AttendanceController {
             }
         }
         redirectAttributes.addAttribute("attendanceUpdated",true);
-        return "redirect:/faculty/dashboard";
+        return "redirect:/faculty/dashboard#attendance#updateattendances";
     }
 
 

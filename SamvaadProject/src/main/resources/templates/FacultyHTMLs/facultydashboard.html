@@ -495,6 +495,28 @@ label[for="photoInput"]:hover {
     </div>
 </div>
 
+<div class="modal fade" id="submittedAssignmentsModal" tabindex="-1" aria-labelledby="submittedAssignmentsModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title text-center" id="submittedAssignmentsModelLabel">Update Password</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Container for dynamically generated modals -->
+<div id="allAssignmentModals"></div>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -973,8 +995,37 @@ label[for="photoInput"]:hover {
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="allassignments" role="tabpanel">
-                                    <h5>All Assignments </h5>
-                                    <p>User Notifications list goes here.</p>
+                                    <h5>Check Students Assignments</h5>
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="submitAssignmentBatchId" class="form-label">Select
+                                                Batch:</label>
+                                            <select id="submitAssignmentBatchId" name="assignmentBatchId"
+                                                    class="form-select" required>
+                                                <option value="" selected disabled>-- Select Batch --</option>
+                                                <option th:each="batch : ${batches}" th:value="${batch.batchId}"
+                                                        th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
+                                            </select>
+                                        </div>
+                                    </form>
+
+                                    <div id="showsubmitpdf" style="display:none;">
+                                        <h3>Existing Assignments</h3>
+                                        <table class="table table-bordered" id="submitassignmenttable">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Assignments</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -1019,60 +1070,106 @@ label[for="photoInput"]:hover {
                             <!-- Tab Content -->
                             <div class="tab-content p-3">
                                 <div class="tab-pane fade show active" id="addnewattendance" role="tabpanel">
-                                    <h3 class="mb-4 text-center ">Mark Attendance</h3>
-                                    <form th:action="@{/MarkedAttendance}" method="post"
-                                          onsubmit="validateDate(event)">
-                                        <div class="mb-3">
-                                            <label for="batchSelect" class="form-label">Select Course</label>
-                                            <select id="batchSelect" name="batchSelect"
-                                                    class="form-select shadow-sm" required>
-                                                <option value="" disabled selected>--Select a batch--</option>
-                                                <option th:if="${batches == null || batches.isEmpty()}" value=""
-                                                        disabled selected>Yet Course Assigned To You</option>
-                                                <!--                                                <option th:unless="${batches == null || batches.isEmpty()}"  disabled selected>Select Option</option>-->
-                                                <option th:each="batch : ${batches}" th:value="${batch.batchId}"
-                                                        th:text="${batch.name}"
-                                                        th:selected="${batch.batchId} == ${selectedBatchId}"></option>
-                                            </select>
-                                        </div>
+                                    <div class="card shadow-sm border-0 rounded-3 p-4">
+                                        <h4 class="text-center mb-3 text-primary fw-semibold">Mark Attendance</h4>
 
+                                        <form th:action="@{/MarkedAttendance}" method="post" onsubmit="validateDate(event)">
 
-                                        <div class="mb-3">
-                                            <label for="attendanceDate" class="form-label">Select Date</label>
-                                            <input type="date" id="attendanceDate" name="attendance"
-                                                   th:value="${selectedDate}" class="form-control shadow-sm" required>
-                                            <p id="dateError" class="text-danger mt-1" style="display: none;"></p>
-                                        </div>
-
-
-                                        <div class="mb-3 ">
-                                            <label class="form-label fw-bold ">Students</label>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch"
-                                                       id="selectAll">
-                                                <label class="form-check-label" for="selectAll">Marked All</label>
+                                            <!-- Course -->
+                                            <div class="mb-3">
+                                                <label for="batchSelect" class="form-label fw-semibold">Select Course</label>
+                                                <select id="batchSelect" name="batchSelect" class="form-select" required>
+                                                    <option value="" disabled selected>-- Select a Course --</option>
+                                                    <option th:each="batch : ${batches}" th:value="${batch.batchId}" th:text="${batch.name}"
+                                                            th:selected="${batch.batchId} == ${selectedBatchId}"></option>
+                                                </select>
                                             </div>
-                                            <div id="studentList" class="mt-2 ps-3">
-                                                <!--                                                <div class="form-check form-switch">-->
-                                                <!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
-                                                <!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
-                                                <!--                                                </div>-->
+
+                                            <!-- Date -->
+                                            <div class="mb-3">
+                                                <label for="attendanceDate" class="form-label fw-semibold">Select Date</label>
+                                                <input type="date" id="attendanceDate" name="attendance" th:value="${selectedDate}"
+                                                       class="form-control" required>
+                                                <p id="dateError" class="text-danger small mt-1" style="display:none;"></p>
                                             </div>
-                                            <!--                                            <div id="studentList" class="mt-2 ps-3" th:each="names : ${Studentname}">-->
-                                            <!--                                                <div class="form-check form-switch">-->
-                                            <!--                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">-->
-                                            <!--                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>-->
-                                            <!--                                                </div>-->
-                                            <!--                                            </div>-->
-                                        </div>
 
-                                        <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary px-4">Save
-                                                Attendance</button>
-                                        </div>
-                                    </form>
+                                            <!-- Student List -->
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label class="form-label fw-semibold mb-0">Students</label>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="selectAll" checked>
+                                                        <label class="form-check-label" for="selectAll">Mark All Present</label>
+                                                    </div>
+                                                </div>
 
+                                                <div id="studentList" class="border rounded p-3 bg-light" style="max-height:250px; overflow-y:auto;">
+                                                    <!-- Students will load here -->
+                                                </div>
+                                            </div>
+
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary px-4">Save Attendance</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+
+                                <!--                                <div class="tab-pane fade show active" id="addnewattendance" role="tabpanel">-->
+<!--                                    <h3 class="mb-4 text-center ">Mark Attendance</h3>-->
+<!--                                    <form th:action="@{/MarkedAttendance}" method="post"-->
+<!--                                          onsubmit="validateDate(event)">-->
+<!--                                        <div class="mb-3">-->
+<!--                                            <label for="batchSelect" class="form-label">Select Course</label>-->
+<!--                                            <select id="batchSelect" name="batchSelect"-->
+<!--                                                    class="form-select shadow-sm" required>-->
+<!--                                                <option value="" disabled selected>&#45;&#45;Select a batch&#45;&#45;</option>-->
+<!--                                                <option th:if="${batches == null || batches.isEmpty()}" value=""-->
+<!--                                                        disabled selected>Yet Course Assigned To You</option>-->
+<!--                                                &lt;!&ndash;                                                <option th:unless="${batches == null || batches.isEmpty()}"  disabled selected>Select Option</option>&ndash;&gt;-->
+<!--                                                <option th:each="batch : ${batches}" th:value="${batch.batchId}"-->
+<!--                                                        th:text="${batch.name}"-->
+<!--                                                        th:selected="${batch.batchId} == ${selectedBatchId}"></option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+
+
+<!--                                        <div class="mb-3">-->
+<!--                                            <label for="attendanceDate" class="form-label">Select Date</label>-->
+<!--                                            <input type="date" id="attendanceDate" name="attendance"-->
+<!--                                                   th:value="${selectedDate}" class="form-control shadow-sm" required>-->
+<!--                                            <p id="dateError" class="text-danger mt-1" style="display: none;"></p>-->
+<!--                                        </div>-->
+
+
+<!--                                        <div class="mb-3 ">-->
+<!--                                            <label class="form-label fw-bold ">Students</label>-->
+<!--                                            <div class="form-check form-switch">-->
+<!--                                                <input class="form-check-input" type="checkbox" role="switch"-->
+<!--                                                       id="selectAll">-->
+<!--                                                <label class="form-check-label" for="selectAll">Marked All</label>-->
+<!--                                            </div>-->
+<!--                                            <div id="studentList" class="mt-2 ps-3">-->
+<!--                                                &lt;!&ndash;                                                <div class="form-check form-switch">&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>&ndash;&gt;-->
+<!--                                                &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                            &lt;!&ndash;                                            <div id="studentList" class="mt-2 ps-3" th:each="names : ${Studentname}">&ndash;&gt;-->
+<!--                                            &lt;!&ndash;                                                <div class="form-check form-switch">&ndash;&gt;-->
+<!--                                            &lt;!&ndash;                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">&ndash;&gt;-->
+<!--                                            &lt;!&ndash;                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                                            &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                                        </div>-->
+
+<!--                                        <div class="d-flex justify-content-end">-->
+<!--                                            <button type="submit" class="btn btn-primary px-4">Save-->
+<!--                                                Attendance</button>-->
+<!--                                        </div>-->
+<!--                                    </form>-->
+
+<!--                                </div>-->
 
                                 <div class="tab-pane fade " id="updateattendances" role="tabpanel">
                                     <h5 class="text-center mb-3">Update Attendance</h5>
@@ -1566,6 +1663,49 @@ label[for="photoInput"]:hover {
 
 <!--Get Student For Attendance-->
 <script>
+
+    document.getElementById("batchSelect").addEventListener("change", function () {
+    const batchId = this.value;
+    if (!batchId) return;
+
+    fetch('/getstudentsforattendance/' + batchId)
+        .then(response => response.json())
+        .then(data => {
+            const studentListDiv = document.getElementById("studentList");
+            studentListDiv.innerHTML = "";
+
+            if (data.length === 0) {
+                studentListDiv.innerHTML = "<p class='text-center text-muted'>No Student Found</p>";
+                return;
+            }
+
+            // Generate each student checkbox (checked by default)
+            data.forEach(student => {
+                const row = `
+                    <div class="form-check">
+                        <input class="form-check-input student-checkbox" type="checkbox" role="switch"
+                               name="attendanceStatus" id="student-${student.admissionId}"
+                               value="${student.admissionId}" checked>
+                        <label class="form-check-label" for="student-${student.admissionId}">
+                            ${student.studentName} (AID ${student.admissionId})
+                        </label>
+                    </div>
+                `;
+                studentListDiv.innerHTML += row;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+});
+
+// ✅ Select All toggle
+document.getElementById('selectAll').addEventListener('change', function () {
+    document.querySelectorAll('.student-checkbox').forEach(cb => {
+        cb.checked = this.checked;
+    });
+});
+
+
+    /*
     document.getElementById("batchSelect").addEventListener("change", function () {
         var batchId = this.value;
         console.log("Batch id " + batchId);
@@ -1609,7 +1749,180 @@ label[for="photoInput"]:hover {
             cb.checked = this.checked;
         });
     });
+
+    */
 </script>
+
+
+<!--View Submitted  Assignments-->
+<script>
+    document.getElementById("submitAssignmentBatchId").addEventListener("change", function () {
+        var assignmentBatchId = this.value;
+        console.log("Course id " + assignmentBatchId);
+        document.getElementById("showsubmitpdf").style.display = "block";
+
+        if (assignmentBatchId) {
+            fetch('/allassignmetbybatchid/' + assignmentBatchId)
+                .then(response => response.json())
+                .then(data => {
+                    let tbody = document.querySelector("#submitassignmenttable tbody");
+                    tbody.innerHTML = "";
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";
+                        return;
+                    }
+
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const modalContainer = document.getElementById("allAssignmentModals");
+                    modalContainer.innerHTML = ""; // Clear old modals
+
+                    data.forEach((assignment, index) => {
+                        let modalId = `submittedAssignmentsModal_${assignment.assignmentId}`;
+
+                        // Row in the main assignment table
+                        let row = `
+                            <tr>
+                                <td>${assignment.title}</td>
+                                <td>
+                                    ${assignment.pdfName} <br>
+                                    <small>${assignment.pdfDate}</small> <br>
+                                    <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#${modalId}"
+                                            onclick="loadSubmissions(${assignment.assignmentId})">
+                                        View Submission
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += row;
+
+                        // Modal for this specific assignment
+                        let modal = `
+                            <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title">Submissions - ${assignment.title}</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-hover">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Sr. No</th>
+                                                            <th>Name</th>
+                                                            <th>Submission Date</th>
+                                                            <th>Submitted Assignment</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="submissionTable_${assignment.assignmentId}">
+                                                        <tr><td colspan="4" class="text-center text-muted">Loading...</td></tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        modalContainer.innerHTML += modal;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+
+    // Function to fetch submissions for a specific assignment
+    function loadSubmissions(assignmentId) {
+        const tableBody = document.getElementById(`submissionTable_${assignmentId}`);
+        tableBody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>Loading...</td></tr>";
+
+        fetch(`/getSubmissionsByAssignment/${assignmentId}`)
+            .then(response => response.json())
+            .then(submissions => {
+                if (submissions.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No submissions found.</td></tr>";
+                    return;
+                }
+
+                tableBody.innerHTML = "";
+                submissions.forEach((sub, index) => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${sub.studentName}</td>
+                            <td>${sub.submissionDate}</td>
+                            <td><a href="/downloadSubmission/${sub.submissionId}" class="btn btn-sm btn-primary" target="_blank">View</a></td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error('Error loading submissions:', error);
+                tableBody.innerHTML = "<tr><td colspan='4' class='text-center text-danger'>Error loading submissions</td></tr>";
+            });
+    }
+</script>
+
+
+
+
+
+
+
+<!--<script>-->
+<!--    document.getElementById("submitAssignmentBatchId").addEventListener("change", function () {-->
+<!--        var assignmentBatchId = this.value;-->
+<!--        console.log("Course id " + assignmentBatchId);-->
+<!--        document.getElementById("showsubmitpdf").style.display = "block";-->
+<!--        if (assignmentBatchId) {-->
+<!--            fetch('/allassignmetbybatchid/' + assignmentBatchId)   // Call Spring Boot GET endpoint-->
+<!--                .then(response => response.json()) // Either JSON OR TEXT.-->
+<!--                .then(data => {-->
+<!--                    let tbody = document.querySelector("#submitassignmenttable tbody");-->
+<!--                    tbody.innerHTML = "";-->
+
+<!--                    if (data.length === 0) {-->
+<!--                        tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>No Assignment found</td></tr>";-->
+<!--                        return;-->
+<!--                    }-->
+<!--                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');-->
+<!--                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');-->
+
+
+<!--                    data.forEach(assignment => {-->
+<!--                        let row = `-->
+<!--         <tr>-->
+<!--           <td>${assignment.title}</td>-->
+<!--                     <td>-->
+<!--            ${assignment.pdfName} ${assignment.pdfDate}-->
+<!--            <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>-->
+<!--        </td>-->
+
+<!--           <td>-->
+<!--               <form action="/delete_assignment/${assignment.assignmentId}" method="post"-->
+<!--                  onsubmit="return confirm('Delete this assignment?');">-->
+<!--              <input type="hidden" name="_csrf" value="${csrfToken}">-->
+<!--              <a class="btn btn-sm btn-success" data-bs-target="#submittedAssignmentsModal"  data-bs-toggle="modal">View Submission</a>-->
+<!--            </form>-->
+<!--           </td>-->
+<!--         </tr>-->
+<!--       `;-->
+<!--                        tbody.innerHTML += row;-->
+<!--                    });-->
+<!--                })-->
+<!--                .catch(error => console.error('Error:', error));-->
+<!--        } else {-->
+<!--            //document.getElementById("fees").value = '0.0';-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 
 
 <!--Delete Assignments-->

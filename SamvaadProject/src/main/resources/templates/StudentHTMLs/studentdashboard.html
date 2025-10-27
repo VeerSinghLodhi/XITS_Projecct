@@ -378,7 +378,7 @@
         </nav>
 
         <!-- Main Content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="dashboardContent">
             <!-- Home -->
             <div id="home" class="dashboard-section active">
 
@@ -1329,91 +1329,205 @@
 
 <!-- Custom JS for section navigation -->
 <script>
+
     document.addEventListener('DOMContentLoaded', function () {
-        const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-        const sections = document.querySelectorAll('.dashboard-section');
-        const sidebar = document.getElementById('sidebarMenu');
+ // ✅ Select only dashboard sections (exclude modals)
+ const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+ const sections = document.querySelectorAll('#dashboardContent .dashboard-section');
+ const sidebar = document.getElementById('sidebarMenu'); // added for mobile collapse
 
-        // Function to activate a section
-        function activateSection(targetId) {
-            // Remove active from all links and sections
-            navLinks.forEach(l => l.classList.remove('active'));
-            sections.forEach(section => section.classList.remove('active'));
+ // ✅ Function to activate a section and optionally a tab within it
+ function activateSection(sectionId, tabId = null) {
+   // If any Bootstrap modal is open, do nothing
+   if (document.querySelector('.modal.show')) return;
 
-            // Find the target link and section
-            const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
-            const targetSection = document.getElementById(targetId);
+   // Remove active from all main links and sections
+   navLinks.forEach(link => link.classList.remove('active'));
+   sections.forEach(section => {
+     section.classList.remove('active');
+     section.classList.remove('show');
+   });
 
-            if (targetLink && targetSection) {
-                targetLink.classList.add('active');
-                targetSection.classList.add('active');
-            }
-        }
+   // Activate target section
+   const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${sectionId}']`);
+   const targetSection = document.getElementById(sectionId);
 
-        // Handle sidebar clicks
-        navLinks.forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault(); // Prevent default scroll
-                const targetId = this.getAttribute('href').substring(1);
-                activateSection(targetId);
+   if (targetLink && targetSection) {
+     targetLink.classList.add('active');
+     targetSection.classList.add('active');
+     targetSection.classList.add('show');
 
-                // Collapse sidebar on small screens
-                if (window.innerWidth < 992 && sidebar) {
-                    const collapseInstance = bootstrap.Collapse.getInstance(sidebar) || new bootstrap.Collapse(sidebar);
-                    if (sidebar.classList.contains('show')) {
-                        collapseInstance.hide();
-                    }
-                }
+     // Handle tab activation if tabId provided
+     if (tabId) {
+       const tabButton = targetSection.querySelector(`button[data-bs-target='#${tabId}']`);
+       const tabPane = targetSection.querySelector(`#${tabId}`);
 
-                // Update the URL hash (so refresh/redirect keeps state)
-                history.replaceState(null, null, `#${targetId}`);
-            });
-        });
+       if (tabButton && tabPane) {
+         const allTabButtons = targetSection.querySelectorAll('[data-bs-toggle="tab"]');
+         const allTabPanes = targetSection.querySelectorAll('.tab-pane');
 
-        // Activate section based on current URL hash
-        const currentHash = window.location.hash;
-        if (currentHash) {
-            const targetId = currentHash.substring(1);
-            activateSection(targetId);
-        } else {
-            // Default section (home)
-            activateSection('home');
-        }
-    });
+         allTabButtons.forEach(btn => btn.classList.remove('active'));
+         allTabPanes.forEach(pane => {
+           pane.classList.remove('active');
+           pane.classList.remove('show');
+         });
 
-    /*
-        document.addEventListener('DOMContentLoaded', function () {
-                const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-                const sections = document.querySelectorAll('.dashboard-section');
-                const sidebar = document.getElementById('sidebarMenu');
+         tabButton.classList.add('active');
+         tabPane.classList.add('active');
+         tabPane.classList.add('show');
+       }
+     }
+   }
+ }
 
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function (e) {
-                        e.preventDefault(); // Prevent page jump
+ // ✅ Sidebar link click handling
+ navLinks.forEach(link => {
+   link.addEventListener('click', function (e) {
+     e.preventDefault();
 
-                        // Remove active from all links and sections
-                        navLinks.forEach(l => l.classList.remove('active'));
-                        sections.forEach(section => section.classList.remove('active'));
+     // Skip if a modal is open
+     if (document.querySelector('.modal.show')) return;
 
-                        // Add active to clicked link
-                        this.classList.add('active');
+     const sectionId = this.getAttribute('href').substring(1);
+     activateSection(sectionId);
 
-                        // Show the corresponding section
-                        const targetId = this.getAttribute('href').substring(1);
-                        const targetSection = document.getElementById(targetId);
-                        if (targetSection) {
-                            targetSection.classList.add('active');
-                        }
+     // ✅ Collapse sidebar on mobile screens (added)
+     if (window.innerWidth < 992 && sidebar) {
+       const collapseInstance = bootstrap.Collapse.getInstance(sidebar) || new bootstrap.Collapse(sidebar);
+       if (sidebar.classList.contains('show')) {
+         collapseInstance.hide();
+       }
+     }
 
-                        // Collapse sidebar if on small screens
-                        if (window.innerWidth < 992 && sidebar) {
-                            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
-                            collapseInstance.hide();
-                        }
-                    });
-                });
-            });
-    */
+     // ✅ Update the URL hash
+     history.replaceState(null, null, `#${sectionId}`);
+   });
+ });
+
+ // ✅ Tab click handling inside sections
+ document.addEventListener('click', function (e) {
+   if (e.target.matches('[data-bs-toggle="tab"]')) {
+     const tabId = e.target.getAttribute('data-bs-target').substring(1);
+     const currentSection = e.target.closest('.dashboard-section');
+
+     if (currentSection) {
+       const sectionId = currentSection.id;
+       history.replaceState(null, null, `#${sectionId}#${tabId}`);
+     }
+   }
+ });
+
+ // ✅ Parse URL hash for navigation
+ function parseAndActivateHash() {
+   // Do not change anything if modal is open
+   if (document.querySelector('.modal.show')) return;
+
+   const hash = window.location.hash.substring(1); // Remove #
+   if (hash) {
+     const parts = hash.split('#');
+     const sectionId = parts[0];
+     const tabId = parts[1] || null;
+     activateSection(sectionId, tabId);
+   } else {
+     activateSection('home');
+   }
+ }
+
+ // Initial load
+ parseAndActivateHash();
+
+ // Handle browser back/forward
+ window.addEventListener('hashchange', parseAndActivateHash);
+});
+
+
+
+   /*
+   document.addEventListener('DOMContentLoaded', function () {
+       const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+       const sections = document.querySelectorAll('.dashboard-section');
+       const sidebar = document.getElementById('sidebarMenu');
+
+       // Function to activate a section
+       function activateSection(targetId) {
+           // Remove active from all links and sections
+           navLinks.forEach(l => l.classList.remove('active'));
+           sections.forEach(section => section.classList.remove('active'));
+
+           // Find the target link and section
+           const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${targetId}']`);
+           const targetSection = document.getElementById(targetId);
+
+           if (targetLink && targetSection) {
+               targetLink.classList.add('active');
+               targetSection.classList.add('active');
+           }
+       }
+
+       // Handle sidebar clicks
+       navLinks.forEach(link => {
+           link.addEventListener('click', function (e) {
+               e.preventDefault(); // Prevent default scroll
+               const targetId = this.getAttribute('href').substring(1);
+               activateSection(targetId);
+
+               // Collapse sidebar on small screens
+               if (window.innerWidth < 992 && sidebar) {
+                   const collapseInstance = bootstrap.Collapse.getInstance(sidebar) || new bootstrap.Collapse(sidebar);
+                   if (sidebar.classList.contains('show')) {
+                       collapseInstance.hide();
+                   }
+               }
+
+               // Update the URL hash (so refresh/redirect keeps state)
+               history.replaceState(null, null, `#${targetId}`);
+           });
+       });
+
+       // Activate section based on current URL hash
+       const currentHash = window.location.hash;
+       if (currentHash) {
+           const targetId = currentHash.substring(1);
+           activateSection(targetId);
+       } else {
+           // Default section (home)
+           activateSection('home');
+       }
+   });
+*/
+   /*
+       document.addEventListener('DOMContentLoaded', function () {
+               const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+               const sections = document.querySelectorAll('.dashboard-section');
+               const sidebar = document.getElementById('sidebarMenu');
+
+               navLinks.forEach(link => {
+                   link.addEventListener('click', function (e) {
+                       e.preventDefault(); // Prevent page jump
+
+                       // Remove active from all links and sections
+                       navLinks.forEach(l => l.classList.remove('active'));
+                       sections.forEach(section => section.classList.remove('active'));
+
+                       // Add active to clicked link
+                       this.classList.add('active');
+
+                       // Show the corresponding section
+                       const targetId = this.getAttribute('href').substring(1);
+                       const targetSection = document.getElementById(targetId);
+                       if (targetSection) {
+                           targetSection.classList.add('active');
+                       }
+
+                       // Collapse sidebar if on small screens
+                       if (window.innerWidth < 992 && sidebar) {
+                           const collapseInstance = bootstrap.Collapse.getOrCreateInstance(sidebar);
+                           collapseInstance.hide();
+                       }
+                   });
+               });
+           });
+   */
 </script>
 
 <!--For Assignment according to student batches-->

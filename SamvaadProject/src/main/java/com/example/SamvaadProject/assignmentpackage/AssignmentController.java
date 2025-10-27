@@ -29,20 +29,7 @@ public class AssignmentController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/add_assignment")
-    public String showAddAssignmentPage(Model model, HttpSession session) {
-        UserMaster user = (UserMaster) session.getAttribute("user");
-        if (user == null) return "login2";
 
-        if (user.getRole() == UserMaster.Role.ADMIN) {
-            populateModel(model);
-            return "Add_Assignment";
-        }
-        else {
-            model.addAttribute("error", "You are not authorized to access this page.");
-            return "error";
-        }
-    }
     @PostMapping("/done")
     public String uploadAssignment(@RequestParam("batchId") Long batchId,
                                    @RequestParam("file") MultipartFile file,
@@ -66,7 +53,7 @@ public class AssignmentController {
 
             redirectAttributes.addAttribute("newAssignmentAdded",true);
 
-            return "redirect:/faculty/dashboard";
+            return "redirect:/faculty/dashboard#assignments";
         } catch (Exception e) {
             model.addAttribute("error", "Error saving assignment: " + e.getMessage());
         }
@@ -101,7 +88,7 @@ public class AssignmentController {
         model.addAttribute("groupedAssignments", groupedAssignments);
     }
 
-    @PostMapping("/update_assignment/{id}")
+    @PostMapping("/updateassignment/{id}")
     public String updatePdf(@PathVariable("id") Long id,
                                             @RequestParam("file") MultipartFile file,
                                             HttpSession session,
@@ -121,7 +108,7 @@ public class AssignmentController {
             assignmentRepository.save(assignment);
 
             redirectAttributes.addAttribute("assignmentUpdated",true);
-
+                System.out.println("Assignment Updated");
             return "redirect:/faculty/dashboard";
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,7 +118,7 @@ public class AssignmentController {
 
 
     // Get Assignment By batch id
-    @GetMapping("/allassignmetbybatchid/{batchId}")
+@GetMapping("/allassignmetbybatchid/{batchId}")
     @ResponseBody
     public List<AssignmentDTO>getAllAssingmentByBatchId(@PathVariable("batchId")Long batchId){
         return assignmentRepository.getAllAssignmentByBatchId(batchId)
@@ -139,5 +126,7 @@ public class AssignmentController {
                 .map(dto -> new AssignmentDTO(dto.getAssignmentId(),dto.getTitle(),dto.getBatch().getName(), dto.getPdfName(),dto.getPdfDate().toString()))
                 .toList();
     }
+
+
 
 }

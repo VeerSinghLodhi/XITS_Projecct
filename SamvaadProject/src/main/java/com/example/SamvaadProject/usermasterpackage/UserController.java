@@ -3,10 +3,7 @@ package com.example.SamvaadProject.usermasterpackage;
 import com.example.SamvaadProject.admissionpackage.AdmissionDTO;
 import com.example.SamvaadProject.admissionpackage.AdmissionMaster;
 import com.example.SamvaadProject.admissionpackage.AdmissionRepository;
-import com.example.SamvaadProject.assignmentpackage.AssignmentMaster;
-import com.example.SamvaadProject.assignmentpackage.AssignmentRepository;
-import com.example.SamvaadProject.assignmentpackage.SubmitAssignment;
-import com.example.SamvaadProject.assignmentpackage.SubmitRepository;
+import com.example.SamvaadProject.assignmentpackage.*;
 import com.example.SamvaadProject.attendancepackage.AttendanceMaster;
 import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
 import com.example.SamvaadProject.batchmasterpackage.BatchMasterRepository;
@@ -19,6 +16,8 @@ import com.example.SamvaadProject.pdfpackage.PdfDTO;
 import com.example.SamvaadProject.pdfpackage.PdfMaster;
 import com.example.SamvaadProject.pdfpackage.PdfRepository;
 import com.example.SamvaadProject.studentbatchpackage.StudentBatchRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -34,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -81,40 +81,6 @@ public class UserController {
     public String showLoginPage() {
         return "login";
     }
-
-//    @PostMapping("/login")
-//    public String processLogin(@RequestParam String username,
-//                               @RequestParam String password,
-//                               Model model,
-//                               HttpSession session) {
-//        UserMaster user = userService.login(username, password);
-//
-//        if (user == null) {
-//            model.addAttribute("error", "Invalid username or password!");
-//            return "login";
-//        }
-//
-//        if(!user.getStatus()){
-//            model.addAttribute("error","This account has been disabled by the admin!!");
-//            return "login";
-//        }
-//
-//        session.setAttribute("userId",user.getUserId());
-//
-//        // ✅ Role based redirection
-//        switch (user.getRole()) {
-//            case ADMIN:
-//                return "redirect:/admin/dashboard";
-//            case STUDENT:
-//                return "redirect:/student/dashboard";
-//            case FACULTY:
-//                return "redirect:/faculty/dashboard";
-//            default:
-//                model.addAttribute("error", "Unknown role!");
-//                return "login";
-//        }
-//    }
-
 
 
     @GetMapping("/admin/dashboard")
@@ -204,6 +170,7 @@ public class UserController {
 
         return "AdminHTMLs/admindashboard";
     }
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping("/faculty/dashboard")
     public String getFacultyDashboard(HttpSession session,
@@ -213,7 +180,10 @@ public class UserController {
                           @RequestParam(value = "assignmentUpdated",required = false)Boolean isAssignmentUpdate ,
                           @RequestParam(value = "attendanceMarked",required = false)Boolean isAttendanceMarked,
                           @RequestParam(value = "attendanceUpdated",required = false)Boolean isAttendanceUpdated,
-                          @RequestParam(value = "attendanceAlreadyErrorMessage",required = false)Boolean isAttendanceAlreadyErrorMessage){
+                          @RequestParam(value = "attendanceAlreadyErrorMessage",required = false)Boolean isAttendanceAlreadyErrorMessage,
+                          @RequestParam(value = "profileUpdated",required = false)Boolean isProfileUpdated,
+                          @RequestParam(value = "profileUpdatedError",required = false)Boolean isProfileUpdatedError
+                            ){
         Long userId=(Long) session.getAttribute("userId");
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
         if(userMaster==null){
@@ -239,6 +209,12 @@ public class UserController {
         if (Boolean.TRUE.equals(isAttendanceAlreadyErrorMessage)) {
             model.addAttribute("attendanceAlreadyErrorMessage", true);
         }
+        if (Boolean.TRUE.equals(isProfileUpdated)) {
+            model.addAttribute("profileUpdated", "Profile photo updated successfully");
+        }
+        if (Boolean.TRUE.equals(isProfileUpdatedError)) {
+            model.addAttribute("profileUpdatedError", "Failed to update photo. Please try again.");
+        }
 
 //        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));
     model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId(),"ACTIVE")); //checking Status Too Active batch or archived
@@ -253,8 +229,21 @@ public class UserController {
         return "FacultyHTMLs/facultydashboard";
     }
 
+    @GetMapping("/studentAssignments/list")
+    public String getAList(@RequestParam(required = false) Long batchId){
+System.out.println("Batch Id "+batchId);
+        return "redirect:/student/dashboard?batchId=" + batchId + "#assignments";
+//        return "redirect:/student/dashboard/" + batchId + "#assignments";
+
+
+    }
+
     @GetMapping("/student/dashboard")
     public String getStudentDashboard(HttpSession session,
+                                      @RequestParam(value = "batchId", required = false) Long batchId,
+                                      @RequestParam(value = "submitId",required = false)Long submitId,
+                                      @RequestParam(value = "profileUpdated",required = false)Boolean isProfileUpdated,
+                                      @RequestParam(value = "profileUpdatedError",required = false)Boolean isProfileUpdatedError,
                                       Model model){
         Long userId=(Long) session.getAttribute("userId");
         UserMaster userMaster=userRepository.findById(userId).orElse(null);
@@ -274,12 +263,154 @@ public class UserController {
                 .filter(Objects::nonNull)  // remove nulls if you don't want them
                 .toList();
 
+        List<BatchMaster> batches = batchMasterRepository.findBatchesByStudent(userMaster.getUserId());
+        model.addAttribute("batches", batches);
+        model.addAttribute("selectedBatchId", batchId);
+
+        List<Long> batchIds = batchId != null
+                ? Collections.singletonList(batchId)
+                : batches.stream().map(BatchMaster::getBatchId).collect(Collectors.toList());
+
+        List<AssignmentMaster> assignments = batchIds.isEmpty()
+                ? Collections.emptyList()
+                : assignmentRepository.findByBatch_BatchIdIn(batchIds);
+
+        List<SubmitAssignment> submittedAssignments =
+                submitRepository.findByAdmission_UserMaster_UserId(userMaster.getUserId());
+
+        Map<Long, SubmitAssignment> submittedMap = new HashMap<>();
+        Map<Long, Boolean> deletableMap = new HashMap<>();
+        Map<Long, Boolean> hasFeedback = new HashMap<>();
+        Map<Long, String> feedbackSnippet = new HashMap<>();
+
+        for (SubmitAssignment sa : submittedAssignments) {
+            Long aid = sa.getAssignment().getAssignmentId();
+            submittedMap.put(aid, sa);
+            deletableMap.put(aid, isSubmissionDeletable(sa));
+            hasFeedback.put(aid, sa.getGptFeedback() != null && !sa.getGptFeedback().isBlank());
+
+            String snippet = "Pending evaluation...";
+            try {
+                if (sa.getGptFeedback() != null) {
+                    snippet = sa.getGptFeedback().length() > 100
+                            ? sa.getGptFeedback().substring(0, 100) + "..."
+                            : sa.getGptFeedback();
+                }
+            } catch (Exception e) {
+                snippet = "Pending evaluation...";
+            }
+            feedbackSnippet.put(aid, snippet);
+        }
+        Set<Long> submittedAssignmentIds = submittedMap.keySet();
+
+        model.addAttribute("submittedMap", submittedMap);
+        model.addAttribute("assignments", assignments);
+        model.addAttribute("submittedAssignmentIds", submittedAssignmentIds);
+        model.addAttribute("deletableMap", deletableMap);
+        model.addAttribute("hasFeedback", hasFeedback);
+        model.addAttribute("feedbackSnippet", feedbackSnippet);
+
+        if (Boolean.TRUE.equals(isProfileUpdated)) {
+            model.addAttribute("profileUpdated", "Profile photo updated successfully");
+        }
+        if (Boolean.TRUE.equals(isProfileUpdatedError)) {
+            model.addAttribute("profileUpdatedError", "Failed to update photo. Please try again.");
+        }
+
 
         List<BatchMaster> batches1 = batchMasterRepository.findAllById(batchIds1);
         model.addAttribute("studentbatches", batches1);
-
-
         model.addAttribute("user_master",userMaster);
+
+
+        if(submitId!=null){
+            SubmitAssignment submission = submitRepository.findById(submitId).orElse(null);
+//            if (submission == null) {
+//                model.addAttribute("feedbackSummary", "No submission found for the provided ID.");
+//                return "Student_assignment_feedback";
+//            }
+
+            AssignmentMaster assignment = assignmentRepository
+                    .findById(submission.getAssignment().getAssignmentId())
+                    .orElse(null);
+//
+//            if (assignment == null) {
+//                model.addAttribute("feedbackSummary", "Assignment details for this submission were not found.");
+//                return "StudentHTMLs/studentdashboard";
+//            }
+
+            model.addAttribute("assignment", assignment);
+            model.addAttribute("submission", submission);
+
+            String feedbackJson = submission.getGptFeedback();
+            if (feedbackJson == null || feedbackJson.isBlank()) {
+                model.addAttribute("feedbackSummary", "Evaluation Pending or Not Yet Available.");
+                model.addAttribute("feedbackGrade", null);
+                model.addAttribute("feedbackVerdict", null);
+                model.addAttribute("feedbackIssues", new ArrayList<>());
+                model.addAttribute("feedbackSuggestions", new ArrayList<>());
+                model.addAttribute("feedbackRaw", "No feedback data available.");
+                return "StudentHTMLs/studentdashboard";
+            }
+
+            try {
+                String cleanedJson = feedbackJson.trim();
+                if (cleanedJson.startsWith("json")) cleanedJson = cleanedJson.substring(7).trim();
+                else if (cleanedJson.startsWith("")) cleanedJson = cleanedJson.substring(3).trim();
+                if (cleanedJson.endsWith("```")) cleanedJson = cleanedJson.substring(0, cleanedJson.length() - 3).trim();
+
+                JsonNode root = mapper.readTree(cleanedJson);
+
+                if (root.has("error")) {
+                    String errorMessage = root.path("error").asText("API error details unavailable.");
+                    model.addAttribute("feedbackSummary", "Evaluation Failed: " + errorMessage);
+                    model.addAttribute("feedbackVerdict", "Failed");
+                    model.addAttribute("feedbackGrade", null);
+                    model.addAttribute("feedbackIssues", new ArrayList<>());
+                    model.addAttribute("feedbackSuggestions", new ArrayList<>());
+                    model.addAttribute("feedbackRaw", feedbackJson);
+
+                    submission.setStatus("Failed");
+                    submission.setGptScore(null);
+                    submitRepository.save(submission);
+
+                    return "Student_assignment_feedback";
+                }
+                String statusValue = root.path("Status").asText(root.path("verdict").asText("Unknown"));
+                int gradeValue = root.path("grade").asInt(-1);
+
+                List<String> issues = new ArrayList<>();
+                if (root.has("issues") && root.get("issues").isArray()) {
+                    root.get("issues").forEach(i -> issues.add(i.asText()));
+                }
+
+                List<String> suggestions = new ArrayList<>();
+                if (root.has("suggestions") && root.get("suggestions").isArray()) {
+                    root.get("suggestions").forEach(s -> suggestions.add(s.asText()));
+                }
+                model.addAttribute("feedbackVerdict", statusValue);
+                model.addAttribute("feedbackSummary", root.path("summary").asText("No summary provided."));
+                model.addAttribute("feedbackGrade", (gradeValue >= 0) ? gradeValue : null);
+                model.addAttribute("feedbackIssues", issues);
+                model.addAttribute("feedbackSuggestions", suggestions);
+                model.addAttribute("feedbackRaw", cleanedJson);
+
+                submission.setGptScore((gradeValue >= 0) ? gradeValue : null);
+                submission.setStatus(statusValue);
+                submitRepository.save(submission);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                model.addAttribute("feedbackSummary", "Evaluation Failed: Invalid JSON or Parsing Error.");
+                model.addAttribute("feedbackGrade", null);
+                model.addAttribute("feedbackVerdict", null);
+                model.addAttribute("feedbackIssues", new ArrayList<>());
+                model.addAttribute("feedbackSuggestions", new ArrayList<>());
+                model.addAttribute("feedbackRaw", feedbackJson);
+            }
+
+        }
+
         return "StudentHTMLs/studentdashboard";
     }
 
@@ -515,6 +646,7 @@ public ResponseEntity<byte[]> getResume(@PathVariable("pdfId")Long pdfId) {
     OtpService otpService;
 
 
+
     // OTP Page
     @GetMapping("/request-password-update")
     public String getRequestPasswordUpdate(){
@@ -600,8 +732,99 @@ public Map<String, Boolean> verifyOtpAndUpdatePassword2(
     return response;
 }
 
+    private static Boolean isSubmissionDeletable(SubmitAssignment submission) {
+        Date subAt = submission.getSubmittedAt();
+        return subAt != null && (System.currentTimeMillis() - subAt.getTime()) < 2 * 86400000L;
+    }
+
+
+//    @GetMapping("/list")
+//    public String listAssignments(HttpSession session,
+//                                  @RequestParam(required = false) Long batchId,
+//                                  Model model) {
+//        UserMaster student = (UserMaster) session.getAttribute("user");
+//        if (student == null || student.getRole() != UserMaster.Role.STUDENT) {
+//            model.addAttribute("error", "Unauthorized access");
+//            return "error";
+//        }
+//
+//        List<BatchMaster> batches = batchMasterRepository.findBatchesByStudent(student.getUserId());
+//        model.addAttribute("batches", batches);
+//        model.addAttribute("selectedBatchId", batchId);
+//
+//        List<Long> batchIds = batchId != null
+//                ? Collections.singletonList(batchId)
+//                : batches.stream().map(BatchMaster::getBatchId).collect(Collectors.toList());
+//
+//        List<AssignmentMaster> assignments = batchIds.isEmpty()
+//                ? Collections.emptyList()
+//                : assignmentRepository.findByBatch_BatchIdIn(batchIds);
+//
+//        List<SubmitAssignment> submittedAssignments =
+//                submitRepository.findByAdmission_UserMaster_UserId(student.getUserId());
+//
+//        Map<Long, SubmitAssignment> submittedMap = new HashMap<>();
+//        Map<Long, Boolean> deletableMap = new HashMap<>();
+//        Map<Long, Boolean> hasFeedback = new HashMap<>();
+//        Map<Long, String> feedbackSnippet = new HashMap<>();
+//
+//        for (SubmitAssignment sa : submittedAssignments) {
+//            Long aid = sa.getAssignment().getAssignmentId();
+//            submittedMap.put(aid, sa);
+//            deletableMap.put(aid, isSubmissionDeletable(sa));
+//            hasFeedback.put(aid, sa.getGptFeedback() != null && !sa.getGptFeedback().isBlank());
+//
+//            String snippet = "Pending evaluation...";
+//            try {
+//                if (sa.getGptFeedback() != null) {
+//                    snippet = sa.getGptFeedback().length() > 100
+//                            ? sa.getGptFeedback().substring(0, 100) + "..."
+//                            : sa.getGptFeedback();
+//                }
+//            } catch (Exception e) {
+//                snippet = "Pending evaluation...";
+//            }
+//            feedbackSnippet.put(aid, snippet);
+//        }
+//        Set<Long> submittedAssignmentIds = submittedMap.keySet();
+//
+//        model.addAttribute("submittedMap", submittedMap);
+//        model.addAttribute("assignments", assignments);
+//        model.addAttribute("submittedAssignmentIds", submittedAssignmentIds);
+//        model.addAttribute("deletableMap", deletableMap);
+//        model.addAttribute("hasFeedback", hasFeedback);
+//        model.addAttribute("feedbackSnippet", feedbackSnippet);
+//        return "Student_assignment";
+//    }
 
 
 
+    @PostMapping("/faculty/updatePhoto")
+    public String updateFacultyProfilePhoto(@RequestParam("photo") MultipartFile photo,
+                                     RedirectAttributes redirectAttributes,
+                                     HttpSession session) {
+        try {
+            Long userId=(Long) session.getAttribute("userId");
+            userService.updateUserPhoto(userId, photo);
+            redirectAttributes.addAttribute("profileUpdated", true); //""Profile photo updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addAttribute("profileUpdatedError",true); // "Failed to update photo. Please try again.");
+        }
+        return "redirect:/faculty/dashboard#profile"; // or your actual profile page URL
+    }
+
+    @PostMapping("/student/updatePhoto")
+    public String updateStudentProfilePhoto(@RequestParam("photo") MultipartFile photo,
+                                     RedirectAttributes redirectAttributes,
+                                     HttpSession session) {
+        try {
+            Long userId=(Long) session.getAttribute("userId");
+            userService.updateUserPhoto(userId, photo);
+            redirectAttributes.addAttribute("profileUpdated", true); //""Profile photo updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addAttribute("profileUpdatedError",true); // "Failed to update photo. Please try again.");
+        }
+        return "redirect:/student/dashboard#profile"; // or your actual profile page URL
+    }
 
 }

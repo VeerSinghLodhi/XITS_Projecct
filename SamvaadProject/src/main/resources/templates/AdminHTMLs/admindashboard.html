@@ -1158,7 +1158,7 @@ footer a:hover {
             </div>
 
             <!-- Right Section (Shortcuts) -->
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-4" style="margin-top: -20px;">
               <div class="card mb-3">
                 <div class="card-body">
                   <!-- Thymeleaf fragment for shortcuts -->
@@ -1203,6 +1203,7 @@ footer a:hover {
               </div>
             </div>
           </div>
+
           <div th:insert="~{fragments :: footer}"></div>
         </div>
 
@@ -1443,26 +1444,26 @@ footer a:hover {
                   </form>
 
                   <div id="alldetailofstudent" style="display:none;">
-                    <hr class="border border-success">
-                  <div class="row mb-3">
-                    <div class="row mb-3">
-                      <div class="col">
-                        <span>Total Batch: <span class="fw-bold fst-italic" >4</span></span>
-                      </div>
-                      <div class="col">
-                        <span>Attendance: <span class="fw-bold " >76%</span></span>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col">
-                        <span>Balance: <span class="fw-bold fst-italic" >₹2000 (all admissions)</span></span>
-                      </div>
-                      <div class="col">
-                        <span>Abc: <span class="fw-bold " >Veer</span></span>
-                      </div>
-                    </div>
-                  </div>
 
+<!--                  <div class="row mb-3">-->
+<!--                    <div class="row mb-3">-->
+<!--                      <div class="col">-->
+<!--                        <span>Total Batch: <span class="fw-bold fst-italic" >4</span></span>-->
+<!--                      </div>-->
+<!--                      <div class="col">-->
+<!--                        <span>Attendance: <span class="fw-bold " >76%</span></span>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="row mb-3">-->
+<!--                      <div class="col">-->
+<!--                        <span>Balance: <span class="fw-bold fst-italic" >₹2000 (all admissions)</span></span>-->
+<!--                      </div>-->
+<!--                      <div class="col">-->
+<!--                        <span>Abc: <span class="fw-bold " >Veer</span></span>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                    <hr class="border border-success">
                   <!-- Table to show admissions -->
                   <div class="mt-4">
                     <h5>Admissions List</h5>
@@ -2889,7 +2890,6 @@ footer a:hover {
 
           <div th:insert="~{fragments :: footer}"></div>
         </div>
-
     </main>
   </div>
   <!-- Modal -->
@@ -3205,207 +3205,6 @@ footer a:hover {
 });
 
 
-  /*
-
-  document.addEventListener('DOMContentLoaded', function () {
-    // ✅ Select only dashboard sections (exclude modals)
-    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-    const sections = document.querySelectorAll('#dashboardContent .dashboard-section');
-
-    // ✅ Function to activate a section and optionally a tab within it
-    function activateSection(sectionId, tabId = null) {
-      // If any Bootstrap modal is open, do nothing
-      if (document.querySelector('.modal.show')) return;
-
-      // Remove active from all main links and sections
-      navLinks.forEach(link => link.classList.remove('active'));
-      sections.forEach(section => {
-        section.classList.remove('active');
-        section.classList.remove('show');
-      });
-
-      // Activate target section
-      const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${sectionId}']`);
-      const targetSection = document.getElementById(sectionId);
-
-      if (targetLink && targetSection) {
-        targetLink.classList.add('active');
-        targetSection.classList.add('active');
-        targetSection.classList.add('show');
-
-        // Handle tab activation if tabId provided
-        if (tabId) {
-          const tabButton = targetSection.querySelector(`button[data-bs-target='#${tabId}']`);
-          const tabPane = targetSection.querySelector(`#${tabId}`);
-
-          if (tabButton && tabPane) {
-            const allTabButtons = targetSection.querySelectorAll('[data-bs-toggle="tab"]');
-            const allTabPanes = targetSection.querySelectorAll('.tab-pane');
-
-            allTabButtons.forEach(btn => btn.classList.remove('active'));
-            allTabPanes.forEach(pane => {
-              pane.classList.remove('active');
-              pane.classList.remove('show');
-            });
-
-            tabButton.classList.add('active');
-            tabPane.classList.add('active');
-            tabPane.classList.add('show');
-          }
-        }
-      }
-    }
-
-    // ✅ Sidebar link click handling
-    navLinks.forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        // Skip if a modal is open
-        if (document.querySelector('.modal.show')) return;
-
-        const sectionId = this.getAttribute('href').substring(1);
-        activateSection(sectionId);
-
-        history.replaceState(null, null, `#${sectionId}`);
-      });
-    });
-
-    // ✅ Tab click handling inside sections
-    document.addEventListener('click', function (e) {
-      if (e.target.matches('[data-bs-toggle="tab"]')) {
-        const tabId = e.target.getAttribute('data-bs-target').substring(1);
-        const currentSection = e.target.closest('.dashboard-section');
-
-        if (currentSection) {
-          const sectionId = currentSection.id;
-          history.replaceState(null, null, `#${sectionId}#${tabId}`);
-        }
-      }
-    });
-
-    // ✅ Parse URL hash for navigation
-    function parseAndActivateHash() {
-      // Do not change anything if modal is open
-      if (document.querySelector('.modal.show')) return;
-
-      const hash = window.location.hash.substring(1); // Remove #
-      if (hash) {
-        const parts = hash.split('#');
-        const sectionId = parts[0];
-        const tabId = parts[1] || null;
-        activateSection(sectionId, tabId);
-      } else {
-        activateSection('home');
-      }
-    }
-
-    // Initial load
-    parseAndActivateHash();
-
-    // Handle browser back/forward
-    window.addEventListener('hashchange', parseAndActivateHash);
-  });
-*/
-
-/*
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
-    const sections = document.querySelectorAll('.dashboard-section');
-
-    // Function to activate a section and optionally a tab within it
-    function activateSection(sectionId, tabId = null) {
-        // Remove active from all main links and sections
-        navLinks.forEach(l => l.classList.remove('active'));
-        sections.forEach(section => {
-            section.classList.remove('active');
-            section.classList.remove('show');
-        });
-
-        // Find and activate the main section
-        const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${sectionId}']`);
-        const targetSection = document.getElementById(sectionId);
-
-        if (targetLink && targetSection) {
-            targetLink.classList.add('active');
-            targetSection.classList.add('active');
-            targetSection.classList.add('show');
-
-            // If there's a tab ID, activate that tab within the section
-            if (tabId) {
-                const tabButton = targetSection.querySelector(`button[data-bs-target='#${tabId}']`);
-                const tabPane = targetSection.querySelector(`#${tabId}`);
-
-                if (tabButton && tabPane) {
-                    // Remove active from all tabs in this section
-                    const allTabButtons = targetSection.querySelectorAll('.nav-link');
-                    const allTabPanes = targetSection.querySelectorAll('.tab-pane');
-
-                    allTabButtons.forEach(btn => btn.classList.remove('active'));
-                    allTabPanes.forEach(pane => {
-                        pane.classList.remove('active');
-                        pane.classList.remove('show');
-                    });
-
-                    // Activate the target tab
-                    tabButton.classList.add('active');
-                    tabPane.classList.add('active');
-                    tabPane.classList.add('show');
-                }
-            }
-        }
-    }
-
-    // Handle sidebar clicks
-    navLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const sectionId = this.getAttribute('href').substring(1);
-            activateSection(sectionId);
-
-            // Update the URL hash
-            history.replaceState(null, null, `#${sectionId}`);
-        });
-    });
-
-    // Handle tab clicks within sections (for nested tabs)
-    document.addEventListener('click', function(e) {
-        if (e.target.matches('[data-bs-toggle="tab"]')) {
-            const tabId = e.target.getAttribute('data-bs-target').substring(1);
-            const currentSection = e.target.closest('.dashboard-section');
-
-            if (currentSection) {
-                const sectionId = currentSection.id;
-                // Update URL to show section#tab
-                history.replaceState(null, null, `#${sectionId}#${tabId}`);
-            }
-        }
-    });
-
-    // Parse hash on page load (supports #section or #section#tab)
-    function parseAndActivateHash() {
-        const hash = window.location.hash.substring(1); // Remove #
-
-        if (hash) {
-            const parts = hash.split('#');
-            const sectionId = parts[0];
-            const tabId = parts[1] || null;
-
-            activateSection(sectionId, tabId);
-        } else {
-            activateSection('home');
-        }
-    }
-
-    // Initial load
-    parseAndActivateHash();
-
-    // Handle browser back/forward
-    window.addEventListener('hashchange', parseAndActivateHash);
-});
-
-  */
 
 
 </script>

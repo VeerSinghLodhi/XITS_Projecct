@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fee Payment Invoice</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 15mm;
+    }
+
+    @font-face {
+      font-family: 'DejaVu Sans';
+      src: url('https://dejavu-fonts.github.io/dejavu-fonts/ttf/DejaVuSans.ttf');
+    }
+
+    body {
+      font-family: 'DejaVu Sans', Arial, sans-serif;
+      color: #1a1a1a;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+
+    .invoice-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    .header-table {
+      width: 100%;
+      border-bottom: 3px solid #2563eb;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+    }
+
+    .header-table td {
+      vertical-align: top;
+      border: none;
+    }
+
+    .logo-cell {
+      width: 50%;
+    }
+
+    .company-info {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #4b5563;
+    }
+
+    .company-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2563eb;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .invoice-title {
+      text-align: center;
+      color: #1e40af;
+      font-size: 26px;
+      font-weight: 700;
+      margin: 20px 0 30px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .invoice-meta {
+      background-color: #f8fafc;
+      border-left: 4px solid #2563eb;
+      padding: 15px 20px;
+      margin-bottom: 25px;
+    }
+
+    .invoice-meta table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .invoice-meta td {
+      padding: 6px 0;
+      border: none;
+    }
+
+    .invoice-meta .label {
+      font-weight: 600;
+      color: #374151;
+      width: 35%;
+    }
+
+    .invoice-meta .value {
+      color: #1f2937;
+    }
+
+    .section-divider {
+      border-top: 2px solid #e5e7eb;
+      margin: 25px 0;
+    }
+
+    .fee-summary {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .fee-summary table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .fee-summary td {
+      padding: 8px 0;
+      border: none;
+    }
+
+    .fee-summary .label {
+      font-weight: 600;
+      color: #1e40af;
+      width: 60%;
+    }
+
+    .fee-summary .amount {
+      text-align: right;
+      font-size: 16px;
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      background-color: #10b981;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-left: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+      background-color: #f59e0b;
+    }
+
+    .total-row {
+      border-top: 2px solid #2563eb;
+      padding-top: 10px !important;
+    }
+
+    .total-row .amount {
+      font-size: 20px;
+      color: #1e40af;
+    }
+
+    .section-header {
+      font-size: 18px;
+      color: #1e40af;
+      font-weight: 700;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .installment-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .installment-table th {
+      background-color: #1e40af;
+      color: #ffffff;
+      padding: 12px 10px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #1e40af;
+    }
+
+    .installment-table td {
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      color: #374151;
+    }
+
+    .installment-table tbody tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+
+    .installment-table tbody tr:hover {
+      background-color: #f3f4f6;
+    }
+
+    .payment-mode-online {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .payment-mode-pending {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .payment-mode-cash {
+      color: #3b82f6;
+      font-weight: 600;
+    }
+
+    .footer-section {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+    }
+
+    .footer-note {
+      background-color: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      color: #92400e;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    .signature-section {
+      margin-top: 40px;
+      display: table;
+      width: 100%;
+    }
+
+    .signature-box {
+      display: table-cell;
+      width: 45%;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .signature-line {
+      border-top: 2px solid #374151;
+      margin-top: 50px;
+      padding-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .rupee-symbol {
+    /*  font-family: 'DejaVu Sans', Arial, sans-serif; /*
+    }
+  </style>
+</head>
+
+<body>
+<div class="invoice-container">
+
+  <!-- HEADER -->
+  <table class="header-table">
+    <tr>
+      <td class="logo-cell">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg0GupVn_X0cW7eVWzGcnkhdmkA5l3QN1wUaWEX3Bj_cU-33UQjI1jJlHVKLkRTsd9zQVWG2rlzHrP7PyWxXkBoQmGcfeM8yBRhaI935Kupo-5Sfy1cSjpCPXUEffEvLRb4_Jf6v6Adu4w1l7QPBuP66hFl_Ei2NaE1AENV69mU-Jv6D02K-JG3hEaYNHKl/s320/xansaitsulutionsLogo.png"
+             alt="Company Logo" style="width: 200px; height: auto;" />
+      </td>
+      <td>
+        <div class="company-info">
+          <span class="company-name">Xansa IT Solutions</span>
+          Opposite Abdul Ghani Stadium<br />
+          In front of Govind Rajput Office Tili, Sagar<br />
+          Email: contact@xansa.net<br />
+          Phone: +91 8770480826
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- INVOICE TITLE -->
+  <h1 class="invoice-title">Fee Payment Invoice</h1>
+
+
+  <!-- STUDENT INFORMATION -->
+  <div class="invoice-meta">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <span style="margin-right:10px">Name: <span style="font-weight:bold;" th:text="${invoice.studentName}"></span></span>
+      </div>
+      <div>
+        <span style="margin-right:10px">Admission ID: <span style="font-weight:bold;" th:text="${invoice.admissionId}"></span></span>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <span style="margin-right:10px">Course Name: <span style="font-weight:bold;" th:text="${invoice.courseName}"></span></span>
+      </div>
+      <div>
+        <span style="margin-right:10px">Fee Category: <span style="font-weight:bold;" th:text="${invoice.feeCategory}"></span></span>
+      </div>
+    </div>
+  </div>
+  <!-- FEE SUMMARY -->
+  <div th:if="${invoice.feeCategory}=='Installments'" class="fee-summary">
+    <table>
+      <tr>
+        <td class="label">Registration Fee:</td>
+        <td class="amount"><span th:text="${invoice.registrationFee}"></span><span class="status-badge">COMPLETED</span></td>
+      </tr>
+      <tr>
+        <td class="label">Course Fee:</td>
+        <td class="amount"><span th:text="${invoice.courseFee}"></span></td>
+      </tr>
+      <tr>
+        <td class="label">Discount Applied:</td>
+        <td class="amount"><span th:text="${invoice.discount}"></span></td>
+      </tr>
+      <tr>
+        <td class="label">Net Payable Amount:</td>
+        <td class="amount"><span th:text="${invoice.netPayableAmount}"></span></td>
+      </tr>
+      <tr>
+        <td class="label">Total Installments:</td>
+        <td class="amount"><span th:text="${invoice.totalInstallments}"></span></td>
+      </tr>
+      <tr class="total-row">
+        <td class="label">Pending Balance:</td>
+        <td class="amount"><span th:text="${invoice.pendingBalance}"></span></td>
+      </tr>
+    </table>
+  </div>
+  <div th:unless="${invoice.feeCategory}=='Installments'" class="fee-summary">
+    <table>
+      <tr>
+        <td class="label">Lumpsum Fee:</td>
+        <td class="amount"><span th:text="${invoice.netPayableAmount}"></span><span class="status-badge">COMPLETED</span></td>
+      </tr>
+      <tr>
+        <td class="label">Course Fee:</td>
+        <td class="amount"><span th:text="${invoice.courseFee}"></span></td>
+      </tr>
+
+    </table>
+  </div>
+
+  <!-- INSTALLMENT DETAILS -->
+  <div th:if="${invoice.feeCategory}=='Installments'">
+  <div class="section-header">Installment Payment Details</div>
+
+  <table class="installment-table">
+    <thead>
+    <tr>
+      <th style="width: 8%;">S.No</th>
+      <th style="width: 25%;">Installment</th>
+      <th style="width: 20%;">Amount</th>
+      <th style="width: 20%;">Payment Mode</th>
+      <th style="width: 17%;">Payment Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="payment, status : ${invoice.allInstallments}">
+      <td><span th:text="${status.index + 1}"></span></td>
+      <td>
+        <span th:if="${payment.installmentNumber}==0">Registration Fee </span>
+        <span th:if="${payment.installmentNumber}!=0">Installment No. <span th:text="${payment.installmentNumber}"></span></span>
+      </td>
+      <td><span th:text="${payment.amount}"></span></td>
+      <td><span th:text="${payment.paymentMode}"></span></td>
+      <td><span th:text="${payment.paymentDate}"></span></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-section">
+    <div class="footer-note">
+      <strong>Note:</strong> Please make the payment before the due date to avoid late fees. For any queries regarding your fee payment, please contact the XITS.
+    </div>
+
+<!--    <div class="signature-section">-->
+<!--      <div class="signature-box">-->
+<!--        <div class="signature-line">Authorized Signature</div>-->
+<!--      </div>-->
+<!--      <div class="signature-box" style="float: right;">-->
+<!--        <div class="signature-line">Student Signature</div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div class="footer-text" style="margin-top: 30px;">
+      This is a computer-generated invoice and does not require a physical signature.<br />
+      For support, contact us at contact@xansa.net or call +91 8770480826
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

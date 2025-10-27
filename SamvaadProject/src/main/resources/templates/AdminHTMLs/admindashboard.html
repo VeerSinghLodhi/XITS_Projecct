@@ -248,21 +248,31 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-    .dashboard-shortcut a {
-  display: inline-block;
-  text-align: center;
-  color: #333;
-  text-decoration: none;
-  transition: all 0.3s ease; /* smooth transition */
-  border-radius: 8px;
-  padding: 10px;
-}
 
-.dashboard-shortcut a:hover {
-  background-color: #FFBB33;
-  color: white;
-  transform: translateY(-4px); /* slight lift effect */
-}
+  .dashboard-shortcut a {
+    color: #212529;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+    display: inline-block;
+    width: 100%;
+    padding: 8px 0;
+    border-radius: 10px;
+  }
+
+  .dashboard-shortcut a:hover {
+    transform: scale(1.05);
+    color: #FFBB33;
+    background-color: #f8f9fa;
+  }
+
+  .dashboard-shortcut i {
+    margin-bottom: 4px;
+  }
+
+  .dashboard-shortcut span {
+    font-size: 0.9rem;
+  }
+
 .card.shadow-sm {
   border-radius: 15px;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -286,12 +296,12 @@ footer a:hover {
     text-decoration: underline;
 }
 
-   #home .dashboard-card {
+ /*  #home .dashboard-card {
       border-radius: 12px;
       background: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       padding: 20px;
-    }
+    }  */
     #home .profile-card {
       text-align: center;
     }
@@ -445,7 +455,7 @@ footer a:hover {
 }
 
     /* Card Container */
-#quickStatsDiv .card {
+ .card {
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
@@ -455,7 +465,7 @@ footer a:hover {
   margin: 20px auto;
 }
 
-#quickStatsDiv .card:hover {
+ .card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
@@ -663,7 +673,7 @@ footer a:hover {
 }
 
 
-    /* === Rewards Card === */
+    /* === Rewards Card ===
 .card {
   background-color: #ffffff;
   border-radius: 16px;
@@ -676,6 +686,7 @@ footer a:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
+*/
 
 /* === Card Header === */
  #referralPoints .card-header {
@@ -1022,7 +1033,7 @@ footer a:hover {
     </nav>
 
     <!-- Main Content -->
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" id="dashboardContent">
 
 
         <!-- Home Page-->
@@ -1070,15 +1081,6 @@ footer a:hover {
                 </div>
               </div>
             </div>
-<!--              <div class="card shadow-sm mb-3">-->
-<!--                <div class="card-body">-->
-<!--&lt;!&ndash;              <div class="dashboard-card profile-card mb-3">&ndash;&gt;-->
-<!--                <h2>Admin</h2>-->
-<!--                <p><b>Email:</b> contact@xansa.net</p>-->
-<!--                <p><b>Phone:</b> +91 8770480826</p>-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--                </div>-->
-<!--              </div>-->
 
               <div id="quickStatsDiv" class="mb-3">
               <div class="card">
@@ -1123,31 +1125,6 @@ footer a:hover {
               </div>
 
 
-<!--                  <div class="study-card shadow-sm mb-3">-->
-<!--                    <h6>Issue Study Material</h6>-->
-<!--                    <p><b>Current batch list:</b> Topic Name</p>-->
-<!--                    <p><b>No. of Hours:</b> 2</p>-->
-<!--              </div>-->
-
-<!--              <div class="row">-->
-<!--                <div class="col-md-6 mb-3">-->
-<!--                  <div class="card text-center shadow-sm">-->
-<!--                    <div class="card-body">-->
-<!--                      <h5>Total Students</h5>-->
-<!--                      <h3 th:text="${allstudents.size()}">0</h3>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="col-md-6 mb-3">-->
-<!--                  <div class="card text-center shadow-sm">-->
-<!--                    <div class="card-body">-->
-<!--                      <h5>Total Courses</h5>-->
-<!--                      <h3 th:text="${allcourses.size()}">0</h3>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-
               <div class="stats-grid mb-3">
                 <div class="stat-card">
                   <div class="stat-card-content">
@@ -1182,7 +1159,7 @@ footer a:hover {
 
             <!-- Right Section (Shortcuts) -->
             <div class="col-lg-4 col-md-4">
-              <div class="card shadow-sm mb-3">
+              <div class="card mb-3">
                 <div class="card-body">
                   <!-- Thymeleaf fragment for shortcuts -->
                   <div th:insert="~{fragments :: shortcut}"></div>
@@ -1224,15 +1201,6 @@ footer a:hover {
                 </div>
               </div>
               </div>
-<!--              <div class="card shadow-sm mb-3">-->
-<!--                <div class="card-body">-->
-<!--              <div class="rewards">-->
-<!--                <h6 class="section-title">Rewards</h6>-->
-<!--                <p>Assignments Credited <span class="reward-points">+ ₹250</span></p>-->
-<!--                <p>Referrals Credited <span class="reward-points green">+ ₹280</span></p>-->
-<!--              </div>-->
-<!--                </div>-->
-<!--              </div>-->
             </div>
           </div>
           <div th:insert="~{fragments :: footer}"></div>
@@ -2096,7 +2064,7 @@ footer a:hover {
                   </table>
                   </div>
                 </div>
-                <div id="showattendance2"></div>
+
               </div>
             </div>
           </div>
@@ -2455,110 +2423,7 @@ footer a:hover {
 <!--                        </div>-->
                       </div>
                     </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="updateCourseModal" tabindex="-1" aria-labelledby="updateCourseModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
 
-                          <!-- Modal Header -->
-                          <div class="modal-header bg-primary text-white">
-                            <h5 class="modal-title text-center" id="updateCourseModalLabel">Update Course</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                          </div>
-
-                          <!-- Modal Body -->
-                          <div class="modal-body">
-                            <form id="updateCourseForm" class="form-div p-3" method="post"   onsubmit="return confirm('Do you want to update?');">
-
-<!--                              <meta name="_csrf" th:content="${_csrf.token}" />-->
-<!--                              <meta name="_csrf_header" th:content="${_csrf.headerName}" />-->
-
-                              <input type="hidden" name="courseId" id="courseIdUpdate" >
-
-                              <div class="form-group mb-3">
-                                <label for="courseName" class="form-label"><b>Course Name</b></label>
-                                <input type="text" name="courseName" id="courseNameUpdate"
-                                       class="form-control" placeholder="Enter course name">
-                              </div>
-
-                              <div class="form-group mb-3">
-                                <label for="duration" class="form-label"><b>Course Duration</b></label>
-                                <select id="durationUpdate" name="duration"  class="form-select" required>
-                                  <option value=""   selected disabled>--Select Duration--</option>
-                                  <option value="10 Hours" >10 Hours</option>
-                                  <option value="20 Hours" >20 Hours</option>
-                                  <option value="30 Hours" >30 Hours</option>
-                                  <option value="40 Hours" >40 Hours</option>
-                                  <option value="50 Hours" >50 Hours</option>
-                                  <option value="60 Hours" >60 Hours</option>
-                                  <option value="70 Hours" >70 Hours</option>
-                                  <option value="80 Hours" >80 Hours</option>
-                                  <option value="90 Hours" >90 Hours</option>
-                                  <option value="100 Hours" >100 Hours</option>
-                                  <option value="120 Hours" >120 Hours</option>
-                                </select>
-                              </div>
-
-                              <div class="form-group mb-3">
-                                <label for="courseFeeUpdate" class="form-label"><b>Course Fee</b></label>
-                                <input type="number" name="feesOfCourse" id="courseFeeUpdate"
-                                       class="form-control" onkeyup="calculateInstallment2();"  placeholder="Enter course fee">
-                              </div>
-
-                              <div class="form-group mb-3">
-                                <label for="lumpsumUpdate" class="form-label"><b>Lumpsum Amount</b></label>
-                                <input type="number" name="lumpSum" id="lumpsumUpdate"
-                                       class="form-control" placeholder="Enter lumpsum amount">
-                              </div>
-
-                              <div class="form-group mb-3">
-                                <label for="registrationFeeUpdate" class="form-label"><b>Registration Fee</b></label>
-                                <input type="number" name="registrationFees" min="0" value="0" id="registrationFeeUpdate"  class="form-control"
-                                       placeholder="Enter registration fee" onkeyup="calculateInstallment2();" required>
-                              </div>
-
-                              <div id="showcourseupdatedivUpdate" >
-                                <hr class="border border-success mb-3">
-
-                                <div class="row mb-3">
-                                  <div class="col">
-                                    Course Fee: <span id="courseFeesUpdate" class="fw-bolder">4600</span>
-                                  </div>
-                                  <div class="col">
-                                    Registration Fee: <span id="registrationFeesUpdate" class="fw-bolder">2000</span>
-                                  </div>
-                                  <div class="col">
-                                    Rest amount: <span id="restFeesUpdate" class="fw-bolder">2600</span>
-                                  </div>
-                                </div>
-                                <div class="row mb-3">
-
-                                  <div class="col d-flex flex-row">
-                                    <span>Make Installment:</span> <input id="makeInstallmentUpdate" value="1" type="number" class="form-control" onkeyup="calculateInstallment2();">
-                                  </div>
-                                  <div class="col">
-                                    Per Installment: <span id="perInstallmentUpdate" class="fw-bolder">1234</span>
-                                  </div>
-                                </div>
-                                <hr class="border border-success mb-3">
-                              </div>
-
-<!--                                <label for="installment" class="form-label"><b>Installment Amount</b></label>-->
-                                <input type="hidden" name="installment" id="installmentUpdate">
-                               <input type="hidden" name="numberOfInstallments" id="numberOfInstallmentsUpdate">
-
-                              <div class="text-end">
-                                <!-- Cancel Button -->
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <!-- Submit Button -->
-                                <input type="submit" class="btn btn-success" value="Update Course">
-                              </div>
-                            </form>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
                   </div>
 
                 </div>
@@ -3027,6 +2892,111 @@ footer a:hover {
 
     </main>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="updateCourseModal" tabindex="-1" aria-labelledby="updateCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title text-center" id="updateCourseModalLabel">Update Course</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form id="updateCourseForm" class="form-div p-3" method="post"   onsubmit="return confirm('Do you want to update?');">
+
+            <!--                              <meta name="_csrf" th:content="${_csrf.token}" />-->
+            <!--                              <meta name="_csrf_header" th:content="${_csrf.headerName}" />-->
+
+            <input type="hidden" name="courseId" id="courseIdUpdate" >
+
+            <div class="form-group mb-3">
+              <label for="courseName" class="form-label"><b>Course Name</b></label>
+              <input type="text" name="courseName" id="courseNameUpdate"
+                     class="form-control" placeholder="Enter course name">
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="duration" class="form-label"><b>Course Duration</b></label>
+              <select id="durationUpdate" name="duration"  class="form-select" required>
+                <option value=""   selected disabled>--Select Duration--</option>
+                <option value="10 Hours" >10 Hours</option>
+                <option value="20 Hours" >20 Hours</option>
+                <option value="30 Hours" >30 Hours</option>
+                <option value="40 Hours" >40 Hours</option>
+                <option value="50 Hours" >50 Hours</option>
+                <option value="60 Hours" >60 Hours</option>
+                <option value="70 Hours" >70 Hours</option>
+                <option value="80 Hours" >80 Hours</option>
+                <option value="90 Hours" >90 Hours</option>
+                <option value="100 Hours" >100 Hours</option>
+                <option value="120 Hours" >120 Hours</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="courseFeeUpdate" class="form-label"><b>Course Fee</b></label>
+              <input type="number" name="feesOfCourse" id="courseFeeUpdate"
+                     class="form-control" onkeyup="calculateInstallment2();"  placeholder="Enter course fee">
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="lumpsumUpdate" class="form-label"><b>Lumpsum Amount</b></label>
+              <input type="number" name="lumpSum" id="lumpsumUpdate"
+                     class="form-control" placeholder="Enter lumpsum amount">
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="registrationFeeUpdate" class="form-label"><b>Registration Fee</b></label>
+              <input type="number" name="registrationFees" min="0" value="0" id="registrationFeeUpdate"  class="form-control"
+                     placeholder="Enter registration fee" onkeyup="calculateInstallment2();" required>
+            </div>
+
+            <div id="showcourseupdatedivUpdate" >
+              <hr class="border border-success mb-3">
+
+              <div class="row mb-3">
+                <div class="col">
+                  Course Fee: <span id="courseFeesUpdate" class="fw-bolder">4600</span>
+                </div>
+                <div class="col">
+                  Registration Fee: <span id="registrationFeesUpdate" class="fw-bolder">2000</span>
+                </div>
+                <div class="col">
+                  Rest amount: <span id="restFeesUpdate" class="fw-bolder">2600</span>
+                </div>
+              </div>
+              <div class="row mb-3">
+
+                <div class="col d-flex flex-row">
+                  <span>Make Installment:</span> <input id="makeInstallmentUpdate" value="1" type="number" class="form-control" onkeyup="calculateInstallment2();">
+                </div>
+                <div class="col">
+                  Per Installment: <span id="perInstallmentUpdate" class="fw-bolder">1234</span>
+                </div>
+              </div>
+              <hr class="border border-success mb-3">
+            </div>
+
+            <!--                                <label for="installment" class="form-label"><b>Installment Amount</b></label>-->
+            <input type="hidden" name="installment" id="installmentUpdate">
+            <input type="hidden" name="numberOfInstallments" id="numberOfInstallmentsUpdate">
+
+            <div class="text-end">
+              <!-- Cancel Button -->
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <!-- Submit Button -->
+              <input type="submit" class="btn btn-success" value="Update Course">
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="showattendance2"></div>
 </div>
 
 <!-- Bootstrap JS -->
@@ -3125,6 +3095,222 @@ footer a:hover {
 <script>
 
   document.addEventListener('DOMContentLoaded', function () {
+  // ✅ Select only dashboard sections (exclude modals)
+  const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+  const sections = document.querySelectorAll('#dashboardContent .dashboard-section');
+  const sidebar = document.getElementById('sidebarMenu'); // added for mobile collapse
+
+  // ✅ Function to activate a section and optionally a tab within it
+  function activateSection(sectionId, tabId = null) {
+    // If any Bootstrap modal is open, do nothing
+    if (document.querySelector('.modal.show')) return;
+
+    // Remove active from all main links and sections
+    navLinks.forEach(link => link.classList.remove('active'));
+    sections.forEach(section => {
+      section.classList.remove('active');
+      section.classList.remove('show');
+    });
+
+    // Activate target section
+    const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${sectionId}']`);
+    const targetSection = document.getElementById(sectionId);
+
+    if (targetLink && targetSection) {
+      targetLink.classList.add('active');
+      targetSection.classList.add('active');
+      targetSection.classList.add('show');
+
+      // Handle tab activation if tabId provided
+      if (tabId) {
+        const tabButton = targetSection.querySelector(`button[data-bs-target='#${tabId}']`);
+        const tabPane = targetSection.querySelector(`#${tabId}`);
+
+        if (tabButton && tabPane) {
+          const allTabButtons = targetSection.querySelectorAll('[data-bs-toggle="tab"]');
+          const allTabPanes = targetSection.querySelectorAll('.tab-pane');
+
+          allTabButtons.forEach(btn => btn.classList.remove('active'));
+          allTabPanes.forEach(pane => {
+            pane.classList.remove('active');
+            pane.classList.remove('show');
+          });
+
+          tabButton.classList.add('active');
+          tabPane.classList.add('active');
+          tabPane.classList.add('show');
+        }
+      }
+    }
+  }
+
+  // ✅ Sidebar link click handling
+  navLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      // Skip if a modal is open
+      if (document.querySelector('.modal.show')) return;
+
+      const sectionId = this.getAttribute('href').substring(1);
+      activateSection(sectionId);
+
+      // ✅ Collapse sidebar on mobile screens (added)
+      if (window.innerWidth < 992 && sidebar) {
+        const collapseInstance = bootstrap.Collapse.getInstance(sidebar) || new bootstrap.Collapse(sidebar);
+        if (sidebar.classList.contains('show')) {
+          collapseInstance.hide();
+        }
+      }
+
+      // ✅ Update the URL hash
+      history.replaceState(null, null, `#${sectionId}`);
+    });
+  });
+
+  // ✅ Tab click handling inside sections
+  document.addEventListener('click', function (e) {
+    if (e.target.matches('[data-bs-toggle="tab"]')) {
+      const tabId = e.target.getAttribute('data-bs-target').substring(1);
+      const currentSection = e.target.closest('.dashboard-section');
+
+      if (currentSection) {
+        const sectionId = currentSection.id;
+        history.replaceState(null, null, `#${sectionId}#${tabId}`);
+      }
+    }
+  });
+
+  // ✅ Parse URL hash for navigation
+  function parseAndActivateHash() {
+    // Do not change anything if modal is open
+    if (document.querySelector('.modal.show')) return;
+
+    const hash = window.location.hash.substring(1); // Remove #
+    if (hash) {
+      const parts = hash.split('#');
+      const sectionId = parts[0];
+      const tabId = parts[1] || null;
+      activateSection(sectionId, tabId);
+    } else {
+      activateSection('home');
+    }
+  }
+
+  // Initial load
+  parseAndActivateHash();
+
+  // Handle browser back/forward
+  window.addEventListener('hashchange', parseAndActivateHash);
+});
+
+
+  /*
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // ✅ Select only dashboard sections (exclude modals)
+    const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
+    const sections = document.querySelectorAll('#dashboardContent .dashboard-section');
+
+    // ✅ Function to activate a section and optionally a tab within it
+    function activateSection(sectionId, tabId = null) {
+      // If any Bootstrap modal is open, do nothing
+      if (document.querySelector('.modal.show')) return;
+
+      // Remove active from all main links and sections
+      navLinks.forEach(link => link.classList.remove('active'));
+      sections.forEach(section => {
+        section.classList.remove('active');
+        section.classList.remove('show');
+      });
+
+      // Activate target section
+      const targetLink = document.querySelector(`#sidebarMenu .nav-link[href='#${sectionId}']`);
+      const targetSection = document.getElementById(sectionId);
+
+      if (targetLink && targetSection) {
+        targetLink.classList.add('active');
+        targetSection.classList.add('active');
+        targetSection.classList.add('show');
+
+        // Handle tab activation if tabId provided
+        if (tabId) {
+          const tabButton = targetSection.querySelector(`button[data-bs-target='#${tabId}']`);
+          const tabPane = targetSection.querySelector(`#${tabId}`);
+
+          if (tabButton && tabPane) {
+            const allTabButtons = targetSection.querySelectorAll('[data-bs-toggle="tab"]');
+            const allTabPanes = targetSection.querySelectorAll('.tab-pane');
+
+            allTabButtons.forEach(btn => btn.classList.remove('active'));
+            allTabPanes.forEach(pane => {
+              pane.classList.remove('active');
+              pane.classList.remove('show');
+            });
+
+            tabButton.classList.add('active');
+            tabPane.classList.add('active');
+            tabPane.classList.add('show');
+          }
+        }
+      }
+    }
+
+    // ✅ Sidebar link click handling
+    navLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Skip if a modal is open
+        if (document.querySelector('.modal.show')) return;
+
+        const sectionId = this.getAttribute('href').substring(1);
+        activateSection(sectionId);
+
+        history.replaceState(null, null, `#${sectionId}`);
+      });
+    });
+
+    // ✅ Tab click handling inside sections
+    document.addEventListener('click', function (e) {
+      if (e.target.matches('[data-bs-toggle="tab"]')) {
+        const tabId = e.target.getAttribute('data-bs-target').substring(1);
+        const currentSection = e.target.closest('.dashboard-section');
+
+        if (currentSection) {
+          const sectionId = currentSection.id;
+          history.replaceState(null, null, `#${sectionId}#${tabId}`);
+        }
+      }
+    });
+
+    // ✅ Parse URL hash for navigation
+    function parseAndActivateHash() {
+      // Do not change anything if modal is open
+      if (document.querySelector('.modal.show')) return;
+
+      const hash = window.location.hash.substring(1); // Remove #
+      if (hash) {
+        const parts = hash.split('#');
+        const sectionId = parts[0];
+        const tabId = parts[1] || null;
+        activateSection(sectionId, tabId);
+      } else {
+        activateSection('home');
+      }
+    }
+
+    // Initial load
+    parseAndActivateHash();
+
+    // Handle browser back/forward
+    window.addEventListener('hashchange', parseAndActivateHash);
+  });
+*/
+
+/*
+
+  document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelectorAll('#sidebarMenu .nav-link');
     const sections = document.querySelectorAll('.dashboard-section');
 
@@ -3218,6 +3404,8 @@ footer a:hover {
     // Handle browser back/forward
     window.addEventListener('hashchange', parseAndActivateHash);
 });
+
+  */
 
 
 </script>
@@ -4087,31 +4275,86 @@ fetch("/getstudentsattendancefulldetails/" + batchId)
     let batchId = this.value;
     let courseId = this.options[this.selectedIndex].getAttribute("data-courseid");
     let admissionSelect = document.getElementById("admissionIds");
-    admissionSelect.innerHTML = ""; // Clear previous options
+    admissionSelect.innerHTML = ""; // clear old options
 
-    if (!batchId) return;
+    if (!batchId || !courseId) return;
 
+    // Fetch all students already assigned to any batch of this course
     fetch("/studentbatch/students/" + batchId)
       .then(res => res.json())
       .then(assignedIds => {
-        // Filter by course and exclude already assigned students
+        console.log("Already assigned student IDs:", assignedIds);
+
+        // Filter only those admissions that belong to the same course
+        // and are not yet assigned to any batch of this course
         let filteredAdmissions = allAdmissions.filter(admission =>
-          admission.courseId == courseId && !assignedIds.includes(admission.admissionId)
+          admission.courseId == courseId &&
+          !assignedIds.includes(String(admission.admissionId)) // ensure correct type match
         );
 
         // Sort alphabetically by student name
         filteredAdmissions.sort((a, b) => a.studentName.localeCompare(b.studentName));
 
-        // Add options to select
-        filteredAdmissions.forEach(admission => {
+        // Add filtered options to the select box
+        if (filteredAdmissions.length === 0) {
           let option = document.createElement("option");
-          option.value = admission.admissionId;
-          option.text = `${admission.studentName} (AID - ${admission.admissionId})`;
+          option.text = "No students available";
+          option.disabled = true;
+          option.selected = true;
           admissionSelect.appendChild(option);
-        });
+        } else {
+          filteredAdmissions.forEach(admission => {
+            let option = document.createElement("option");
+            option.value = admission.admissionId;
+            option.text = `${admission.studentName} (AID - ${admission.admissionId})`;
+            admissionSelect.appendChild(option);
+          });
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching assigned students:", err);
       });
   });
 </script>
+
+
+
+<!--<script th:inline="javascript">-->
+<!--  /*<![CDATA[*/-->
+<!--  let allAdmissions = [[${alladmissions2}]];-->
+<!--  /*]]>*/-->
+<!--</script>-->
+
+<!--<script>-->
+<!--  document.getElementById("batchId").addEventListener("change", function () {-->
+<!--    let batchId = this.value;-->
+<!--    let courseId = this.options[this.selectedIndex].getAttribute("data-courseid");-->
+<!--    let admissionSelect = document.getElementById("admissionIds");-->
+<!--    admissionSelect.innerHTML = ""; // Clear previous options-->
+
+<!--    if (!batchId) return;-->
+
+<!--    fetch("/studentbatch/students/" + batchId)-->
+<!--      .then(res => res.json())-->
+<!--      .then(assignedIds => {-->
+<!--        // Filter by course and exclude already assigned students-->
+<!--        let filteredAdmissions = allAdmissions.filter(admission =>-->
+<!--          admission.courseId == courseId && !assignedIds.includes(admission.admissionId)-->
+<!--        );-->
+
+<!--        // Sort alphabetically by student name-->
+<!--        filteredAdmissions.sort((a, b) => a.studentName.localeCompare(b.studentName));-->
+
+<!--        // Add options to select-->
+<!--        filteredAdmissions.forEach(admission => {-->
+<!--          let option = document.createElement("option");-->
+<!--          option.value = admission.admissionId;-->
+<!--          option.text = `${admission.studentName} (AID - ${admission.admissionId})`;-->
+<!--          admissionSelect.appendChild(option);-->
+<!--        });-->
+<!--      });-->
+<!--  });-->
+<!--</script>-->
 
 
 <script>

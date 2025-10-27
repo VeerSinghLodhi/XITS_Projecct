@@ -68,7 +68,7 @@ public class AssignmentController {
         System.out.println("Assignment Id: " + assignmentId);
         assignmentRepository.getAssignmentDelete(assignmentId);
         redirectAttributes.addAttribute("assignmentDeleted", true);
-        return "redirect:/faculty/dashboard";
+        return "redirect:/faculty/dashboard#assignments#deleteassignment";
     }
 
 
@@ -109,7 +109,7 @@ public class AssignmentController {
 
             redirectAttributes.addAttribute("assignmentUpdated",true);
                 System.out.println("Assignment Updated");
-            return "redirect:/faculty/dashboard";
+            return "redirect:/faculty/dashboard#assignments#updateassignment";
         } catch (Exception e) {
             e.printStackTrace();
             return "login";

@@ -17,5 +17,5 @@ public interface SubmitRepository extends JpaRepository<SubmitAssignment, Long> 
 
     // Find a submission for a specific assignment and admission
     Optional<SubmitAssignment> findByAssignmentAndAdmission(AssignmentMaster assignment, AdmissionMaster admission);
-
+    List<SubmitAssignment> findByAssignment_AssignmentId(Long assignmentId);
 }

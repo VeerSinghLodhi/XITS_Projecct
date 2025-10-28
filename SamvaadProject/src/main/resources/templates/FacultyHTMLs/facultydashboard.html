@@ -1101,19 +1101,23 @@ h3.section-heading {
                                     </form>
                                     <div id="updatepdf" style="display:none;">
                                         <h3>Existing Assignments</h3>
-                                        <table class="table table-bordered" id="updatetable">
-                                            <thead class="table-light">
-                                            <tr>
-                                                <th>Title</th>
-                                                <th>Assignments</th>
-                                                <th>Update</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
 
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="updatetable">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Assignments</th>
+                                                    <th>Update</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!-- Your dynamic rows will appear here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="tab-pane fade" id="deleteassignment" role="tabpanel">
@@ -1129,19 +1133,22 @@ h3.section-heading {
                                         </div>
                                     </form>
                                     <div id="showdeletepdf" style="display:none;">
-                                        <h3>Existing Assignments</h3>
-                                        <table class="table table-bordered" id="assignmenttable">
-                                            <thead class="table-light">
-                                            <tr>
-                                                <th>Title</th>
-                                                <th>Assignments</th>
-                                                <th>Delete</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+                                        <h3 class="table-heading">Existing Assignments</h3>
 
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="assignmenttable">
+                                                <thead class="table-light sticky-header">
+                                                <tr>
+                                                    <th>Title</th>
+                                                    <th>Assignments</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!-- Your dynamic rows will appear here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="allassignments" role="tabpanel">
@@ -1160,9 +1167,10 @@ h3.section-heading {
                                     </form>
 
                                     <div id="showsubmitpdf" style="display:none;">
-                                        <h3>Existing Assignments</h3>
+                                        <h3 class="table-heading">Existing Assignments</h3>
+                                        <div class="table-responsive">
                                         <table class="table table-bordered" id="submitassignmenttable">
-                                            <thead class="table-light">
+                                            <thead class="table-light sticky-header">
                                             <tr>
                                                 <th>Title</th>
                                                 <th>Assignments</th>
@@ -1173,6 +1181,7 @@ h3.section-heading {
 
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
 
 
@@ -1358,8 +1367,9 @@ h3.section-heading {
                                         </div>
                                     </div>
                                     <div id="attendancetable" style="display:none">
+                                        <div class="table-responsive">
                                         <table class="table table-bordered text-center align-middle">
-                                            <thead class="table-dark">
+                                            <thead class="table-light sticky-header">
                                             <tr>
                                                 <th>Admission ID</th>
                                                 <th>Student Name</th>
@@ -1372,6 +1382,7 @@ h3.section-heading {
 
                                             </tbody>
                                         </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

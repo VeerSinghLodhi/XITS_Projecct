@@ -148,7 +148,12 @@ public class UserController {
         model.addAttribute("allcourses", courseRepository.findAll(Sort.by(Sort.Direction.ASC, "courseId")));// All Courses List.
         model.addAttribute("newbatch",new BatchMaster());// For add new Batch
         model.addAttribute("allfaculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));  // All Faculties for new batch creation.
-        model.addAttribute("allbatches",batchMasterRepository.findAll()); // All Batches List.
+        List<BatchMaster> allBatches = batchMasterRepository.findAll();
+        allBatches.sort(Comparator.comparing(
+                b -> "ARCHIVED".equalsIgnoreCase(b.getStatus()) // ARCHIVED BATCHES WILL SHOW AT THE END 
+        ));
+        model.addAttribute("allbatches", allBatches);
+
         model.addAttribute("allactivebatches",batchMasterRepository.findAllBatchByStatus("ACTIVE"));
         model.addAttribute("newadmission",new AdmissionMaster());  // Object for new Admission.
         model.addAttribute("alladmissions",admissionRepository.findAll(Sort.by(Sort.Direction.ASC,"admissionId"))); // All Admissions for Updating
@@ -217,21 +222,19 @@ public class UserController {
         }
 
 //        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));
-    model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId(),"ACTIVE")); //checking Status Too Active batch or archived
+        model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId(),"ACTIVE")); //checking Status Too Active batch or archived
+        model.addAttribute("facultyAllBatches",batchMasterRepository.findByFacultyId(userMaster.getUserId()));
         model.addAttribute("user_master",userMaster);
 
 
 //        Attendance Part
         model.addAttribute("selectedDate",LocalDate.now());
-
-
-
         return "FacultyHTMLs/facultydashboard";
     }
 
     @GetMapping("/studentAssignments/list")
     public String getAList(@RequestParam(required = false) Long batchId){
-System.out.println("Batch Id "+batchId);
+        System.out.println("Batch Id "+batchId);
         return "redirect:/student/dashboard?batchId=" + batchId + "#assignments";
 //        return "redirect:/student/dashboard/" + batchId + "#assignments";
 
@@ -263,7 +266,7 @@ System.out.println("Batch Id "+batchId);
                 .filter(Objects::nonNull)  // remove nulls if you don't want them
                 .toList();
 
-        List<BatchMaster> batches = batchMasterRepository.findBatchesByStudent(userMaster.getUserId());
+        List<BatchMaster> batches = studentBatchRepository.findBatchesByStudentUserId(userMaster.getUserId());
         model.addAttribute("batches", batches);
         model.addAttribute("selectedBatchId", batchId);
 
@@ -374,7 +377,7 @@ System.out.println("Batch Id "+batchId);
                     submission.setGptScore(null);
                     submitRepository.save(submission);
 
-                    return "Student_assignment_feedback";
+                    return "StudentHTMLs/studentdashboard";
                 }
                 String statusValue = root.path("Status").asText(root.path("verdict").asText("Unknown"));
                 int gradeValue = root.path("grade").asInt(-1);

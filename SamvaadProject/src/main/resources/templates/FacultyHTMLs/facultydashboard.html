@@ -313,6 +313,20 @@ label[for="photoInput"]:hover {
   transform: translate(20%, 20%) scale(1.1);
 }
 
+h3.section-heading {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: green;
+    letter-spacing: 1px;
+    margin-top: 1rem;
+    margin-bottom: 1.2rem;
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-left: 6px solid green;
+    border-radius: 6px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
     </style>
 </head>
 
@@ -643,7 +657,7 @@ label[for="photoInput"]:hover {
 
             <!-- Profile -->
             <div id="profile" class="dashboard-section">
-                <h4 class="mt-3">My Profile</h4>
+                <h3 class="section-heading">My Profile</h3>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3 mb-5 bg-white rounded">
@@ -880,25 +894,26 @@ label[for="photoInput"]:hover {
 
             <!-- Batches -->
             <div id="batch" class="dashboard-section">
-                  <h4 class="mt-3">My Batch</h4>
+                <h3 class="section-heading">My Batches</h3>
+
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
-                        <div class="card p-3">
+<!--                        <div class="card p-3">-->
 
 
                             <!-- Tabs -->
-                            <ul class="nav nav-tabs" id="myTab5" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="newuser-tab" data-bs-toggle="tab"
-                                            data-bs-target="#addnewuser" type="button">Batches</button>
-                                </li>
+<!--                            <ul class="nav nav-tabs" id="myTab5" role="tablist">-->
+<!--                                <li class="nav-item" role="presentation">-->
+<!--                                    <button class="nav-link active" id="newuser-tab" data-bs-toggle="tab"-->
+<!--                                            data-bs-target="#addnewuser" type="button">Batches</button>-->
+<!--                                </li>-->
 
-                            </ul>
+<!--                            </ul>-->
 
                             <!-- Tab Content -->
-                            <div class="tab-content p-3">
-                                <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">
-                                    <h4>My Batches</h4>
+<!--                            <div class="tab-content p-3">-->
+<!--                                <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">-->
+<!--                                    <h4>My Batches</h4>-->
                                     <div class="card mb-4 shadow-sm" th:each="b : ${facultyAllBatches}">
 
                                         <div class="card-header bg-light d-flex justify-content-between">
@@ -925,16 +940,16 @@ label[for="photoInput"]:hover {
                                         <!--                        </div>-->
                                     </div>
 
-                                </div>
-                            </div>
-                        </div>
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                     <!-- Right Section (Shortcuts) -->
                     <div class="col-lg-4 col-md-4">
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
-                                <div th:insert="~{fragments :: shortcut-student}"></div>
+                                <div th:insert="~{fragments :: shortcut-faculty}"></div>
                             </div>
                         </div>
                     </div>
@@ -944,22 +959,22 @@ label[for="photoInput"]:hover {
 
             <!-- Notes -->
             <div id="notes" class="dashboard-section">
-                <h4 class="mt-3">📚 My Notes</h4>
+                <h3 class="section-heading">Notes</h3>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
-                        <div class="card p-3">
+<!--                        <div class="card p-3">-->
 
                             <!-- Tabs -->
-                            <ul class="nav nav-tabs" id="myTab4" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="batch-notes-tab" data-bs-toggle="tab"
-                                            data-bs-target="#batch_notes" type="button">Batch Notes</button>
-                                </li>
-                            </ul>
+<!--                            <ul class="nav nav-tabs" id="myTab4" role="tablist">-->
+<!--                                <li class="nav-item" role="presentation">-->
+<!--                                    <button class="nav-link active" id="batch-notes-tab" data-bs-toggle="tab"-->
+<!--                                            data-bs-target="#batch_notes" type="button">Batch Notes</button>-->
+<!--                                </li>-->
+<!--                            </ul>-->
 
                             <!-- Tab Content -->
-                            <div class="tab-content p-3">
-                                <div class="tab-pane fade show active" id="batch_notes" role="tabpanel">
+<!--                            <div class="tab-content p-3">-->
+<!--                                <div class="tab-pane fade show active" id="batch_notes" role="tabpanel">-->
                                     <h5>Notes</h5>
                                     <div class="mb-3">
                                         <label for="batch_id" class="form-label">Select your batch to get notes:</label>
@@ -994,9 +1009,9 @@ label[for="photoInput"]:hover {
                                     </div>
 
 
-                                </div>
-                            </div>
-                        </div>
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <!---->
                         <!--                        -->
                     </div>
@@ -1005,7 +1020,7 @@ label[for="photoInput"]:hover {
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
-                                <div th:insert="~{fragments :: shortcut-student}"></div>
+                                <div th:insert="~{fragments :: shortcut-faculty}"></div>
                             </div>
                         </div>
                     </div>
@@ -1015,7 +1030,7 @@ label[for="photoInput"]:hover {
 
             <!-- Assignments -->
             <div id="assignments" class="dashboard-section">
-                <h3 class="text-center mt-3">--Assignment Management--</h3>
+                <h3 class="section-heading">Assignment Management</h3>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3">
@@ -1180,7 +1195,7 @@ label[for="photoInput"]:hover {
 
             <!-- Attendance -->
             <div id="attendance" class="dashboard-section">
-                <h3 class="text-center mt-3">--Attendance Management--</h3>
+                <h3 class="section-heading">Attendance Management</h3>
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
                         <div class="card p-3">

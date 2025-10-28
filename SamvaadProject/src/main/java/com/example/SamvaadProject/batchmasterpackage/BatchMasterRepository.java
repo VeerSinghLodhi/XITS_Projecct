@@ -19,8 +19,11 @@ public interface BatchMasterRepository extends JpaRepository<BatchMaster, Long> 
     @Query("Select b from BatchMaster b where b.faculty.userId=:userId and b.status=:status")
     List<BatchMaster>getAllBatchesByFaculty(@Param("userId")Long userId,@Param("status")String status);
 
-    @Query("SELECT b FROM BatchMaster b WHERE b.faculty.userId = :facultyId ")
+    @Query("SELECT b FROM BatchMaster b " +
+            "WHERE b.faculty.userId = :facultyId " +
+            "ORDER BY CASE WHEN b.status = 'ARCHIVED' THEN 1 ELSE 0 END, b.batchId DESC")
     List<BatchMaster> findByFacultyId(@Param("facultyId") Long facultyId);
+
 
     @Query("SELECT b FROM BatchMaster b WHERE b.course.courseId IN :courseIds")
     List<BatchMaster> findByCourseId(@Param("courseIds") List<Long>courseIds);

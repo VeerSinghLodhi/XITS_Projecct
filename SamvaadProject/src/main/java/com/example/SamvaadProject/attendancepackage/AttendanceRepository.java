@@ -48,5 +48,15 @@ public interface AttendanceRepository extends JpaRepository<AttendanceMaster, Lo
        """)
     Long countDistinctSessionsByBatchId(@Param("batchId") Long batchId);
 
+    @Query("SELECT new com.example.SamvaadProject.attendancepackage.AttendanceDTO(" +
+            "a.admission.admissionId, " +
+            "a.status, " +
+            "CAST(a.attendanceDate AS string)) " +
+            "FROM AttendanceMaster a " +
+            "JOIN a.admission.studentBatchMappings sbm " +
+            "WHERE sbm.batch.batchId = :batchId " +
+            "AND a.admission.userMaster.userId = :userId")
+    List<AttendanceDTO> findAttendanceByUserIdAndBatchId(@Param("userId") Long userId,
+                                                         @Param("batchId") Long batchId);
 
 }

@@ -1599,7 +1599,7 @@
           return;
       }
 
-      fetch("/student/course/material/batch/"+batch_id) // Spring Boot endpoint returning JSON
+      fetch("/course/material/batch/"+batch_id) // Spring Boot endpoint returning JSON
           .then(response => response.json())
           .then(pdfs => {
               tableBody.innerHTML = "";
@@ -1616,8 +1616,8 @@
                           <td>${pdf.documentName}</td>
                           <td>${pdf.uploadedAt}</td>
                           <td>
-                          <a href="/student/pdf/view/${pdf.pdfId}" class="btn btn-sm btn-outline-success mb-3 mb-lg-0 mb-sm-0">View</a>
-                          <a href="/student/notes/download/${pdf.pdfId}" class="btn btn-primary btn-sm" >Download</a>
+                          <a href="/course/pdf/view/${pdf.pdfId}" class="btn btn-sm btn-outline-success mb-3 mb-lg-0 mb-sm-0">View</a>
+                          <a href="/notes/download/${pdf.pdfId}" class="btn btn-primary btn-sm" >Download</a>
                           </td>
                       </tr>
                   `;

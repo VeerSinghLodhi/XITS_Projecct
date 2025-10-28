@@ -513,7 +513,7 @@ label[for="photoInput"]:hover {
         </div>
     </div>
 </div>
-
+<div id="showattendance2"></div>
 <!-- Container for dynamically generated modals -->
 <div id="allAssignmentModals"></div>
 
@@ -527,8 +527,8 @@ label[for="photoInput"]:hover {
                             class="bi bi-house me-2"></i>Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profile"><i class="bi bi-person me-2"></i>My
                         Profile</a></li>
-<!--                    <li class="nav-item"><a class="nav-link" href="#students"><i-->
-<!--                            class="bi bi-people me-2"></i>Students</a></li>-->
+                    <li class="nav-item"><a class="nav-link" href="#batch"><i
+                            class="bi bi-people me-2"></i>My Batches</a></li>
 <!--                    <li class="nav-item"><a class="nav-link" href="#courses"><i-->
 <!--                            class="bi bi-mortarboard me-2"></i>Courses</a></li>-->
                     <li class="nav-item"><a class="nav-link" href="#assignments"><i
@@ -878,6 +878,70 @@ label[for="photoInput"]:hover {
                 </div>
             </div>
 
+
+            <div id="batch" class="dashboard-section">
+                  <h4 class="mt-3">My Batch</h4>
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                        <div class="card p-3">
+
+
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs" id="myTab5" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="newuser-tab" data-bs-toggle="tab"
+                                            data-bs-target="#addnewuser" type="button">Batches</button>
+                                </li>
+
+                            </ul>
+
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">
+                                    <h4>My Batches</h4>
+                                    <div class="card mb-4 shadow-sm" th:each="b : ${facultyAllBatches}">
+
+                                        <div class="card-header bg-light d-flex justify-content-between">
+                                            <div><h4 class="card-title" th:text="${b.name}">Batch Name</h4></div>
+                                            <div>
+                                                <span class="badge bg-success" th:if="${b.status}=='ACTIVE'">Active</span>
+                                                <span class="badge rounded-pill bg-danger" th:unless="${b.status}=='ACTIVE'">Archived</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mb-1"><strong>Time:</strong> <span th:text="${#temporals.format(b.startDate,'hh:mm a')}">10:00 AM</span></p>
+                                                <p class="card-text mb-3"><strong>Mode:</strong> <span th:text="${b.mode}">Online</span></p>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mb-1"><strong>Start Date:</strong> <span th:text="${#temporals.format(b.startDate,'dd-MM-yyyy')}">01-01-2025</span></p>
+                                                <p class="card-text mb-1"><strong>Faculty:</strong> <span th:text="${b.faculty.fullName}"></span></p>
+
+                                            </div>
+                                            <div class="mt-3 d-flex justify-content-end">
+                                                <!--                              <a th:href="@{'admin/batch/edit/' + ${b.batchId}}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i>Edit</a>-->
+                                            </div>
+                                        </div>
+                                        <!--                        </div>-->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section (Shortcuts) -->
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut-student}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:insert="~{fragments :: footer}"></div>
+            </div>
+
             <!-- Assignments -->
             <div id="assignments" class="dashboard-section">
                 <h3 class="text-center mt-3">--Assignment Management--</h3>
@@ -1115,62 +1179,6 @@ label[for="photoInput"]:hover {
                                     </div>
                                 </div>
 
-                                <!--                                <div class="tab-pane fade show active" id="addnewattendance" role="tabpanel">-->
-<!--                                    <h3 class="mb-4 text-center ">Mark Attendance</h3>-->
-<!--                                    <form th:action="@{/MarkedAttendance}" method="post"-->
-<!--                                          onsubmit="validateDate(event)">-->
-<!--                                        <div class="mb-3">-->
-<!--                                            <label for="batchSelect" class="form-label">Select Course</label>-->
-<!--                                            <select id="batchSelect" name="batchSelect"-->
-<!--                                                    class="form-select shadow-sm" required>-->
-<!--                                                <option value="" disabled selected>&#45;&#45;Select a batch&#45;&#45;</option>-->
-<!--                                                <option th:if="${batches == null || batches.isEmpty()}" value=""-->
-<!--                                                        disabled selected>Yet Course Assigned To You</option>-->
-<!--                                                &lt;!&ndash;                                                <option th:unless="${batches == null || batches.isEmpty()}"  disabled selected>Select Option</option>&ndash;&gt;-->
-<!--                                                <option th:each="batch : ${batches}" th:value="${batch.batchId}"-->
-<!--                                                        th:text="${batch.name}"-->
-<!--                                                        th:selected="${batch.batchId} == ${selectedBatchId}"></option>-->
-<!--                                            </select>-->
-<!--                                        </div>-->
-
-
-<!--                                        <div class="mb-3">-->
-<!--                                            <label for="attendanceDate" class="form-label">Select Date</label>-->
-<!--                                            <input type="date" id="attendanceDate" name="attendance"-->
-<!--                                                   th:value="${selectedDate}" class="form-control shadow-sm" required>-->
-<!--                                            <p id="dateError" class="text-danger mt-1" style="display: none;"></p>-->
-<!--                                        </div>-->
-
-
-<!--                                        <div class="mb-3 ">-->
-<!--                                            <label class="form-label fw-bold ">Students</label>-->
-<!--                                            <div class="form-check form-switch">-->
-<!--                                                <input class="form-check-input" type="checkbox" role="switch"-->
-<!--                                                       id="selectAll">-->
-<!--                                                <label class="form-check-label" for="selectAll">Marked All</label>-->
-<!--                                            </div>-->
-<!--                                            <div id="studentList" class="mt-2 ps-3">-->
-<!--                                                &lt;!&ndash;                                                <div class="form-check form-switch">&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>&ndash;&gt;-->
-<!--                                                &lt;!&ndash;                                                </div>&ndash;&gt;-->
-<!--                                            </div>-->
-<!--                                            &lt;!&ndash;                                            <div id="studentList" class="mt-2 ps-3" th:each="names : ${Studentname}">&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                                <div class="form-check form-switch">&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                                    <input class="form-check-input student-checkbox" type="checkbox" role="switch" name="attendanceStatus" th:id="'student-' + ${names.admission_id} " th:value="${names.admission_id}">&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                                    <label class="form-check-label" th:for="'student-' + ${names.admission_id}" th:text="${names.full_name}">Switch checkbox input</label>&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                                </div>&ndash;&gt;-->
-<!--                                            &lt;!&ndash;                                            </div>&ndash;&gt;-->
-<!--                                        </div>-->
-
-<!--                                        <div class="d-flex justify-content-end">-->
-<!--                                            <button type="submit" class="btn btn-primary px-4">Save-->
-<!--                                                Attendance</button>-->
-<!--                                        </div>-->
-<!--                                    </form>-->
-
-<!--                                </div>-->
-
                                 <div class="tab-pane fade " id="updateattendances" role="tabpanel">
                                     <h5 class="text-center mb-3">Update Attendance</h5>
                                     <form id="attendanceForm" th:action="@{/UpdateAttendance}" method="post">
@@ -1244,8 +1252,41 @@ label[for="photoInput"]:hover {
                                 </div>
 
                                 <div class="tab-pane fade" id="showstudentattendance" role="tabpanel">
-                                    <h5>All Assignments </h5>
-                                    <p>User Notifications list goes here.</p>
+                                    <h4>Show Student Attendance</h4>
+                                    <div class="row justify-content-end mb-3">
+                                        <div class="col">
+                                            <div class="input-group">
+                                                <span class="input-group-text">Select Batch</span>
+                                                <select class="form-select" id="getbatchid">
+                                                    <option th:if="${batches == null || batches.isEmpty()}" disabled selected>No Batches Currently
+                                                        Running
+                                                    </option>
+                                                    <option th:unless="${batches == null || batches.isEmpty()}" value="" disabled selected>Select
+                                                        Batch
+                                                    </option>
+                                                    <option th:each="batch : ${batches}" th:text="${batch.name}" th:value="${batch.batchId}"
+                                                            th:selected="${batch.course.courseId} == ${SelectedCourseId}"></option>
+                                                </select>
+                                                <a id="ShowAll" class="btn btn-success">Show</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="attendancetable" style="display:none">
+                                        <table class="table table-bordered text-center align-middle">
+                                            <thead class="table-dark">
+                                            <tr>
+                                                <th>Admission ID</th>
+                                                <th>Student Name</th>
+                                                <th>Presenties</th>
+                                                <th>Percentage</th>
+                                                <th>Remark</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="showattendancetable">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1751,6 +1792,137 @@ document.getElementById('selectAll').addEventListener('change', function () {
     });
 
     */
+</script>
+
+<!--For show attendance-->
+<script>
+    document.getElementById("getbatchid").addEventListener("change", function () {
+      let batchId = this.value;
+
+     // console.log("Batch Id " + batchId);
+
+      if (batchId) {
+       // console.log("Inside the attendance mapping");
+       document.getElementById("attendancetable").style.display="block";
+        let tbody = document.getElementById("showattendancetable");
+        tbody.innerHTML = "";
+
+        fetch("/getstudentsattendance/" + batchId)
+          .then(res => res.json())
+          .then(data => {
+            if (data.length === 0) {
+              tbody.innerHTML = "<tr><td colspan='5' class='text-center text-muted'>No Student Found</td></tr>";
+              return;
+            }
+
+            data.forEach(student => {
+              let row = `
+                <tr>
+                  <td>
+                    <button type="button" class="btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal_${student.admissionId}">
+                      <span>${student.admissionId}</span>
+                    </button>
+                  </td>
+
+                  <td>
+                    <button type="button" class="btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modal_${student.admissionId}">
+                      <span>${student.fullName}</span>
+                    </button>
+                  </td>
+
+                  <td data-bs-toggle="tooltip"
+                      title="Present: ${student.presentCount}, Absent: ${student.absentCount}">
+                    ${student.presentCount} Out Of ${student.totalAttendance}
+                  </td>
+
+                  <td>
+                    <div class="progress" style="height: 20px;">
+                      <div class="progress-bar ${student.badgeClass}"
+                           style="width: ${student.percentage}%; ">
+                        ${student.percentage.toFixed(2)}%
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <span class="${student.badgeClass}">
+                      ${student.status}
+                    </span>
+                  </td>
+                </tr>
+              `;
+              tbody.innerHTML += row;
+            });
+          });
+
+        let showattendanceDiv = document.getElementById("showattendance2");
+
+  fetch("/getstudentsattendancefulldetails/" + batchId)
+    .then(res => res.json())
+    .then(data => {
+      let students = data.students;
+      let attendance = data.attendance;
+
+      // Clear previous modals
+      showattendanceDiv.innerHTML = "";
+
+      if (!students || students.length === 0) {
+        showattendanceDiv.innerHTML = "<tr><td colspan='5' class='text-center text-muted'>No Attendance Found</td></tr>";
+        return;
+      }
+
+      //console.log("Jay Ho");
+
+      students.forEach(student => {
+        let studentAttendance = attendance.filter(att => att.admission_id === student.admissionId);
+       // console.log("Size is "+studentAttendance.length);
+
+          let rows = studentAttendance.map(att => `
+          <tr>
+            <td>${att.attendanceDate}</td>
+            <td>${att.status}</td>
+          </tr>
+        `).join("");
+
+      //  console.log("rows "+rows);
+
+            let row = `
+        <div class="modal fade" id="modal_${student.admissionId}" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Attendance for ${student.fullName}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <table class="table table-bordered table-striped table-hover text-center align-middle">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${rows}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      showattendanceDiv.innerHTML += row;
+
+      });
+    });
+
+      }
+    });
 </script>
 
 

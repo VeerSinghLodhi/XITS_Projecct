@@ -9,6 +9,7 @@ import com.example.SamvaadProject.attendance_view.attendanceview_repo;
 import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
 import com.example.SamvaadProject.batchmasterpackage.BatchMasterRepository;
 import com.example.SamvaadProject.coursepackage.CourseRepository;
+import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import com.example.SamvaadProject.usermasterpackage.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -321,6 +322,48 @@ public class AttendanceController {
 //            return objectMap;
 //        }
 //
+
+    @GetMapping("/getStudentAttendance/{batchId}")
+    @ResponseBody
+    public Map<String, Object> getStudentAttendance(@PathVariable Long batchId, HttpSession session) {
+        Long userId=(Long) session.getAttribute("userId");
+        UserMaster userMaster=userRepository.findById(userId).orElse(null);
+        List<AttendanceDTO> attendanceList = attendanceRepository.findAttendanceByUserIdAndBatchId(userId, batchId);
+
+        long presentCount = attendanceList.stream()
+                .filter(a -> "Present".equalsIgnoreCase(a.getStatus()))
+                .count();
+
+        long totalDays = attendanceList.size();
+        double percentage = totalDays > 0 ? (presentCount * 100.0 / totalDays) : 0.0;
+
+        String remark;
+        String badgeClass;
+        if (percentage >= 90) {
+            remark = "Excellent";
+            badgeClass = "bg-success";
+        } else if (percentage >= 75) {
+            remark = "Good";
+            badgeClass = "bg-primary";
+        } else if (percentage >= 50) {
+            remark = "Average";
+            badgeClass = "bg-warning text-dark";
+        } else {
+            remark = "Poor";
+            badgeClass = "bg-danger";
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("attendanceList", attendanceList);
+        response.put("presentCount", presentCount);
+        response.put("totalDays", totalDays);
+        response.put("percentage", percentage);
+        response.put("remark", remark);
+        response.put("badgeClass", badgeClass);
+
+        return response;
+    }
+
 
 
 }

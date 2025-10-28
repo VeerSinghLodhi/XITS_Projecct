@@ -26,13 +26,13 @@ public class PdfController {
     @Autowired
     CourseRepository courseRepository;
 
-    @GetMapping("/admin/document")
-    public String documents(@RequestParam(value = "course", required = false) Long cId,
-                            Model model) {
-        model.addAttribute("courses", courseRepository.findAll());
-        model.addAttribute("pdfs", pdfRepository.findByCourse_CourseId(cId));
-        return "document";
-    }
+//    @GetMapping("/admin/document")
+//    public String documents(@RequestParam(value = "course", required = false) Long cId,
+//                            Model model) {
+//        model.addAttribute("courses", courseRepository.findAll());
+//        model.addAttribute("pdfs", pdfRepository.findByCourse_CourseId(cId));
+//        return "document";
+//    }
 
     @GetMapping("/admin/view/{id}")
     public ResponseEntity<byte[]> view(@PathVariable Long id) {
@@ -95,11 +95,11 @@ public class PdfController {
         pdfRepository.deleteById(pdfId);
 
         redirectAttributes.addAttribute("notePdfDeleted",true);
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/dashboard#studymaterial#showcoursematerial";
     }
 
 
-    @GetMapping("/student/pdf/view/{id}")
+    @GetMapping("/course/pdf/view/{id}")
     public ResponseEntity<byte[]> viewForFaculty(@PathVariable Long id) {
         PdfMaster pdf = pdfRepository.findById(id)
                 .orElse(null);

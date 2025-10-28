@@ -947,15 +947,16 @@
 <!--                            </ul>-->
 
                             <!-- Tab Content -->
-                            <div class="tab-content p-3">
-                                <div class="tab-pane fade show active" id="assignment_tab" role="tabpanel">
-                                    <h5>Assignments</h5>
+<!--                            <div class="tab-content p-3">-->
+<!--                                <div class="tab-pane fade show active" id="assignment_tab" role="tabpanel">-->
+<!--                                    <h5>Assignments</h5>-->
 
                                     <div class="filter-row mb-3">
                                         <form th:action="@{/studentAssignments/list}" method="get" style="margin:0;">
                                             <label for="batchSelect" class="form-label">Search by batch:</label>
                                             <select id="batchSelect" name="batchId" class="form-select" onchange="this.form.submit()">
-                                                <option value="" th:selected="${selectedBatchId == null}" >All batches</option>
+<!--                                                <option value="" th:selected="${selectedBatchId == null}" >All batches</option>-->
+                                                <option value="" selected disabled>--Select a batch--</option>
                                                 <option th:each="b : ${batches}"
                                                         th:value="${b.batchId}"
                                                         th:text="${b.name}"
@@ -1041,7 +1042,7 @@
                                                             </span>
 
 
-                                                            <button class="btn btn-primary btn-sm view-feedback-btn"
+                                                            <button th:unless="${!hasFeedback[a.assignmentId]}" class="btn btn-primary btn-sm view-feedback-btn"
                                                                     th:data-submit-id="${submittedMap[a.assignmentId].submitId}"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#assignmentfeedback">
@@ -1100,8 +1101,9 @@
             <!-- Attendance -->
             <div id="attendance" class="dashboard-section">
                 <h3 class="text-center mt-3">-- My Attendance --</h3>
-
-                <div class="card p-4 mt-4 shadow-sm border-0 rounded-3">
+                <div class="row mt-4">
+                    <div class="col-lg-8 col-md-8 mb-3">
+                <div class="card p-4 shadow-sm border-0 rounded-3">
                     <!-- Select Batch -->
                     <div class="row mb-3">
                         <div class="col-md-6 mx-auto">
@@ -1146,6 +1148,16 @@
                                 </thead>
                                 <tbody id="studentAttendanceBody"></tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <!-- Thymeleaf fragment for shortcuts -->
+                                <div th:insert="~{fragments :: shortcut-student}"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

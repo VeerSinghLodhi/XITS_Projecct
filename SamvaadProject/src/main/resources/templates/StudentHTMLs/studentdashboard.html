@@ -202,7 +202,7 @@
   margin: 0;
 }
 
-                   #dashboard-short a {
+      #dashboard-shortcut-student a {
     color: #212529;
     text-decoration: none;
     transition: transform 0.2s ease, color 0.2s ease;
@@ -382,9 +382,9 @@
             <!-- Home -->
             <div id="home" class="dashboard-section active">
 
-                <div class="row">
-                    <div class="col-lg-8 col-md-8 mb-3">
-                        <div id="adminAdministrator" class="my-3">
+                <div class="row my-4">
+                    <div class="col-lg-8 col-md-8 ">
+                        <div id="adminAdministrator" class="mb-3">
                     <div class="card">
                         <div class="admin-profile">
 <!--                            <div class="admin-avatar">X</div>-->
@@ -425,8 +425,8 @@
                     </div>
                 </div>
                     </div>
-                    <div class="col-lg-4 col-md-4">
-                        <div class="card shadow-sm">
+                    <div class="col-lg-4 col-md-4" >
+                        <div class="card mb-3">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
                                 <div th:insert="~{fragments :: shortcut-student}"></div>
@@ -441,7 +441,7 @@
                             <div class="emoji mb-2">🎓</div>
                             <h5>My Total Batches</h5>
 <!--                            <p><span class="badge bg-success"  th:text="${studentbatches.size()}"></span></p>-->
-                            <h3 th:text="${studentbatches.size()}"></h3>
+                            <h3 th:text="${batches.size()}"></h3>
                         </div>
                     </div>
                     <div class="col-md-3 mb-2">
@@ -479,7 +479,7 @@
                     <div class="card-body">
                         <ul class="list-group">
                             <ul class="list-group">
-                                <li th:each="batch : ${studentbatches}"
+                                <li th:each="batch : ${batches}"
                                     class="list-group-item d-flex justify-content-between align-items-center">
 
                                     <!-- Batch Name & ID -->
@@ -543,7 +543,7 @@
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 mb-3">
 <!--                        <div class="col-lg-8 col-md-8 mb-3">-->
-                            <div class="card p-3 mb-5 bg-white rounded">
+                            <div class="card  ">
                                 <div class="card-body text-center">
 
                                     <!-- Profile Photo Wrapper -->
@@ -585,12 +585,12 @@
 
                                     <!-- Name & Info -->
                                     <h3 th:text="${user_master.fullName}" class="mt-3"></h3>
-                                    <p class="text-muted">FACULTY</p>
+                                    <p class="text-muted">STUDENT</p>
 
                                     <div class="text-center">
                                         <button class="btn btn-sm btn-primary"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#updateFacultyModel">
+                                                data-bs-target="#updateStudentModel">
                                             <i class="bi bi-pencil-square me-1"></i>Edit
                                         </button>
                                     </div>
@@ -762,7 +762,7 @@
                     </div>
                     <!-- Right Section (Shortcuts) -->
                     <div class="col-lg-4 col-md-4">
-                        <div class="card shadow-sm">
+                        <div class="card ">
                             <div class="card-body">
                                 <!-- Thymeleaf fragment for shortcuts -->
                                 <div th:insert="~{fragments :: shortcut-student}"></div>
@@ -785,39 +785,52 @@
                             <ul class="nav nav-tabs" id="myTab2" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="newuser-tab" data-bs-toggle="tab"
-                                            data-bs-target="#addnewuser" type="button">Add New User</button>
+                                            data-bs-target="#addnewuser" type="button">Batches</button>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="userupdate-tab" data-bs-toggle="tab"
-                                            data-bs-target="#update_user" type="button">Update</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="usernotifications-tab" data-bs-toggle="tab"
-                                            data-bs-target="#user_notifications" type="button">Notifications</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="user-tab" data-bs-toggle="tab"
-                                            data-bs-target="#allusers" type="button">All Users</button>
-                                </li>
+<!--                                <li class="nav-item" role="presentation">-->
+<!--                                    <button class="nav-link" id="userupdate-tab" data-bs-toggle="tab"-->
+<!--                                            data-bs-target="#update_user" type="button">Update</button>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item" role="presentation">-->
+<!--                                    <button class="nav-link" id="usernotifications-tab" data-bs-toggle="tab"-->
+<!--                                            data-bs-target="#user_notifications" type="button">Notifications</button>-->
+<!--                                </li>-->
+<!--                                <li class="nav-item" role="presentation">-->
+<!--                                    <button class="nav-link" id="user-tab" data-bs-toggle="tab"-->
+<!--                                            data-bs-target="#allusers" type="button">All Users</button>-->
+<!--                                </li>-->
                             </ul>
 
                             <!-- Tab Content -->
                             <div class="tab-content p-3">
-                                <div class="tab-pane fade" id="allusers" role="tabpanel">
-                                    <h5>User Profile</h5>
-                                    <p>All User will be show here.</p>
-                                </div>
                                 <div class="tab-pane fade show active" id="addnewuser" role="tabpanel">
-                                    <h4>Add New User</h4>
+                                    <h4>My Batches</h4>
+                                    <div class="card mb-4 shadow-sm" th:each="b : ${batches}">
 
-                                </div>
-                                <div class="tab-pane fade" id="update_user" role="tabpanel">
-                                    <h4 class="mb-3">Available User</h4>
-                                    <h3>Users Details to be updated here.</h3>
-                                </div>
-                                <div class="tab-pane fade" id="user_notifications" role="tabpanel">
-                                    <h5>User Notifications</h5>
-                                    <p>User Notifications list goes here.</p>
+                                        <div class="card-header bg-light d-flex justify-content-between">
+                                            <div><h4 class="card-title" th:text="${b.name}">Batch Name</h4></div>
+                                            <div>
+                                                <span class="badge bg-success" th:if="${b.status}=='ACTIVE'">Active</span>
+                                                <span class="badge rounded-pill bg-danger" th:unless="${b.status}=='ACTIVE'">Archived</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mb-1"><strong>Time:</strong> <span th:text="${#temporals.format(b.startDate,'hh:mm a')}">10:00 AM</span></p>
+                                                <p class="card-text mb-3"><strong>Mode:</strong> <span th:text="${b.mode}">Online</span></p>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <p class="card-text mb-1"><strong>Start Date:</strong> <span th:text="${#temporals.format(b.startDate,'dd-MM-yyyy')}">01-01-2025</span></p>
+                                                <p class="card-text mb-1"><strong>Faculty:</strong> <span th:text="${b.faculty.fullName}"></span></p>
+
+                                            </div>
+                                            <div class="mt-3 d-flex justify-content-end">
+                                                <!--                              <a th:href="@{'admin/batch/edit/' + ${b.batchId}}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i>Edit</a>-->
+                                            </div>
+                                        </div>
+                                        <!--                        </div>-->
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -855,10 +868,11 @@
                                 <div class="tab-pane fade show active" id="batch_notes" role="tabpanel">
                                     <h5>Notes</h5>
                                     <div class="mb-3">
-                                        <label for="batchId" class="form-label">Select your batch to get notes:</label>
+                                        <label for="batch_id" class="form-label">Select your batch to get notes:</label>
                                         <select id="batch_id" name="batchId" class="form-select" required>
                                             <option value="" selected disabled>-- Select Batch --</option>
-                                            <option th:each="batch : ${studentbatches}" th:value="${batch.batchId}"
+<!--                                            <option th:each="batch : ${studentbatches}" th:value="${batch.batchId}"-->
+                                            <option th:each="batch : ${batches}" th:value="${batch.batchId}"
                                                     th:text="${batch.name}+' (BID -'+${batch.batchId}+')'"></option>
                                         </select>
                                     </div>

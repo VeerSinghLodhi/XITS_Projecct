@@ -150,7 +150,7 @@ public class UserController {
         model.addAttribute("allfaculties",userRepository.findByRoleOrderByFullNameAsc(UserMaster.Role.FACULTY));  // All Faculties for new batch creation.
         List<BatchMaster> allBatches = batchMasterRepository.findAll();
         allBatches.sort(Comparator.comparing(
-                b -> "ARCHIVED".equalsIgnoreCase(b.getStatus()) // ARCHIVED BATCHES WILL SHOW AT THE END 
+                b -> "ARCHIVED".equalsIgnoreCase(b.getStatus()) // ARCHIVED BATCHES WILL SHOW AT THE END
         ));
         model.addAttribute("allbatches", allBatches);
 
@@ -559,7 +559,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/student/course/material/batch/{batchId}")
+    @GetMapping("/course/material/batch/{batchId}")
     @ResponseBody
     public List<PdfDTO> getMaterialByBatch(@PathVariable("batchId")Long batchId){
         Long courseId=batchMasterRepository.findById(batchId).orElse(null).getCourse().getCourseId();
@@ -570,7 +570,7 @@ public class UserController {
     }
 
 //    Download Notes
-@GetMapping("/student/notes/download/{pdfId}")
+@GetMapping("/notes/download/{pdfId}")
 public ResponseEntity<byte[]> getResume(@PathVariable("pdfId")Long pdfId) {
 
     PdfMaster pdfMaster=pdfRepository.findById(pdfId).orElse(null);

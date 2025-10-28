@@ -176,7 +176,7 @@ public class StudentAssignmentController {
             e.printStackTrace();
             return "login";
         }
-        return "redirect:/student/dashboard";
+        return "redirect:/student/dashboard#assignments";
     }
 
     @PostMapping("/delete/{assignmentId}")
@@ -199,94 +199,6 @@ public class StudentAssignmentController {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-//    @GetMapping("/feedback/{submitId}")
-//    public String viewFeedback(@PathVariable Long submitId, Model model) {
-//        SubmitAssignment submission = submitAssignmentRepository.findById(submitId).orElse(null);
-//        if (submission == null) {
-//            model.addAttribute("feedbackSummary", "No submission found for the provided ID.");
-//            return "Student_assignment_feedback";
-//        }
-//
-//        AssignmentMaster assignment = assignmentRepository
-//                .findById(submission.getAssignment().getAssignmentId())
-//                .orElse(null);
-//
-//        if (assignment == null) {
-//            model.addAttribute("feedbackSummary", "Assignment details for this submission were not found.");
-//            return "Student_assignment_feedback";
-//        }
-//
-//        model.addAttribute("assignment", assignment);
-//        model.addAttribute("submission", submission);
-//
-//        String feedbackJson = submission.getGptFeedback();
-//        if (feedbackJson == null || feedbackJson.isBlank()) {
-//            model.addAttribute("feedbackSummary", "Evaluation Pending or Not Yet Available.");
-//            model.addAttribute("feedbackGrade", null);
-//            model.addAttribute("feedbackVerdict", null);
-//            model.addAttribute("feedbackIssues", new ArrayList<>());
-//            model.addAttribute("feedbackSuggestions", new ArrayList<>());
-//            model.addAttribute("feedbackRaw", "No feedback data available.");
-//            return "Student_assignment_feedback";
-//        }
-//
-//        try {
-//            String cleanedJson = feedbackJson.trim();
-//            if (cleanedJson.startsWith("json")) cleanedJson = cleanedJson.substring(7).trim();
-//            else if (cleanedJson.startsWith("")) cleanedJson = cleanedJson.substring(3).trim();
-//            if (cleanedJson.endsWith("```")) cleanedJson = cleanedJson.substring(0, cleanedJson.length() - 3).trim();
-//
-//            JsonNode root = mapper.readTree(cleanedJson);
-//
-//            if (root.has("error")) {
-//                String errorMessage = root.path("error").asText("API error details unavailable.");
-//                model.addAttribute("feedbackSummary", "Evaluation Failed: " + errorMessage);
-//                model.addAttribute("feedbackVerdict", "Failed");
-//                model.addAttribute("feedbackGrade", null);
-//                model.addAttribute("feedbackIssues", new ArrayList<>());
-//                model.addAttribute("feedbackSuggestions", new ArrayList<>());
-//                model.addAttribute("feedbackRaw", feedbackJson);
-//
-//                submission.setStatus("Failed");
-//                submission.setGptScore(null);
-//                submitAssignmentRepository.save(submission);
-//
-//                return "Student_assignment_feedback";
-//            }
-//            String statusValue = root.path("Status").asText(root.path("verdict").asText("Unknown"));
-//            int gradeValue = root.path("grade").asInt(-1);
-//
-//            List<String> issues = new ArrayList<>();
-//            if (root.has("issues") && root.get("issues").isArray()) {
-//                root.get("issues").forEach(i -> issues.add(i.asText()));
-//            }
-//
-//            List<String> suggestions = new ArrayList<>();
-//            if (root.has("suggestions") && root.get("suggestions").isArray()) {
-//                root.get("suggestions").forEach(s -> suggestions.add(s.asText()));
-//            }
-//            model.addAttribute("feedbackVerdict", statusValue);
-//            model.addAttribute("feedbackSummary", root.path("summary").asText("No summary provided."));
-//            model.addAttribute("feedbackGrade", (gradeValue >= 0) ? gradeValue : null);
-//            model.addAttribute("feedbackIssues", issues);
-//            model.addAttribute("feedbackSuggestions", suggestions);
-//            model.addAttribute("feedbackRaw", cleanedJson);
-//
-//            submission.setGptScore((gradeValue >= 0) ? gradeValue : null);
-//            submission.setStatus(statusValue);
-//            submitAssignmentRepository.save(submission);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            model.addAttribute("feedbackSummary", "Evaluation Failed: Invalid JSON or Parsing Error.");
-//            model.addAttribute("feedbackGrade", null);
-//            model.addAttribute("feedbackVerdict", null);
-//            model.addAttribute("feedbackIssues", new ArrayList<>());
-//            model.addAttribute("feedbackSuggestions", new ArrayList<>());
-//            model.addAttribute("feedbackRaw", feedbackJson);
-//        }
-//        return "Student_assignment_feedback";
-//    }
 @GetMapping("/feedback/{submitId}")
 @ResponseBody
 public ResponseEntity<Map<String, Object>> getFeedbackData(@PathVariable Long submitId) {

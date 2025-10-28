@@ -741,65 +741,6 @@ public Map<String, Boolean> verifyOtpAndUpdatePassword2(
     }
 
 
-//    @GetMapping("/list")
-//    public String listAssignments(HttpSession session,
-//                                  @RequestParam(required = false) Long batchId,
-//                                  Model model) {
-//        UserMaster student = (UserMaster) session.getAttribute("user");
-//        if (student == null || student.getRole() != UserMaster.Role.STUDENT) {
-//            model.addAttribute("error", "Unauthorized access");
-//            return "error";
-//        }
-//
-//        List<BatchMaster> batches = batchMasterRepository.findBatchesByStudent(student.getUserId());
-//        model.addAttribute("batches", batches);
-//        model.addAttribute("selectedBatchId", batchId);
-//
-//        List<Long> batchIds = batchId != null
-//                ? Collections.singletonList(batchId)
-//                : batches.stream().map(BatchMaster::getBatchId).collect(Collectors.toList());
-//
-//        List<AssignmentMaster> assignments = batchIds.isEmpty()
-//                ? Collections.emptyList()
-//                : assignmentRepository.findByBatch_BatchIdIn(batchIds);
-//
-//        List<SubmitAssignment> submittedAssignments =
-//                submitRepository.findByAdmission_UserMaster_UserId(student.getUserId());
-//
-//        Map<Long, SubmitAssignment> submittedMap = new HashMap<>();
-//        Map<Long, Boolean> deletableMap = new HashMap<>();
-//        Map<Long, Boolean> hasFeedback = new HashMap<>();
-//        Map<Long, String> feedbackSnippet = new HashMap<>();
-//
-//        for (SubmitAssignment sa : submittedAssignments) {
-//            Long aid = sa.getAssignment().getAssignmentId();
-//            submittedMap.put(aid, sa);
-//            deletableMap.put(aid, isSubmissionDeletable(sa));
-//            hasFeedback.put(aid, sa.getGptFeedback() != null && !sa.getGptFeedback().isBlank());
-//
-//            String snippet = "Pending evaluation...";
-//            try {
-//                if (sa.getGptFeedback() != null) {
-//                    snippet = sa.getGptFeedback().length() > 100
-//                            ? sa.getGptFeedback().substring(0, 100) + "..."
-//                            : sa.getGptFeedback();
-//                }
-//            } catch (Exception e) {
-//                snippet = "Pending evaluation...";
-//            }
-//            feedbackSnippet.put(aid, snippet);
-//        }
-//        Set<Long> submittedAssignmentIds = submittedMap.keySet();
-//
-//        model.addAttribute("submittedMap", submittedMap);
-//        model.addAttribute("assignments", assignments);
-//        model.addAttribute("submittedAssignmentIds", submittedAssignmentIds);
-//        model.addAttribute("deletableMap", deletableMap);
-//        model.addAttribute("hasFeedback", hasFeedback);
-//        model.addAttribute("feedbackSnippet", feedbackSnippet);
-//        return "Student_assignment";
-//    }
-
 
 
     @PostMapping("/faculty/updatePhoto")

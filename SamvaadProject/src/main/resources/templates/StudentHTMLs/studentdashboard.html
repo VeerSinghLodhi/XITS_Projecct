@@ -445,14 +445,14 @@
                         <a href="#assignments" class="card text-center text-dark text-decoration-none">
                             <div class="emoji mb-2">📚</div>
                             <h5>Assignments</h5>
-                            <p><span class="badge bg-danger">2 Pending</span></p>
+                            <p><span class="badge bg-danger" th:text="${pendingAssignments + ' Pending'}">2 Pending</span></p>
 <!--                            <h3>2 Pending</h3>-->
                         </a>
                     </div>
                     <div class="col-md-4 mb-2">
                         <a href="#attendance" class="card text-center text-dark text-decoration-none">
                             <div class="emoji mb-2">📅</div>
-                            <h5>Attendance</h5>
+                            <h5>Average Attendance</h5>
                             <p><span th:class="'badge ' + ${badgeClass}" th:text="${averageAttendance}">85%</span></p>
 <!--                            <h3>75%</h3>-->
                         </a>

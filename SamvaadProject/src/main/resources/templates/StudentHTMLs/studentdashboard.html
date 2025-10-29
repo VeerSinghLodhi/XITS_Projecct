@@ -433,37 +433,37 @@
                 </div>
                 <!-- Quick Stats -->
                 <div class="row g-3 text-center mb-4">
-                    <div class="col-md-3 mb-2">
-                        <div class="card text-center p-3 bg-primary text-white">
+                    <div class="col-md-4 mb-2">
+                        <a href="#batch" class="card text-center text-dark text-decoration-none">
                             <div class="emoji mb-2">🎓</div>
                             <h5>My Total Batches</h5>
-<!--                            <p><span class="badge bg-success"  th:text="${studentbatches.size()}"></span></p>-->
-                            <h3 th:text="${batches.size()}"></h3>
-                        </div>
+                            <p><span class="badge bg-success"  th:text="${studentbatches.size()}"></span></p>
+<!--                            <h3 th:text="${batches.size()}"></h3>-->
+                        </a>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="card text-center p-3 bg-success text-white">
+                    <div class="col-md-4 mb-2">
+                        <a href="#assignments" class="card text-center text-dark text-decoration-none">
                             <div class="emoji mb-2">📚</div>
                             <h5>Assignments</h5>
-<!--                            <p><span class="badge bg-danger">2 Pending</span></p>-->
-                            <h3>2 Pending</h3>
-                        </div>
+                            <p><span class="badge bg-danger">2 Pending</span></p>
+<!--                            <h3>2 Pending</h3>-->
+                        </a>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="card text-center p-3 bg-warning text-white">
+                    <div class="col-md-4 mb-2">
+                        <a href="#attendance" class="card text-center text-dark text-decoration-none">
                             <div class="emoji mb-2">📅</div>
                             <h5>Attendance</h5>
-<!--                            <p><span class="badge bg-success">85%</span></p>-->
-                            <h3>75%</h3>
-                        </div>
+                            <p><span th:class="'badge ' + ${badgeClass}" th:text="${averageAttendance}">85%</span></p>
+<!--                            <h3>75%</h3>-->
+                        </a>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <div class="card text-center p-3 bg-danger text-white">
-                            <div class="emoji mb-2">📝</div>
-                            <h5>Latest Result</h5>
-                            <h3 class="text-muted">8.5 CGPA</h3>
-                        </div>
-                    </div>
+<!--                    <div class="col-md-3 mb-2">-->
+<!--                        <div class="card text-center text-dark">-->
+<!--                            <div class="emoji mb-2">📝</div>-->
+<!--                            <h5>Latest Result</h5>-->
+<!--                            <h3 class="text-muted">8.5 CGPA</h3>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
 
                 </div>
@@ -1161,8 +1161,6 @@
                     </div>
                 </div>
             </div>
-
-
 
         </main>
     </div>

@@ -1,6 +1,7 @@
 package com.example.SamvaadProject.assignmentpackage;
 
 import com.example.SamvaadProject.batchmasterpackage.BatchMaster;
+import com.example.SamvaadProject.usermasterpackage.UserMaster;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -36,5 +37,8 @@ public interface AssignmentRepository extends JpaRepository<AssignmentMaster,Lon
         )
     """)
     Long countAssignmentsByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(a) FROM AssignmentMaster a WHERE a.professor=:professor")
+    Long getCountAssignmentsByFaculty(@Param("professor")UserMaster userMaster);
 
 }

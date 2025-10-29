@@ -221,6 +221,8 @@ public class UserController {
             model.addAttribute("profileUpdatedError", "Failed to update photo. Please try again.");
         }
 
+
+
 //        model.addAttribute("groupedAssignments",admissionRepository.findByUserMaster_UserId(userMaster.getUserId()));
         model.addAttribute("batches",batchMasterRepository.getAllBatchesByFaculty(userMaster.getUserId(),"ACTIVE")); //checking Status Too Active batch or archived
         model.addAttribute("facultyAllBatches",batchMasterRepository.findByFacultyId(userMaster.getUserId()));
@@ -308,14 +310,15 @@ public class UserController {
         }
         model.addAttribute("remark",remark);
         model.addAttribute("badgeClass",badgeClass);
-        model.addAttribute("averageAttendance",+ averageAttendance+"%");
+        model.addAttribute("averageAttendance", String.format("%.2f", averageAttendance).concat("%"));
 
 
-//        Long totalAssignments = assignmentRepository.count();
-//        Long submittedAssignments = submitAssignmentRepository.count();
-//        Long pendingAssignments = totalAssignments - submittedAssignments;
-//
-//        model.addAttribute("pendingAssignments", pendingAssignments);
+        Long totalAssignments = assignmentRepository.countAssignmentsByUserId(userId);
+        Long submitted_Assignments = submitRepository.countSubmissionsByUserId(userId);
+        Long pendingAssignments = totalAssignments - submitted_Assignments;
+
+        model.addAttribute("pendingAssignments", pendingAssignments);
+
 
         List<Long> batchIds = batchId != null
                 ? Collections.singletonList(batchId)

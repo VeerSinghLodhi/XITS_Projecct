@@ -613,35 +613,35 @@ h3.section-heading {
                 </div>
                 <div class="container-fluid mt-2">
                     <!-- Dashboard Cards -->
-                    <div class="row g-4">
-                        <div class="col-md-3">
+                    <div class="row g-3">
+                        <div class="col-md-4">
                             <div class="card text-center  text-dark">
                                 <div class="emoji mb-2">🎓</div>
                                 <h5>Total Students</h5>
                                 <h3>120</h3>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="card text-center text-dark">
                                 <div class="emoji mb-2">📚</div>
-                                <h5>Courses Assigned</h5>
-                                <h3>8</h3>
+                                <h5>Batches Assigned</h5>
+                                <h3 th:text="${facultyAllBatches.size()}">8</h3>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="card text-center text-dark">
                                 <div class="emoji mb-2">📝</div>
                                 <h5>Assignments Given</h5>
-                                <h3>15</h3>
+                                <h3 th:text="${totalAssignmentsGiven}">15</h3>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-center text-dark">
-                                <div class="emoji mb-2">📅</div>
-                                <h5>Attendance Today</h5>
-                                <h3>95%</h3>
-                            </div>
-                        </div>
+<!--                        <div class="col-md-3">-->
+<!--                            <div class="card text-center text-dark">-->
+<!--                                <div class="emoji mb-2">📅</div>-->
+<!--                                <h5>Attendance Today</h5>-->
+<!--                                <h3>95%</h3>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
 
                     <!-- Optional Message Section -->
@@ -1108,6 +1108,7 @@ h3.section-heading {
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Assignments</th>
+                                                    <th>Select New File</th>
                                                     <th>Update</th>
                                                 </tr>
                                                 </thead>
@@ -2371,23 +2372,39 @@ document.getElementById('selectAll').addEventListener('change', function () {
                     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
                     data.forEach(assignment => {
-                        let row = `
-        <tr>
-          <td>${assignment.title}</td>
-          <td>${assignment.pdfName} ${assignment.pdfDate}
-           <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank">View</a>
-            </td>
-       <td>
-        <form id="updateAssignmentForm" action="/updateassignment/${assignment.assignmentId}"
-                onsubmit="return checkUpdateForm(event)" method="post" enctype="multipart/form-data">
-                 <input type="hidden" name="_csrf" value="${csrfToken}">
-                    <input type="hidden" name="_method" value="put"/>
-                    <input type="file" name="file" class="mb-3" accept="application/pdf" required>
-                   <button type="submit" class="btn btn-sm btn-warning" id="assignmentUpdateButton">Update</button>
-               </form>
-           </td>
-        </tr>
-      `;
+               let row = `
+  <tr>
+    <!-- 1️⃣ Title -->
+    <td>${assignment.title}</td>
+
+    <!-- 2️⃣ Assignment Info -->
+    <td>
+      ${assignment.pdfName} (${assignment.pdfDate})
+      <a href="/studentAssignments/pdfs/${assignment.assignmentId}" target="_blank" class="ms-2">View</a>
+    </td>
+
+    <!-- 3️⃣ and 4️⃣ inside form -->
+    <td colspan="2">
+      <form id="updateAssignmentForm-${assignment.assignmentId}"
+            action="/updateassignment/${assignment.assignmentId}"
+            onsubmit="checkUpdateForm(event)"
+            method="post"
+            enctype="multipart/form-data"
+            class="d-flex align-items-center gap-2">
+
+        <input type="hidden" name="_csrf" value="${csrfToken}">
+        <input type="hidden" name="_method" value="put"/>
+
+        <!-- 3️⃣ File input -->
+        <input type="file" name="file"  accept="application/pdf" required class="form-control form-control-sm">
+
+        <!-- 4️⃣ Update button -->
+        <button type="submit" id="assignmentUpdateButton" class="btn btn-sm btn-warning">Update</button>
+      </form>
+    </td>
+  </tr>
+`;
+
                         tbody.innerHTML += row;
                     });
                 })
@@ -2427,7 +2444,7 @@ document.getElementById('selectAll').addEventListener('change', function () {
         // Submit the form after a short delay to allow popup to render
         setTimeout(() => {
             event.target.submit();
-        }, 4000); // 1s delay
+        }, 2000); // 2s delay
     }
 </script>
 

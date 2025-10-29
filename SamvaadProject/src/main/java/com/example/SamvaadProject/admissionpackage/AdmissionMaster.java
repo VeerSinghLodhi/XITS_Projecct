@@ -200,8 +200,7 @@ public class AdmissionMaster {
 
     @Transient
     public Double getLastBalanceAfterPayment() {
-
-
+//        System.out.println("Inside the LastPayment Method");
         if (!feePayments.isEmpty()) {
            // System.out.println("Ran for admission_id "+admissionId);
             return feePayments.get(feePayments.size() - 1).getBalanceAfterPayment();
@@ -226,6 +225,22 @@ public class AdmissionMaster {
 //        }
 //        return netFees;
 //    }
+
+    @Transient
+    public Double getAverageAttendancePercentage() {
+        if (attendances == null || attendances.isEmpty()) {
+            return 0.0;
+        }
+
+        long total = attendances.size();
+        long presentCount = attendances.stream()
+                .filter(a -> a.getStatus() != null && a.getStatus().equalsIgnoreCase("Present"))
+                .count();
+
+        return (presentCount * 100.0) / total;
+    }
+
+
 
 
 }

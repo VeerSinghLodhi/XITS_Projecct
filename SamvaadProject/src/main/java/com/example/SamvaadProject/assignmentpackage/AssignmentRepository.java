@@ -24,4 +24,17 @@ public interface AssignmentRepository extends JpaRepository<AssignmentMaster,Lon
     @Query("DELETE FROM AssignmentMaster a WHERE a.assignmentId = :assignmentId")
     void getAssignmentDelete(@Param("assignmentId") Long assignmentId);
 
+    List<AssignmentMaster> findByBatch_BatchId(Long batchId);
+
+    @Query("""
+        SELECT COUNT(a)
+        FROM AssignmentMaster a
+        WHERE a.batch.batchId IN (
+            SELECT sbm.batch.batchId
+            FROM StudentBatchMap sbm
+            WHERE sbm.admission.userMaster.userId = :userId
+        )
+    """)
+    Long countAssignmentsByUserId(@Param("userId") Long userId);
+
 }

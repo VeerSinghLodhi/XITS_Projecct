@@ -270,6 +270,53 @@ public class UserController {
         model.addAttribute("batches", batches);
         model.addAttribute("selectedBatchId", batchId);
 
+
+        List<AdmissionMaster> admissions = admissionRepository.findByUserMaster_UserId(userId);
+
+        double totalPercentage = 0.0;
+        int count = 0;
+
+        for (AdmissionMaster admission : admissions) {
+            double avg = admission.getAverageAttendancePercentage();
+            if (avg > 0) {
+                totalPercentage += avg;
+                count++;
+            }
+        }
+
+//            return count > 0 ? totalPercentage / count : 0.0;
+
+
+//            Double avgAttendance = .getAverageAttendancePercentage();
+//        System.out.println("Overall Attendance: " +( count > 0 ? totalPercentage / count : 0.0) + "%");
+
+        double averageAttendance=  count > 0 ? totalPercentage / count : 0.0;
+
+        String remark, badgeClass;
+        if (averageAttendance >= 90) {
+            remark = "Excellent";
+            badgeClass = "bg-success";
+        } else if (averageAttendance >= 75) {
+            remark = "Good";
+            badgeClass = "bg-primary";
+        } else if (averageAttendance >= 50) {
+            remark = "Average";
+            badgeClass = "bg-warning text-dark";
+        } else {
+            remark = "Poor";
+            badgeClass = "bg-danger";
+        }
+        model.addAttribute("remark",remark);
+        model.addAttribute("badgeClass",badgeClass);
+        model.addAttribute("averageAttendance",+ averageAttendance+"%");
+
+
+//        Long totalAssignments = assignmentRepository.count();
+//        Long submittedAssignments = submitAssignmentRepository.count();
+//        Long pendingAssignments = totalAssignments - submittedAssignments;
+//
+//        model.addAttribute("pendingAssignments", pendingAssignments);
+
         List<Long> batchIds = batchId != null
                 ? Collections.singletonList(batchId)
                 : batches.stream().map(BatchMaster::getBatchId).collect(Collectors.toList());
@@ -344,6 +391,9 @@ public class UserController {
 
             model.addAttribute("assignment", assignment);
             model.addAttribute("submission", submission);
+
+
+
 
             String feedbackJson = submission.getGptFeedback();
             if (feedbackJson == null || feedbackJson.isBlank()) {
@@ -740,6 +790,65 @@ public Map<String, Boolean> verifyOtpAndUpdatePassword2(
         return subAt != null && (System.currentTimeMillis() - subAt.getTime()) < 2 * 86400000L;
     }
 
+
+//    @GetMapping("/list")
+//    public String listAssignments(HttpSession session,
+//                                  @RequestParam(required = false) Long batchId,
+//                                  Model model) {
+//        UserMaster student = (UserMaster) session.getAttribute("user");
+//        if (student == null || student.getRole() != UserMaster.Role.STUDENT) {
+//            model.addAttribute("error", "Unauthorized access");
+//            return "error";
+//        }
+//
+//        List<BatchMaster> batches = batchMasterRepository.findBatchesByStudent(student.getUserId());
+//        model.addAttribute("batches", batches);
+//        model.addAttribute("selectedBatchId", batchId);
+//
+//        List<Long> batchIds = batchId != null
+//                ? Collections.singletonList(batchId)
+//                : batches.stream().map(BatchMaster::getBatchId).collect(Collectors.toList());
+//
+//        List<AssignmentMaster> assignments = batchIds.isEmpty()
+//                ? Collections.emptyList()
+//                : assignmentRepository.findByBatch_BatchIdIn(batchIds);
+//
+//        List<SubmitAssignment> submittedAssignments =
+//                submitRepository.findByAdmission_UserMaster_UserId(student.getUserId());
+//
+//        Map<Long, SubmitAssignment> submittedMap = new HashMap<>();
+//        Map<Long, Boolean> deletableMap = new HashMap<>();
+//        Map<Long, Boolean> hasFeedback = new HashMap<>();
+//        Map<Long, String> feedbackSnippet = new HashMap<>();
+//
+//        for (SubmitAssignment sa : submittedAssignments) {
+//            Long aid = sa.getAssignment().getAssignmentId();
+//            submittedMap.put(aid, sa);
+//            deletableMap.put(aid, isSubmissionDeletable(sa));
+//            hasFeedback.put(aid, sa.getGptFeedback() != null && !sa.getGptFeedback().isBlank());
+//
+//            String snippet = "Pending evaluation...";
+//            try {
+//                if (sa.getGptFeedback() != null) {
+//                    snippet = sa.getGptFeedback().length() > 100
+//                            ? sa.getGptFeedback().substring(0, 100) + "..."
+//                            : sa.getGptFeedback();
+//                }
+//            } catch (Exception e) {
+//                snippet = "Pending evaluation...";
+//            }
+//            feedbackSnippet.put(aid, snippet);
+//        }
+//        Set<Long> submittedAssignmentIds = submittedMap.keySet();
+//
+//        model.addAttribute("submittedMap", submittedMap);
+//        model.addAttribute("assignments", assignments);
+//        model.addAttribute("submittedAssignmentIds", submittedAssignmentIds);
+//        model.addAttribute("deletableMap", deletableMap);
+//        model.addAttribute("hasFeedback", hasFeedback);
+//        model.addAttribute("feedbackSnippet", feedbackSnippet);
+//        return "Student_assignment";
+//    }
 
 
 
